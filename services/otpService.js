@@ -1,13 +1,14 @@
 const OTP = require("../models/otpModel");
 
-// Generate OTP and save to the database
+// Generate OTP
 const generateOtp = async (mobileNumber) => {
   try {
     const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
-
-    // Save OTP to the database
-    await OTP.create({ mobileNumber, otp });
-
+    await OTP.findOneAndUpdate(
+      { mobileNumber },
+      { otp, createdAt: new Date() },
+      { upsert: true, new: true }
+    );
     return otp;
   } catch (error) {
     console.error("Error generating OTP:", error);
@@ -15,10 +16,10 @@ const generateOtp = async (mobileNumber) => {
   }
 };
 
-// Verify OTP from the database
+// Verify OTP
 const verifyOtp = async (mobileNumber, enteredOtp) => {
   try {
-    const record = await OTP.findOne({ mobileNumber }).sort({ createdAt: -1 });
+    const record = await OTP.findOne({ mobileNumber });
 
     if (!record) {
       return { success: false, message: "OTP expired or invalid" };
@@ -28,8 +29,7 @@ const verifyOtp = async (mobileNumber, enteredOtp) => {
       return { success: false, message: "Incorrect OTP" };
     }
 
-    // OTP is valid; delete it from the database
-    await OTP.deleteMany({ mobileNumber });
+    await OTP.deleteOne({ mobileNumber }); // OTP is valid, delete it
 
     return { success: true, message: "OTP verified" };
   } catch (error) {

@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const Wallet = require("../models/walletModel"); // Import wallet model
+const Wallet = require("../models/walletModel");
 const { generateOtp, verifyOtp } = require("../services/otpService");
 const { sendOtp } = require("../services/smsService");
 const { generateJwtToken } = require("../services/jwtService");
@@ -82,25 +82,47 @@ const loginController = async (req, res) => {
   }
 };
 
-const updateUser = async(req, res)=>{
+// Update User Profile (Name and Email)
+const updateProfileController = async (req, res) => {
   try {
-    const {mobileNumber, name, email, userId} = req.body;
-  if(!mobileNumber || !name || !email){
-    res.send("All fields are required");
-  }
-  const user = await User.findById(userId);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-  const updateUser = User.findByIdAndUpdate(userId,
-    {name, email},
-    { new: true }
-  );
-  res.send(updateUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error updating user details' });
-  }
-}
+    const { userId, name, email } = req.body;
 
-module.exports = { sendOtpController, loginController, updateUser };
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Find user by ID
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the user profile with new name and email (if provided)
+    if (name) {
+      user.name = name;
+    }
+    if (email) {
+      user.email = email;
+    }
+
+    // Save updated user details
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        mobileNumber: user.mobileNumber,
+        name: user.name,
+        email: user.email,
+        isVerified: user.isVerified,
+      },
+    });
+  } catch (error) {
+    console.error("Error in updateProfileController:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { sendOtpController, loginController, updateProfileController };
