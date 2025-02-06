@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String, // Stores the JWT token
     },
+    email: {type: String, required: false},
+    name: {type: String, required: false},
   },
   { timestamps: true }
 );

@@ -82,4 +82,25 @@ const loginController = async (req, res) => {
   }
 };
 
-module.exports = { sendOtpController, loginController };
+const updateUser = async(req, res)=>{
+  try {
+    const {mobileNumber, name, email, userId} = req.body;
+  if(!mobileNumber || !name || !email){
+    res.send("All fields are required");
+  }
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  const updateUser = User.findByIdAndUpdate(userId,
+    {name, email},
+    { new: true }
+  );
+  res.send(updateUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error updating user details' });
+  }
+}
+
+module.exports = { sendOtpController, loginController, updateUser };
