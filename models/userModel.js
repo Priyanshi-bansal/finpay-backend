@@ -15,6 +15,18 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String, // Stores the JWT token
     },
+    panName: {
+      type: String,
+      required: false,
+    },
+    bankName: {
+      type: String,
+      required: false,
+    },
+    aadharName: {
+      type: String,
+      required: false,
+    }
     
   },
   { timestamps: true }
