@@ -107,7 +107,8 @@ const updateProfileController = async (req, res) => {
     if (name) {
       user.name = name;
     }
-    if (email) {
+    if (email)
+ {
       user.email = email;
     }
 
@@ -298,4 +299,3 @@ const submitAadharOTP = async(req, res)=>{
   }
 
 module.exports = { sendOtpController, loginController, updateProfileController, aadhaarVerify , submitAadharOTP,verifyBank, verifyPAN, userVerify };
-
