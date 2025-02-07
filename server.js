@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const cors = require('cors');
 const app = require("./app");
 require("dotenv").config();
 const Merchant = require("./models/merchantModel"); // Import Merchant model
+
+
 
 // Connect to MongoDB
 mongoose
