@@ -12,7 +12,7 @@ const sendOtp = async (mobileNumber, otp) => {
     }
 
     const params = {
-      authorization: apiKey,
+      // authorization: apiKey,
       route: "q",  // Change route if needed (e.g., "dlt")
       sender_id: senderId,
       message,
@@ -22,16 +22,30 @@ const sendOtp = async (mobileNumber, otp) => {
 
     console.log("Fast2SMS Request Params:", params);  // Debugging log
 
-    const response = await axios.post("https://www.fast2sms.com/dev/bulkV2", params);
+    const response = await axios.post("https://www.fast2sms.com/dev/bulkV2", params, {
+      headers: {
+        authorization: apiKey  // API key in the header
+      }
+      });
     console.log("Fast2SMS Response:", response.data);
 
-    return response.data.return
-      ? { success: true, message: "OTP sent successfully" }
-      : { success: false, message: response.data.message || "Failed to send OTP" };
-
+    if (response.data.return) {
+      return { success: true, message: "OTP sent successfully" };
+    } else {
+      // Provide a more detailed error message
+      const errorMessage = response.data.message || "Failed to send OTP";
+      return { success: false, message: errorMessage };
+    }
   } catch (error) {
-    console.error("Error in sendOtp:", error.response?.data || error.message);
-    return { success: false, message: "Error sending OTP" };
+    if (error.response) {
+      console.error("Error in sendOtp - Response Error:", error.response.data);
+      return { success: false, message: error.response.data.message || "Failed to send OTP" };
+    } else {
+      console.error("Error in sendOtp - General Error:", error.message);
+      return { success: false, message: "Error sending OTP" };
+    }
+    // console.error("Error in sendOtp:", error.response?.data || error.message);
+    // return { success: false, message: "Error sending OTP" };
   }
 };
 

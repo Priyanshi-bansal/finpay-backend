@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
-const cors = require('cors');
-// const app = require("./app");
 require("dotenv").config();
 const Merchant = require("./models/merchantModel"); // Import Merchant model
 const express = require("express");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const walletRoutes = require("./routes/walletRoutes");
-
+const cors = require('cors');
 
 
 const app = express();
@@ -17,9 +15,10 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
 
+const url = "mongodb://localhost:27017/";
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI || url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(async () => {
     console.log("Connected to MongoDB");
 

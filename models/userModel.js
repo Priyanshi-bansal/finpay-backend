@@ -24,6 +24,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    panName: {
+      type: String,
+      required: false,
+    },
+    bankName: {
+      type: String,
+      required: false,
+    },
+    aadharName: {
+      type: String,
+      required: false,
+    }
     
   },
   { timestamps: true }

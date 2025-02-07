@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { sendOtpController, loginController, updateProfileController, aadhaarVerify, submitAadharOTP,verifyBank,verifyPAN} = require("../controllers/authController");
+const { sendOtpController, loginController, updateProfileController, aadhaarVerify, submitAadharOTP,verifyBank,verifyPAN, userVerify } = require("../controllers/authController");
 
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.post('/aadhar-verify',aadhaarVerify);
 router.post('/submit-aadhar-otp',submitAadharOTP);
 router.post("/verifybank", verifyBank);
 router.post("/verifyPAN", verifyPAN);
+router.get("/verifyUser", userVerify);
 
 module.exports = router;

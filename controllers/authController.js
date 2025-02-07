@@ -161,8 +161,12 @@ const aadhaarVerify = async(req, res)=>{
 
 
 const submitAadharOTP = async(req, res)=>{
-  const {otp, client_id} = req.body;
+  const {otp, client_id, userId} = req.body; 
+  let user = await User.findById(userId);
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
  
     const submitOtpResponse = await axios.post(
       'https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp',
@@ -178,10 +182,13 @@ const submitAadharOTP = async(req, res)=>{
       }
     );
     console.log(submitOtpResponse.data);
-
+    const nameFromAadhar = submitOtpResponse.data.full_name;
+    user.aadharName = nameFromAadhar;
+    await user.save();
+    
     // Handle the response from OTP submission
     if (submitOtpResponse.data && submitOtpResponse.data.message_code === 'success') {
-      return res.send({message:'Aadhaar verification successful', data: submitOtpResponse.data});
+      return res.send({message:'Aadhaar verification successful', data: submitOtpResponse.data, name:nameFromAadhar});
     } else {
       return res.send('Aadhaar verification failed');
     }
@@ -190,8 +197,12 @@ const submitAadharOTP = async(req, res)=>{
 
 
   const verifyBank = async (req, res) => {
-    const { id_number, ifsc } = req.body;
-  
+    const { id_number, ifsc, userId } = req.body;
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     try {
       if (!id_number || !ifsc) {
         return res.status(400).json({ success: false, message: "IFSC number or ID is missing" });
@@ -217,16 +228,26 @@ const submitAadharOTP = async(req, res)=>{
       );
   
       console.log("Surepass API Response:", response.data);
-  
-      return res.status(200).json(response.data);
+      const nameFromBank = response.data.full_name;
+
+      user.bankName = nameFromBank;
+      await user.save();
+
+      return res.status(200).json({"pandata":response.data, success:true, name:nameFromBank});
     } catch (error) {
       console.error("Error in verifyBank:", error.message);
       return res.status(500).json({ success: false, message: "Error verifying bank details" });
     }
   };
+
+
   const verifyPAN = async (req, res) => {
-    const {id_number } = req.body;
-  
+    const {id_number,userId } = req.body;
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     try {
       if (!id_number ) {
         return res.status(400).json({ success: false, message: "IFSC number missing" });
@@ -251,13 +272,30 @@ const submitAadharOTP = async(req, res)=>{
       );
   
       console.log("Surepass API Response:", response.data);
-  
-      return res.status(200).json(response.data);
+      // Assuming the name is in response.data.name
+      const nameFromPAN = response.data.full_name;
+
+      user.panName = nameFromPAN;
+      await user.save();
+
+      return res.status(200).json({success: true, name: nameFromPAN, data: response.data});
     } catch (error) {
       console.error("Error in pancard:", error.message);
       return res.status(500).json({ success: false, message: "Error verifying pan details" });
     }
   };
 
-module.exports = { sendOtpController, loginController, updateProfileController, aadhaarVerify , submitAadharOTP,verifyBank, verifyPAN};
+  const userVerify = async(req, res)=>{
+    const {userId} = req.body;
+   const user = await User.findById(userId);
+   if(user.aadharName == user.panName && user.panName == user.bankName){
+    user.isVerified = true;
+    await user.save();
+    return res.status(200).send("user verified successfully");
+   }
+   return res.status(400).send("Dismatched User details please Correct the information");
+
+  }
+
+module.exports = { sendOtpController, loginController, updateProfileController, aadhaarVerify , submitAadharOTP,verifyBank, verifyPAN, userVerify };
 
