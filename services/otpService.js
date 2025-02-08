@@ -1,41 +1,33 @@
 const OTP = require("../models/otpModel");
 
-// Generate OTP
 const generateOtp = async (mobileNumber) => {
   try {
-    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
-    await OTP.findOneAndUpdate(
-      { mobileNumber },
-      { otp, createdAt: new Date() },
-      { upsert: true, new: true }
-    );
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    // Remove existing OTPs before creating a new one
+    await OTP.deleteMany({ mobileNumber });
+    await OTP.create({ mobileNumber, otp });
     return otp;
   } catch (error) {
     console.error("Error generating OTP:", error);
     throw new Error("Failed to generate OTP");
   }
 };
-
-// Verify OTP
-const verifyOtp = async (mobileNumber, enteredOtp) => {
-  try {
-    const record = await OTP.findOne({ mobileNumber });
-
-    if (!record) {
-      return { success: false, message: "OTP expired or invalid" };
+  const verifyOtp = async (mobileNumber, otp) => {
+    try {
+      const existingOtp = await OTP.findOne({ mobileNumber, otp });
+  
+      if (!existingOtp) {
+        return { success: false, message: "Invalid or expired OTP" };
+      }
+  
+      // Remove OTP after successful verification
+      await OTP.deleteMany({ mobileNumber });
+  
+      return { success: true, message: "OTP verified successfully" };
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      return { success: false, message: "Failed to verify OTP" };
     }
-
-    if (record.otp !== enteredOtp) {
-      return { success: false, message: "Incorrect OTP" };
-    }
-
-    await OTP.deleteOne({ mobileNumber }); // OTP is valid, delete it
-
-    return { success: true, message: "OTP verified" };
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
-    return { success: false, message: "Internal server error" };
-  }
 };
 
-module.exports = { generateOtp, verifyOtp };
+module.exports = { generateOtp, verifyOtp }; // Ensure this export is correct
