@@ -15,7 +15,7 @@ const generateOtp = async (mobileNumber) => {
   }
 
 };
-  const verifyOtp = async (mobileNumber, otp) => {
+  const verifyOtp = async (mobileNumber, otp) => {                                        
     try {
       const existingOtp = await OTP.findOne({ mobileNumber, otp });
   
