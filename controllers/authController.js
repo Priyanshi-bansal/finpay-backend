@@ -182,7 +182,8 @@ const submitAadharOTP = async(req, res)=>{
       }
     );
     console.log(submitOtpResponse.data);
-    const nameFromAadhar = submitOtpResponse.data.full_name;
+    const nameFromAadhar = submitOtpResponse.data.data.full_name;
+    console.log("szdfxcgvhdfgchv",nameFromAadhar);
     user.aadharName = nameFromAadhar;
     await user.save();
     
@@ -228,8 +229,8 @@ const submitAadharOTP = async(req, res)=>{
       );
   
       console.log("Surepass API Response:", response.data);
-      const nameFromBank = response.data.full_name;
-
+      const nameFromBank = response.data.data.full_name;
+      console.log("sdfghjfdgh",nameFromBank);
       user.bankName = nameFromBank;
       await user.save();
 
@@ -273,8 +274,8 @@ const submitAadharOTP = async(req, res)=>{
   
       console.log("Surepass API Response:", response.data);
       // Assuming the name is in response.data.name
-      const nameFromPAN = response.data.full_name;
-
+      const nameFromPAN = response.data.data.full_name;
+      console.log("wertfgyhjk",nameFromPAN);
       user.panName = nameFromPAN;
       await user.save();
 
@@ -293,6 +294,8 @@ const submitAadharOTP = async(req, res)=>{
     await user.save();
     return res.status(200).send("user verified successfully");
    }
+   user.isVerified = false;
+   await user.save();
    return res.status(400).send("Dismatched User details please Correct the information");
 
   }
