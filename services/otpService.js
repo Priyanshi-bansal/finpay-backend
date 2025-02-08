@@ -1,4 +1,6 @@
+
 const OTP = require("../models/otpModel");
+
 
 const generateOtp = async (mobileNumber) => {
   try {
@@ -11,6 +13,7 @@ const generateOtp = async (mobileNumber) => {
     console.error("Error generating OTP:", error);
     throw new Error("Failed to generate OTP");
   }
+
 };
   const verifyOtp = async (mobileNumber, otp) => {
     try {
@@ -31,3 +34,4 @@ const generateOtp = async (mobileNumber) => {
 };
 
 module.exports = { generateOtp, verifyOtp }; // Ensure this export is correct
+ 
