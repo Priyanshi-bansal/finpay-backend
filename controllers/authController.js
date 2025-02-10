@@ -305,22 +305,22 @@ const submitAadharOTP = async(req, res)=>{
   const userVerify = async(req, res)=>{
     const {userId} = req.body;
    const user = await User.findById(userId);
-   if (!user) {
+    if (!user) {
     return "User not found!";
-  }
+    }
 
   const normalizedAadharName = normalizeName(user.aadharName);
   const normalizedPanName = normalizeName(user.panName);
   const normalizedBankName = normalizeName(user.bankName);
 
    if(normalizedAadharName == normalizedPanName && normalizedPanName == normalizedBankName){
-    user.isVerified = true;
-    await user.save();
-    return res.status(200).send("user verified successfully");
-   }
-   user.isVerified = false;
-   await user.save();
-   return res.status(400).send("Dismatched User details please Correct the information");
+      user.isVerified = true;
+      await user.save();
+      return res.status(200).send("user verified successfully");
+    }
+     user.isVerified = false;
+     await user.save();
+     return res.status(400).send("Dismatched User details please Correct the information");
 
   }
 

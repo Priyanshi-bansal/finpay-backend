@@ -12,6 +12,6 @@ router.post('/aadhar-verify',aadhaarVerify);
 router.post('/submit-aadhar-otp',submitAadharOTP);
 router.post("/verifybank", verifyBank);
 router.post("/verifyPAN", verifyPAN);
-router.get("/verifyUser", userVerify);
+router.post("/verifyUser", userVerify);
 
 module.exports = router;
