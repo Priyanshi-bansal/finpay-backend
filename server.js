@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const walletRoutes = require("./routes/walletRoutes");
 const paymentRoutes = require('./routes/paymentRoutes');
+const queryRoute = require("./routes/queryRoute");
 const cors = require('cors');
 
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/payment",paymentRoutes);
+app.use("/api/query", queryRoute);
 
 const url = "mongodb://localhost:27017/";
 // Connect to MongoDB

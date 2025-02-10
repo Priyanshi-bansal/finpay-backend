@@ -310,11 +310,8 @@ const submitAadharOTP = async(req, res)=>{
   }
 
   const normalizedAadharName = normalizeName(user.aadharName);
-  console.log("sfdgh",normalizedAadharName);
   const normalizedPanName = normalizeName(user.panName);
-  console.log("sfdxddfchgvgh",normalizedPanName);
   const normalizedBankName = normalizeName(user.bankName);
-  console.log("sfdseretdyfjgh",normalizedBankName);
 
    if(normalizedAadharName == normalizedPanName && normalizedPanName == normalizedBankName){
     user.isVerified = true;

@@ -4,7 +4,7 @@ const sendOtp = async (mobileNumber, otp) => {
   try {
     const apiKey = process.env.FLASH2SMS_API_KEY;
     const senderId = process.env.FLASH2SMS_SENDER_ID;
-    const message = `Your OTP is ${otp}`;
+    const message = `Dear user, Your OTP for login is ${otp} Do not share with anyone -Finunique Small Pvt. Ltd.`;
 
     if (!apiKey || !senderId) {
       console.error("Missing API Key or Sender ID");
