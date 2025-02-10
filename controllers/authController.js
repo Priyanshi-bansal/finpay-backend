@@ -23,6 +23,7 @@ const sendOtpController = async (req, res) => {
 
     // Send OTP via SMS
     const smsResult = await sendOtp(mobileNumber, otp);
+    console.log("otp", smsResult);
 
     if (smsResult.success) {
       return res.status(200).json({ message: "OTP sent successfully" });
@@ -287,10 +288,35 @@ const submitAadharOTP = async(req, res)=>{
     }
   };
 
+  const normalizeName = (name) => {
+    // Remove common prefixes like Mr., Mrs., Ms., Dr., etc.
+    // Also, trim extra spaces and convert to lowercase
+    
+    const prefixList = ['Mr', 'Ms', 'Mrs', 'Dr']; // List of possible prefixes
+    prefixList.forEach(prefix => {
+      if (name.startsWith(prefix)) {
+        name = name.replace(prefix, '').trim(); // Remove prefix and trim extra spaces
+      }
+    });
+    name = name.toLowerCase().replace(/\s+/g, ' ');
+    return name;
+  };
+
   const userVerify = async(req, res)=>{
     const {userId} = req.body;
    const user = await User.findById(userId);
-   if(user.aadharName == user.panName && user.panName == user.bankName){
+   if (!user) {
+    return "User not found!";
+  }
+
+  const normalizedAadharName = normalizeName(user.aadharName);
+  console.log("sfdgh",normalizedAadharName);
+  const normalizedPanName = normalizeName(user.panName);
+  console.log("sfdxddfchgvgh",normalizedPanName);
+  const normalizedBankName = normalizeName(user.bankName);
+  console.log("sfdseretdyfjgh",normalizedBankName);
+
+   if(normalizedAadharName == normalizedPanName && normalizedPanName == normalizedBankName){
     user.isVerified = true;
     await user.save();
     return res.status(200).send("user verified successfully");
