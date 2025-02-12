@@ -7,18 +7,20 @@ const authRoutes = require("./routes/authRoutes");
 const walletRoutes = require("./routes/walletRoutes");
 const paymentRoutes = require('./routes/paymentRoutes');
 const queryRoute = require("./routes/queryRoute");
+const planRoute = require("./routes/planRoute");
 const cors = require('cors');
 
 
 const app = express();
 app.use(cors());
 // app.use(cors({origin:"http://localhost:3000"}))
+
 app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/payment",paymentRoutes);
 app.use("/api/query", queryRoute);
-
+app.use("/api/plan",planRoute)
 const url = "mongodb://localhost:27017/";
 // Connect to MongoDB
 mongoose
