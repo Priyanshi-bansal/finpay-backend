@@ -3,24 +3,30 @@ require("dotenv").config();
 const Merchant = require("./models/merchantModel"); // Import Merchant model
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
+
+// Import Routes
 const authRoutes = require("./routes/authRoutes");
 const walletRoutes = require("./routes/walletRoutes");
-const paymentRoutes = require('./routes/paymentRoutes');
+const paymentRoutes = require("./routes/paymentRoutes");
 const queryRoute = require("./routes/queryRoute");
 const planRoute = require("./routes/planRoute");
-const cors = require('cors');
-
+const adminUserRoutes = require("./routes/adminUserRoutes"); // Import Admin User Routes
 
 const app = express();
 app.use(cors());
 // app.use(cors({origin:"http://localhost:3000"}))
 
 app.use(bodyParser.json());
+
+// Register Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
-app.use("/api/payment",paymentRoutes);
+app.use("/api/payment", paymentRoutes);
 app.use("/api/query", queryRoute);
-app.use("/api/plan",planRoute)
+app.use("/api/plan", planRoute);
+app.use("/api/admin-users", adminUserRoutes); // Register Admin User API
+
 const url = "mongodb://localhost:27017/";
 // Connect to MongoDB
 mongoose
