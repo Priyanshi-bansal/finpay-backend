@@ -1,8 +1,8 @@
 // controllers/rechargeController.js
-const {validateService,checkRechargeStatus,checkRetailerBalance ,viewbill} = require('../services/rechargeService');
+const {rechargeValidation,checkRechargeStatus,checkRetailerBalance ,viewbill} = require('../services/rechargeService');
 const rechargeService = require('../services/rechargeService');
 
-const validate = async (req, res) => {
+ const validate = async (req, res) => {
     const { uid, password, amt, cir, cn, op, adParams } = req.body;
 
     try {
@@ -12,7 +12,7 @@ const validate = async (req, res) => {
         }
 
         // Call service to handle recharge logic
-        const response = await validateService.rechargeValidation(uid, password, amt, cir, cn, op, adParams);
+        const response = await rechargeValidation({uid, password, amt, cir, cn, op, adParams});
 
         // Return the response
         res.status(response.status).json(response.data);
@@ -23,7 +23,7 @@ const validate = async (req, res) => {
 };
 
 // Function to initiate recharge
-const initiateRecharge = async (req, res) => {
+ const initiateRecharge = async (req, res) => {
     const { uid, pwd, cn, op, cir, amt, reqid } = req.body;
 
     if (!uid || !pwd || !cn || !op || !cir || !amt || !reqid) {
@@ -38,7 +38,8 @@ const initiateRecharge = async (req, res) => {
         return res.status(500).json({ error: 'Failed to process the recharge request' });
     }
 };
-const getRechargeStatus = async (req, res) => {
+
+ const getRechargeStatus = async (req, res) => {
     try {
         const { txId } = req.body;
 
@@ -52,6 +53,7 @@ const getRechargeStatus = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
 };
+
  const getRechargebalance = async (req, res) => {
     try {
         
@@ -64,7 +66,8 @@ const getRechargeStatus = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
 };
- const getviewbill = async (req, res) => {
+
+const getviewbill = async (req, res) => {
      try {
         const {cir,cn,op}=req.body;
         const response = await viewbill({cir,cn,op});

@@ -13,6 +13,8 @@ const queryRoute = require("./routes/queryRoute");
 const planRoute = require("./routes/planRoute");
 const adminUserRoutes = require("./routes/adminUserRoutes"); // Import Admin User Routes
 const rechargeRoute = require("./routes/rechargeRoute");
+const loggerMiddleware = require("./middleware/loggerMiddleware");
+const creditBillRoute = require("./routes/creditbillRoutes");
 
 const app = express();
 app.use(cors());
@@ -21,6 +23,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Register Routes
+app.use(loggerMiddleware);
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/payment", paymentRoutes);
@@ -28,6 +31,7 @@ app.use("/api/query", queryRoute);
 app.use("/api/plan", planRoute);
 app.use("/api/admin-users", adminUserRoutes); // Register Admin User API
 app.use("/api/recharge",rechargeRoute);
+app.use("/api/creditbill", creditBillRoute);
 
 
 const url = "mongodb://localhost:27017/";
