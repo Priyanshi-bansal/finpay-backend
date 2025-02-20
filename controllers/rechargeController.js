@@ -1,5 +1,5 @@
 // controllers/rechargeController.js
-const {rechargeValidation,checkRechargeStatus,checkRetailerBalance ,viewbill} = require('../services/rechargeService');
+const {rechargeValidation,checkRechargeStatus,checkRetailerBalance ,viewbill, recharge} = require('../services/rechargeService');
 const rechargeService = require('../services/rechargeService');
 
  const validate = async (req, res) => {
@@ -31,7 +31,7 @@ const rechargeService = require('../services/rechargeService');
     }
 
     try {
-        const response = await rechargeService.recharge(uid, pwd, cn, op, cir, amt, reqid);
+        const response = await recharge(uid, pwd, cn, op, cir, amt, reqid);
         return res.status(response.status).json(response.data);
     } catch (error) {
         console.error('Error during recharge:', error);

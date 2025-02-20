@@ -57,13 +57,13 @@ const loginController = async (req, res) => {
 
     if (!user) {
       // Create a new user if not exists
-      user = await User.create({ mobileNumber, isVerified: true });
+      user = await User.create({ mobileNumber });
 
       // Initialize wallet with default balance for a new user
       await Wallet.create({ userId: user._id, balance: 0 });
     } else {
       // Update the user's verification status
-      user.isVerified = true;
+      user.isVerified = false;
     }
 
     // Generate a JWT token
@@ -78,7 +78,6 @@ const loginController = async (req, res) => {
       user: {
         id: user._id,
         mobileNumber: user.mobileNumber,
-        isVerified: user.isVerified,
         token: user.token,
       },
     });
@@ -123,7 +122,6 @@ const updateProfileController = async (req, res) => {
         mobileNumber: user.mobileNumber,
         name: user.name,
         email: user.email,
-        isVerified: user.isVerified,
       },
     });
   } catch (error) {
@@ -183,12 +181,12 @@ const submitAadharOTP = async(req, res)=>{
         }
       }
     );
-    console.log(submitOtpResponse.data);
-    const nameFromAadhar = submitOtpResponse.data.data.full_name;
+    console.log(submitOtpResponse.data.data);
+    const nameFromAadhar = submitOtpResponse.data.data;
     console.log("szdfxcgvhdfgchv",nameFromAadhar);
-    user.aadharName = nameFromAadhar;
+    user.aadharDetails = nameFromAadhar;
     await user.save();
-    
+     
     // Handle the response from OTP submission
     if (submitOtpResponse.data && submitOtpResponse.data.message_code === 'success') {
       return res.send({message:'Aadhaar verification successful', data: submitOtpResponse.data, name:nameFromAadhar});
@@ -231,9 +229,9 @@ const submitAadharOTP = async(req, res)=>{
       );
   
       console.log("Surepass API Response:", response.data);
-      const nameFromBank = response.data.data.full_name;
+      const nameFromBank = response.data.data;
       console.log("sdfghjfdgh",nameFromBank);
-      user.bankName = nameFromBank;
+      user.bankDetails = nameFromBank;
       await user.save();
 
       return res.status(200).json({"pandata":response.data, success:true, name:nameFromBank});
@@ -276,9 +274,9 @@ const submitAadharOTP = async(req, res)=>{
   
       console.log("Surepass API Response:", response.data);
       // Assuming the name is in response.data.name
-      const nameFromPAN = response.data.data.full_name;
+      const nameFromPAN = response.data.data;
       console.log("wertfgyhjk",nameFromPAN);
-      user.panName = nameFromPAN;
+      user.panDetails = nameFromPAN;
       await user.save();
 
       return res.status(200).json({success: true, name: nameFromPAN, data: response.data});
@@ -309,9 +307,9 @@ const submitAadharOTP = async(req, res)=>{
     return "User not found!";
     }
 
-  const normalizedAadharName = normalizeName(user.aadharName);
-  const normalizedPanName = normalizeName(user.panName);
-  const normalizedBankName = normalizeName(user.bankName);
+  const normalizedAadharName = normalizeName(user.aadharDetails.full_name);
+  const normalizedPanName = normalizeName(user.panDetails.full_name);
+  const normalizedBankName = normalizeName(user.bankDetails.full_name);
 
    if(normalizedAadharName == normalizedPanName && normalizedPanName == normalizedBankName){
       user.isVerified = true;

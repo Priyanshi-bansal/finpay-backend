@@ -15,6 +15,7 @@ const adminUserRoutes = require("./routes/adminUserRoutes"); // Import Admin Use
 const rechargeRoute = require("./routes/rechargeRoute");
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 const creditBillRoute = require("./routes/creditbillRoutes");
+const OpLogoRoutes = require("./routes/OpLogoRoutes");
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ app.use("/api/plan", planRoute);
 app.use("/api/admin-users", adminUserRoutes); // Register Admin User API
 app.use("/api/recharge",rechargeRoute);
 app.use("/api/creditbill", creditBillRoute);
+app.use("/api/oplogo",OpLogoRoutes);
 
 
 const url = "mongodb://localhost:27017/";

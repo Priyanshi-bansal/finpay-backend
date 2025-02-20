@@ -45,28 +45,31 @@ const rechargeValidation = async ({ uid, password, amt, cir, cn, op }) => {
 const rechargeviewbill = async ({ uid, password, mobile, last4, encrypted_card }) => {
   const url = "https://alpha3.mobikwik.com/retailer/v2/retailerCCBill";
 
+  // Encrypt the card information
   const encryptedCn = encryptCreditCard(encrypted_card);
   console.log("encrypted cn", encryptedCn);
- const body = JSON.stringify({
+
+  // Prepare the data as parameters
+  const params = JSON.stringify({
     uid,
     password,
     last4,
     mobile,
-    encryptedCn
- });
+    encrypted_card: encryptedCn
+  });
 
- console.log("sfdgfhjh", body);
-//   const plainText = `{"uid":"${uid}","password":"${password}","mobile":${mobile},"last4":"${last4}","encrypted_card":"${encryptedCn}",}`;
-//   console.log("dfghj", plainText);
+  console.log("params", params);
+
   const headers = {
     "X-MClient": "14",
     "Content-Type": "application/json",
   };
 
   try {
-    const response = await axios.post(url, body, { headers });
-    console.log("dfgjuhkl", response);
-    console.log("status: ", response.status, " data:", response.data);
+    // Send the data using parameters, not the body
+    const response = await axios.post(url, params, { headers });
+    console.log("response", response);
+    console.log("status:", response.status, " data:", response.data);
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error("Error while calling recharge API:", error);
@@ -77,4 +80,19 @@ const rechargeviewbill = async ({ uid, password, mobile, last4, encrypted_card }
   }
 };
 
-module.exports = { rechargeValidation, rechargeviewbill };
+
+const recharge = async (uid, pwd, cn, op, cir, amt, reqid, ad9) => {
+  const url = `https://alpha3.mobikwik.com/recharge.do?uid=${uid}&pwd=${pwd}&cn=${cn}&op=${op}&cir=${cir}&amt=${amt}&reqid=${reqid}&ad9=${ad9}`
+  
+
+  try {
+    // Make the GET request to Mobikwik API
+    const response = await axios.get(url);
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error("Error in recharge service:", error);
+    throw error;
+  }
+};
+
+module.exports = { rechargeValidation, rechargeviewbill, recharge };

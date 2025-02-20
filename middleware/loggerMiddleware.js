@@ -15,11 +15,21 @@ async function log(logData) {
 }
 
 const loggerMiddleware = async (req, res, next) => {
-  // 1. Log request body.
-  if (!req.url.includes('signin')) {
-    const logData = `${req.url} - ${JSON.stringify(req.body)} `;
-    await log(logData);
-  }
+  // Store the original send method
+  const originalSend = res.send;
+
+  // Override res.send to capture response body
+  res.send = function (body) {
+    // Log request details
+    const logData = `${req.url} - ${JSON.stringify(req.body)} - Response Status: ${res.statusCode} - Response Body: ${body}`;
+    
+    // Write the log to the log file
+    log(logData);
+    
+    // Call the original send method to complete the response
+    originalSend.call(this, body);
+  };
+
   next();
 };
 

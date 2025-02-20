@@ -1,4 +1,4 @@
-const {rechargeValidation,rechargeviewbill} = require("../services/creditbillService");
+const {rechargeValidation,rechargeviewbill, recharge} = require("../services/creditbillService");
 
 const validate = async (req, res) => {
     const { uid, password, amt, cir, cn, op, adParams } = req.body;
@@ -39,5 +39,21 @@ const viewbill = async (req, res) => {
     }
 };
 
+const initiateRecharge = async (req, res) => {
+    const { uid, pwd, cn, op, cir, amt, reqid, ad9 } = req.body;
 
-module.exports = { validate,viewbill};
+    if (!uid || !pwd || !cn || !op || !cir || !amt || !reqid) {
+        return res.status(400).json({ error: 'Missing required query parameters' });
+    }
+
+    try {
+        const response = await recharge(uid, pwd, cn, op, cir, amt, reqid, ad9);
+        return res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error('Error during recharge:', error);
+        return res.status(500).json({ error: 'Failed to process the recharge request' });
+    }
+};
+
+
+module.exports = { validate,viewbill, initiateRecharge};

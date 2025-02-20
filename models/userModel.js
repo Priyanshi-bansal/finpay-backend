@@ -15,19 +15,47 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String, // Stores the JWT token
     },
-    panName: {
-      type: String,
+    panDetails: {
+      type: Object,
       required: false,
     },
-    bankName: {
-      type: String,
+    bankDetails: {
+      type: Object,
       required: false,
     },
-    aadharName: {
-      type: String,
+    aadharDetails: {
+      type: Object,
       required: false,
+    },
+    role: {
+      type: String,
+      enum: ["Distributer", "Retailer"],
+      default: "Distributer" ,
+      required: true,
+    },
+    status:{
+      type: String, 
+      enum: ["Pending", "Approved"], 
+      default: "Pending",
+      required: true,
+    },
+    services: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    name: {
+      type: String,
+      required:true,
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
     }
-    
   },
   { timestamps: true }
 );
