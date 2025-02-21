@@ -121,45 +121,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// const loginCopntroller = async (req, res) => {
-//   let result = await User.findOne({ email: req.body.email });
-
-//   if (result == null || result == undefined) {
-//     return res.send({
-//       message: "No Email found",
-//     });
-//   }
-
-//   let passCondition;
-
-//   if (result !== null && result !== undefined) {
-//     passCondition = await bcrypt.compare(req.body.password, result.password);
-//   }
-
-//   if (passCondition === false) {
-//     return res.send("Incorrect password");
-//   }
-
-//   if (passCondition === true) {
-    
-//     const token = jwt.sign({ userId: result._id }, JWT_SECRET, {
-//       expiresIn: "1h",
-//     }); 
-
-   
-//     res.send({
-//       responseCode: 1,
-//       result: {
-//         name: result.name,
-//         email: result.email,
-//         mobile: result.mobile,
-//       },
-//       token: token, 
-//     });
-//   }
-// };
-
-
 const updateProfileController = async (req, res) => {
   try {
     const { userId, name, email, mobileNumber  } = req.body;
@@ -253,7 +214,6 @@ const getAlluserController = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 const getUserController = async (req, res) =>{
   try {
