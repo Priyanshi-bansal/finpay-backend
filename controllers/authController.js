@@ -494,5 +494,4 @@ module.exports = {
   verifyBank,
   verifyPAN,
   userVerify,
-  registerUser,
 };
