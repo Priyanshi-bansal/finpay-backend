@@ -84,7 +84,7 @@ const callback = async (req, res) =>{
   try {
    const {data} = req.body;
    console.log( "data",data);
-   
+   return res.status(200).send(data);
   
     } catch (error) {
       console.log("Error in call back response", error);
