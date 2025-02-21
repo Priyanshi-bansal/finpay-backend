@@ -1,0 +1,29 @@
+    // Check if user exists
+    let user = await User.findOne({ mobileNumber });
+
+if (!user) {
+      // Create a new user if not exists
+      user = await User.create({ mobileNumber });
+
+      // Initialize wallet with default balance for a new user
+      await Wallet.create({ userId: user._id, balance: 0 });
+    } else {
+      // Update the user's verification status
+      user.isVerified = false;
+    }
+
+    // Generate a JWT token
+    const token = generateJwtToken(user._id);
+
+    // Save the token in the database
+    user.token = token;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        mobileNumber: user.mobileNumber,
+        token: user.token,
+      },
+});

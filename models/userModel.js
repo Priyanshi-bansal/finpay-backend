@@ -31,13 +31,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["Distributer", "Retailer"],
       default: "Distributer" ,
-      required: true,
+      required: false,
     },
     status:{
       type: String, 
       enum: ["Pending", "Approved"], 
       default: "Pending",
-      required: true,
+      required: false,
     },
     services: {
       type: [String],

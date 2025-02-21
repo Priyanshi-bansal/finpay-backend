@@ -1,13 +1,13 @@
 const User = require("../models/userModel");
+const bcrypt = require("bcrypt");
 const Wallet = require("../models/walletModel");
 const { generateOtp, verifyOtp } = require("../services/otpService");
 const { sendOtp } = require("../services/smsService");
 const { generateJwtToken } = require("../services/jwtService");
 const { default: axios } = require("axios");
-require('dotenv').config();
+require("dotenv").config();
 const token = process.env.TOKEN;
 console.log(token);
-let temporaryData = {};
 
 // Send OTP to the user
 const sendOtpController = async (req, res) => {
@@ -87,10 +87,82 @@ const loginController = async (req, res) => {
   }
 };
 
-// Update User Profile (Name and Email)
+const registerUser = async (req, res) => {
+  try {
+    // Check if user exists
+    const { name, email, mobileNumber, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json("User already exist");
+    }
+
+    let crptPass = await bcrypt
+      .hash(password, 10)
+      .then((hash) => {
+        return hash;
+      })
+      .catch((err) => console.error(err.message));
+
+    user = await User.create({ name, email, mobileNumber, crptPass });
+
+    // Initialize wallet with default balance for a new user
+    await Wallet.create({ userId: user._id, balance: 0 });
+    
+    await user.save();
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: user,
+    });
+  } catch (error) {
+    console.error("Error in registerOController:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// const loginCopntroller = async (req, res) => {
+//   let result = await User.findOne({ email: req.body.email });
+
+//   if (result == null || result == undefined) {
+//     return res.send({
+//       message: "No Email found",
+//     });
+//   }
+
+//   let passCondition;
+
+//   if (result !== null && result !== undefined) {
+//     passCondition = await bcrypt.compare(req.body.password, result.password);
+//   }
+
+//   if (passCondition === false) {
+//     return res.send("Incorrect password");
+//   }
+
+//   if (passCondition === true) {
+    
+//     const token = jwt.sign({ userId: result._id }, JWT_SECRET, {
+//       expiresIn: "1h",
+//     }); 
+
+   
+//     res.send({
+//       responseCode: 1,
+//       result: {
+//         name: result.name,
+//         email: result.email,
+//         mobile: result.mobile,
+//       },
+//       token: token, 
+//     });
+//   }
+// };
+
+
 const updateProfileController = async (req, res) => {
   try {
-    const { userId, name, email } = req.body;
+    const { userId, name, email, mobileNumber  } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
@@ -107,9 +179,11 @@ const updateProfileController = async (req, res) => {
     if (name) {
       user.name = name;
     }
-    if (email)
- {
+    if (email) {
       user.email = email;
+    }
+    if (mobileNumber) {
+      user.mobileNumber = mobileNumber;
     }
 
     // Save updated user details
@@ -130,196 +204,295 @@ const updateProfileController = async (req, res) => {
   }
 };
 
+const getAlluserController = async (req, res) => {
+  try {
+    // Get page, limit, and search query from request query parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || ''; // Default to empty string if no search query
 
-const aadhaarVerify = async(req, res)=>{
-  const {aadharNumber} = req.body;
-  if(!aadharNumber){
+    // Build search criteria if there's a search query
+    const searchCriteria = searchQuery
+      ? {
+          $or: [
+            { name: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive search on name
+            { email: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive search on email
+          ],
+        }
+      : {};
+
+    // Calculate the number of users to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch users with pagination and search criteria
+    const result = await User.find(searchCriteria)
+      .skip(skip)
+      .limit(limit);
+
+    if (!result || result.length === 0) {
+      return res.status(404).send("No users found");
+    }
+
+    // Get the total number of users matching the search criteria
+    const totalUsers = await User.countDocuments(searchCriteria);
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    return res.status(200).json({
+      data: result,
+      pagination: {
+        totalUsers,
+        totalPages,
+        currentPage: page,
+        pageSize: limit,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getAlluserController:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+const getUserController = async (req, res) =>{
+  try {
+   
+    let user = User.findById(req.params.id);
+    if(!user){
+      return res.status(404).send("No user Found");
+    }
+    return res.status(200).send(user);
+  } catch (error) {
+    console.error("Error in getUserController :", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const aadhaarVerify = async (req, res) => {
+  const { aadharNumber } = req.body;
+  if (!aadharNumber) {
     res.send("Aadhar Number is required");
   }
   try {
     // Step 1: Generate OTP for the given Aadhaar number
     const generateOtpResponse = await axios.post(
-      'https://kyc-api.surepass.io/api/v1/aadhaar-v2/generate-otp', 
+      "https://kyc-api.surepass.io/api/v1/aadhaar-v2/generate-otp",
       {
-        id_number: aadharNumber
-      },
-      {
-        headers:{
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.TOKEN}`
-
-        }
-      }
-    );
-    console.log(generateOtpResponse.data);
-    return res.send({message:'OTP send successful', data: generateOtpResponse.data});
-  } catch (error) {
-    console.error('Error during Aadhaar verification:', error);
-    return res.status(500).send('An error occurred during Aadhaar verification');
-  }
-}
-
-
-const submitAadharOTP = async(req, res)=>{
-  const {otp, client_id, userId} = req.body; 
-  let user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
- 
-    const submitOtpResponse = await axios.post(
-      'https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp',
-      {
-        client_id: client_id, // Replace with your actual client_id
-        otp: otp
+        id_number: aadharNumber,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.TOKEN}` // Replace with your actual TOKEN
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.TOKEN}`,
+        },
       }
     );
-    console.log(submitOtpResponse.data.data);
-    const nameFromAadhar = submitOtpResponse.data.data;
-    console.log("szdfxcgvhdfgchv",nameFromAadhar);
-    user.aadharDetails = nameFromAadhar;
-    await user.save();
-     
-    // Handle the response from OTP submission
-    if (submitOtpResponse.data && submitOtpResponse.data.message_code === 'success') {
-      return res.send({message:'Aadhaar verification successful', data: submitOtpResponse.data, name:nameFromAadhar});
-    } else {
-      return res.send('Aadhaar verification failed');
-    }
-  
-}
-
-
-  const verifyBank = async (req, res) => {
-    const { id_number, ifsc, userId } = req.body;
-    let user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    try {
-      if (!id_number || !ifsc) {
-        return res.status(400).json({ success: false, message: "IFSC number or ID is missing" });
-      }
-  
-      // API URL
-      const url = "https://kyc-api.surepass.io/api/v1/bank-verification/";
-  
-      // API Call
-      const response = await axios.post(
-        url,
-        {
-          id_number,
-          ifsc,
-          ifsc_details: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.TOKEN}`
-          },
-        }
-      );
-  
-      console.log("Surepass API Response:", response.data);
-      const nameFromBank = response.data.data;
-      console.log("sdfghjfdgh",nameFromBank);
-      user.bankDetails = nameFromBank;
-      await user.save();
-
-      return res.status(200).json({"pandata":response.data, success:true, name:nameFromBank});
-    } catch (error) {
-      console.error("Error in verifyBank:", error.message);
-      return res.status(500).json({ success: false, message: "Error verifying bank details" });
-    }
-  };
-
-
-  const verifyPAN = async (req, res) => {
-    const {id_number,userId } = req.body;
-    let user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    try {
-      if (!id_number ) {
-        return res.status(400).json({ success: false, message: "IFSC number missing" });
-      }
-  
-      // API URL
-      const url = 'https://kyc-api.surepass.io/api/v1/pan/pan';
-  
-      // API Call
-      const response = await axios.post(
-        url,
-        {
-          id_number,
-        
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.TOKEN}`
-          },
-        }
-      );
-  
-      console.log("Surepass API Response:", response.data);
-      // Assuming the name is in response.data.name
-      const nameFromPAN = response.data.data;
-      console.log("wertfgyhjk",nameFromPAN);
-      user.panDetails = nameFromPAN;
-      await user.save();
-
-      return res.status(200).json({success: true, name: nameFromPAN, data: response.data});
-    } catch (error) {
-      console.error("Error in pancard:", error.message);
-      return res.status(500).json({ success: false, message: "Error verifying pan details" });
-    }
-  };
-
-  const normalizeName = (name) => {
-    // Remove common prefixes like Mr., Mrs., Ms., Dr., etc.
-    // Also, trim extra spaces and convert to lowercase
-    
-    const prefixList = ['Mr', 'Ms', 'Mrs', 'Dr']; // List of possible prefixes
-    prefixList.forEach(prefix => {
-      if (name.startsWith(prefix)) {
-        name = name.replace(prefix, '').trim(); // Remove prefix and trim extra spaces
-      }
+    console.log(generateOtpResponse.data);
+    return res.send({
+      message: "OTP send successful",
+      data: generateOtpResponse.data,
     });
-    name = name.toLowerCase().replace(/\s+/g, ' ');
-    return name;
-  };
+  } catch (error) {
+    console.error("Error during Aadhaar verification:", error);
+    return res
+      .status(500)
+      .send("An error occurred during Aadhaar verification");
+  }
+};
 
-  const userVerify = async(req, res)=>{
-    const {userId} = req.body;
-   const user = await User.findById(userId);
-    if (!user) {
-    return "User not found!";
+const submitAadharOTP = async (req, res) => {
+  const { otp, client_id, userId } = req.body;
+  let user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const submitOtpResponse = await axios.post(
+    "https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp",
+    {
+      client_id: client_id, // Replace with your actual client_id
+      otp: otp,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.TOKEN}`, // Replace with your actual TOKEN
+      },
     }
+  );
+  console.log(submitOtpResponse.data.data);
+  const nameFromAadhar = submitOtpResponse.data.data;
+  console.log("szdfxcgvhdfgchv", nameFromAadhar);
+  user.aadharDetails = nameFromAadhar;
+  await user.save();
+
+  // Handle the response from OTP submission
+  if (
+    submitOtpResponse.data &&
+    submitOtpResponse.data.message_code === "success"
+  ) {
+    return res.send({
+      message: "Aadhaar verification successful",
+      data: submitOtpResponse.data,
+      name: nameFromAadhar,
+    });
+  } else {
+    return res.send("Aadhaar verification failed");
+  }
+};
+
+const verifyBank = async (req, res) => {
+  const { id_number, ifsc, userId } = req.body;
+  let user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  try {
+    if (!id_number || !ifsc) {
+      return res
+        .status(400)
+        .json({ success: false, message: "IFSC number or ID is missing" });
+    }
+
+    // API URL
+    const url = "https://kyc-api.surepass.io/api/v1/bank-verification/";
+
+    // API Call
+    const response = await axios.post(
+      url,
+      {
+        id_number,
+        ifsc,
+        ifsc_details: true,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.TOKEN}`,
+        },
+      }
+    );
+
+    console.log("Surepass API Response:", response.data);
+    const nameFromBank = response.data.data;
+    console.log("sdfghjfdgh", nameFromBank);
+    user.bankDetails = nameFromBank;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ pandata: response.data, success: true, name: nameFromBank });
+  } catch (error) {
+    console.error("Error in verifyBank:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error verifying bank details" });
+  }
+};
+
+const verifyPAN = async (req, res) => {
+  const { id_number, userId } = req.body;
+  let user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  try {
+    if (!id_number) {
+      return res
+        .status(400)
+        .json({ success: false, message: "IFSC number missing" });
+    }
+
+    // API URL
+    const url = "https://kyc-api.surepass.io/api/v1/pan/pan";
+
+    // API Call
+    const response = await axios.post(
+      url,
+      {
+        id_number,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.TOKEN}`,
+        },
+      }
+    );
+
+    console.log("Surepass API Response:", response.data);
+    // Assuming the name is in response.data.name
+    const nameFromPAN = response.data.data;
+    console.log("wertfgyhjk", nameFromPAN);
+    user.panDetails = nameFromPAN;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ success: true, name: nameFromPAN, data: response.data });
+  } catch (error) {
+    console.error("Error in pancard:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error verifying pan details" });
+  }
+};
+
+const normalizeName = (name) => {
+  // Remove common prefixes like Mr., Mrs., Ms., Dr., etc.
+  // Also, trim extra spaces and convert to lowercase
+
+  const prefixList = ["Mr", "Ms", "Mrs", "Dr"]; // List of possible prefixes
+  prefixList.forEach((prefix) => {
+    if (name.startsWith(prefix)) {
+      name = name.replace(prefix, "").trim(); // Remove prefix and trim extra spaces
+    }
+  });
+  name = name.toLowerCase().replace(/\s+/g, " ");
+  return name;
+};
+
+const userVerify = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return "User not found!";
+  }
 
   const normalizedAadharName = normalizeName(user.aadharDetails.full_name);
   const normalizedPanName = normalizeName(user.panDetails.full_name);
   const normalizedBankName = normalizeName(user.bankDetails.full_name);
 
-   if(normalizedAadharName == normalizedPanName && normalizedPanName == normalizedBankName){
-      user.isVerified = true;
-      await user.save();
-      return res.status(200).send("user verified successfully");
-    }
-     user.isVerified = false;
-     await user.save();
-     return res.status(400).send("Dismatched User details please Correct the information");
-
+  if (
+    normalizedAadharName == normalizedPanName &&
+    normalizedPanName == normalizedBankName
+  ) {
+    user.isVerified = true;
+    await user.save();
+    return res.status(200).send("user verified successfully");
   }
+  user.isVerified = false;
+  await user.save();
+  return res
+    .status(400)
+    .send("Dismatched User details please Correct the information");
+};
 
-module.exports = { sendOtpController, loginController, updateProfileController, aadhaarVerify , submitAadharOTP,verifyBank, verifyPAN, userVerify };
+module.exports = {
+  sendOtpController,
+  registerUser,
+  loginController,
+  getAlluserController,
+  getUserController,
+  updateProfileController,
+  aadhaarVerify,
+  submitAadharOTP,
+  verifyBank,
+  verifyPAN,
+  userVerify,
+  registerUser,
+};
