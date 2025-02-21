@@ -29,7 +29,13 @@ const payInSchema = new mongoose.Schema(
         },
         status:{
             type: String,
+            enum: ["Pending", "Approved", "Failed"], 
+            default: "Pending",
             required:false
+        },
+        utr: {
+            type: String,
+            required: false,
         }
     }
 );
