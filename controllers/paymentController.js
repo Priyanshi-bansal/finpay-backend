@@ -82,6 +82,7 @@ const callbackPayIn = async (req, res) =>{
 }
 const callback = async (req, res) =>{
   try {
+    console.log(req)
    const {data} = req.body;
    console.log( "data",data);
    return res.status(200).send(data);
