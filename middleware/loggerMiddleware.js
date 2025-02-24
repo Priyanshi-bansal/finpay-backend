@@ -4,7 +4,7 @@ const fsPromise = fs.promises;
 
 async function log(logData) {
   try {
-    logData = `\n ${new Date().toString()} - ${logData}`;
+    logData = `\n ${new Date().toString()} - ${logData} \n`;
     await fsPromise.appendFile(
       'log.txt',
       logData
@@ -21,7 +21,7 @@ const loggerMiddleware = async (req, res, next) => {
   // Override res.send to capture response body
   res.send = function (body) {
     // Log request details
-    const logData = `${req.url} - ${JSON.stringify(req.body)} - Response Status: ${res.statusCode} - Response Body: ${body}`;
+    const logData = `\n Request URL - ${req.url} - Request Body - ${JSON.stringify(req.body)} - Response Status: ${res.statusCode} - Response Body: ${body}`;
     
     // Write the log to the log file
     log(logData);

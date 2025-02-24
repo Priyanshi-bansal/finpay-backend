@@ -65,7 +65,15 @@ const callback = async (req, res) =>{
     console.log(req.body);
    const data = req.body;
    console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
-   const payin = await PayIn.findOne();
+   const payin = await PayIn.findOne(data.reference);
+   if(data.status === "Success"){
+    payin.status = "Approved";
+    payin.utr = data.utr;
+    await payin.save();
+   }
+   payin.status = "Failed";
+   await payin.save();
+   
    return res.status(200).send(data);
   
     } catch (error) {
