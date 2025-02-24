@@ -1,36 +1,4 @@
 
- Fri Feb 14 2025 12:53:14 GMT+0530 (India Standard Time) - /api/plan/plansAPI - {"op_id":"1","cir_id":"1"}
- Fri Feb 14 2025 13:03:55 GMT+0530 (India Standard Time) - /api/recharge/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"9950950237","op":"1","adParams":{}} 
- Fri Feb 14 2025 13:14:53 GMT+0530 (India Standard Time) - /api/recharge/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"9950950237","op":"1","adParams":{}} 
- Fri Feb 14 2025 13:17:23 GMT+0530 (India Standard Time) - /api/recharge/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"9950950237","op":"1","adParams":{}} 
- Fri Feb 14 2025 13:17:42 GMT+0530 (India Standard Time) - /api/recharge/retailerbalance - {} 
- Fri Feb 14 2025 13:25:41 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"9950950237","op":"1","adParams":{}} 
- Fri Feb 14 2025 13:26:05 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"9950950237","op":"1","adParams":{}} 
- Fri Feb 14 2025 14:27:30 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 14:30:45 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 15:46:12 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 15:48:41 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 15:50:09 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 16:39:34 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 16:39:58 GMT+0530 (India Standard Time) - /api/creditbill/validate - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","amt":"300.00","cir":"8","cn":"374245455400126","op":"1","adParams":{}} 
- Fri Feb 14 2025 16:40:24 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 16:50:28 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 16:52:57 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 16:54:23 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 16:59:34 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 17:01:29 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 17:05:09 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 17:11:48 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 17:54:59 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 18:17:41 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Fri Feb 14 2025 18:19:59 GMT+0530 (India Standard Time) - /api/creditbill/viewbill - {"uid":"testalpha1@gmail.com","password":"testalpha1@123","mobile":"7357444352","last4":"0126","encrypted_card":"374245455400126"} 
- Sat Feb 15 2025 10:37:28 GMT+0530 (India Standard Time) - /api/recharge/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"32567454737465734"} 
- Sat Feb 15 2025 10:37:51 GMT+0530 (India Standard Time) - /api/recharge/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"32567674737465734"} 
- Sat Feb 15 2025 10:38:03 GMT+0530 (India Standard Time) - /api/recharge/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"32567674737465734"} 
- Sat Feb 15 2025 10:38:14 GMT+0530 (India Standard Time) - /api/recharge/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"325676747374657"} 
- Sat Feb 15 2025 10:41:09 GMT+0530 (India Standard Time) - /api/creditbill/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"325676747374657"} 
- Sat Feb 15 2025 10:41:17 GMT+0530 (India Standard Time) - /api/creditbill/recharge - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"9950950237","op":"1","cir":"8","amt":"30.00","reqid":"325686747374657"} 
-
  Thu Feb 20 2025 12:07:31 GMT+0530 (India Standard Time) - /api/plan/plansTypeAPI - {"op_id":"1","cir_id":"1","plan_type":"3"} - Response Status: 200 
  Thu Feb 20 2025 12:08:58 GMT+0530 (India Standard Time) - /api/plan/plansTypeAPI - {"op_id":"1","cir_id":"1","plan_type":"3"} - Response Status: 200 
  Thu Feb 20 2025 12:09:45 GMT+0530 (India Standard Time) - /api/plan/plansTypeAPI - {"op_id":"1","cir_id":"1","plan_type":"3"} - Response Status: 200 
@@ -93,3 +61,8 @@
  Fri Feb 21 2025 17:37:09 GMT+0530 (India Standard Time) - /payIn/callback - {"data":"67b85811c80dd502a5ddee07"} - Response Status: 200 - Response Body: 67b85811c80dd502a5ddee07
  Fri Feb 21 2025 17:38:37 GMT+0530 (India Standard Time) - /payIn - {"amount":"1","reference":"345676876543","name":"xyz","mobile":"8765159528","email":"xyz@gmail.com","userId":"67b6f05e6a935705d8fc54ee"} - Response Status: 200 - Response Body: [object Object]
  Fri Feb 21 2025 17:38:37 GMT+0530 (India Standard Time) - /payIn - {"amount":"1","reference":"345676876543","name":"xyz","mobile":"8765159528","email":"xyz@gmail.com","userId":"67b6f05e6a935705d8fc54ee"} - Response Status: 200 - Response Body: {"data":{"status":"success","data":{"message":"This UPI ID is Valid For 5 Min Only","payment_link":"https://api.kwikpaisa.com/payment/a418c31519cdece1c7c90fb9576b08b0b228323b6b10a8ae33b929e8ac0b3dd3"}},"status":"success","message":"Payment data saved successfully in the database."}
+ Fri Feb 21 2025 18:04:04 GMT+0530 (India Standard Time) - /payIn/callback - {"data":"67b86cc564242a78917eddd7"} - Response Status: 200 - Response Body: 67b86cc564242a78917eddd7
+ Mon Feb 24 2025 10:59:51 GMT+0530 (India Standard Time) - /payIn/callback - {"data":"67b86cc564242a78917eddd7"} - Response Status: 200 - Response Body: 67b86cc564242a78917eddd7
+ Mon Feb 24 2025 11:01:21 GMT+0530 (India Standard Time) - /payIn/callback - {} - Response Status: 200 - Response Body: undefined
+ Mon Feb 24 2025 11:03:30 GMT+0530 (India Standard Time) - /payIn/callback - {"payInId":"67b83f0207f7b73d5ef43c74"} - Response Status: 200 - Response Body: [object Object]
+ Mon Feb 24 2025 11:03:30 GMT+0530 (India Standard Time) - /payIn/callback - {"payInId":"67b83f0207f7b73d5ef43c74"} - Response Status: 200 - Response Body: {"response":{}}

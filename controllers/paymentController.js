@@ -60,31 +60,12 @@ const payIn = async (req, res) => {
   }
 };
 
-const callbackPayIn = async (req, res) =>{
-  try {
-   const {payInId} = req.body;
-  const payin = await PayIn.findById(payInId);
-   if(!payin){
-    return res.status(404).send("No pay In data found");
-   }
-    const data = axios.post("https://finpay-backend.onrender.com/api/payment/payIn/response");
-    console.log("payin response", data);
-    if(data.status === "Success"){
-      payin.status = "Approved";
-      payin.utr = data.utr;
-      await payin.save();
-    }
-    return res.status(200).send({response : data});
-    } catch (error) {
-      console.log("Error in call back response", error);
-      return res.status(400).send("Something went wrong");
-    }
-}
 const callback = async (req, res) =>{
   try {
-    console.log(req)
+    console.log(req.body);
    const {data} = req.body;
-   console.log( "data",data);
+   console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
+   const payin = await PayIn.findOne();
    return res.status(200).send(data);
   
     } catch (error) {
@@ -162,4 +143,4 @@ const payOut = async (req, res) => {
   }
 };
 
-module.exports = { payIn, payOut, callbackPayIn,callback };
+module.exports = { payIn, payOut,callback };
