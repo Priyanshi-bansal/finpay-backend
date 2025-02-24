@@ -1,5 +1,6 @@
 const { default: axios } = require("axios");
 const PayIn = require("../models/payInModel");
+
 const PayOut = require("../models/payOutModel");
 const payment = require("../services/payment");
 
@@ -73,13 +74,23 @@ const callback = async (req, res) =>{
    }
    payin.status = "Failed";
    await payin.save();
-   
+
    return res.status(200).send(data);
   
     } catch (error) {
       console.log("Error in call back response", error);
       return res.status(400).send("Something went wrong");
     }
+}
+
+const getPayInRes = async (req, res) =>{
+  const payin = await PayIn.findById(req.body.id);
+  if(!payin){
+    return res.status(404).send("No data found");
+  }
+
+  return res.status(200).send(payin);
+
 }
 
 const payOut = async (req, res) => {
@@ -151,4 +162,4 @@ const payOut = async (req, res) => {
   }
 };
 
-module.exports = { payIn, payOut,callback };
+module.exports = { payIn, payOut,callback, getPayInRes };
