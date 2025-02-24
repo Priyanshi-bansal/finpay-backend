@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/payIn", payIn);
 router.post("/payOut", payOut);
-router.post("/payIn/response", callback);
-// router.post("/payIn/callback", callback);
+// router.post("/payIn/response", callback);
+router.post("/payIn/callback", callback);
 
 module.exports = router;
