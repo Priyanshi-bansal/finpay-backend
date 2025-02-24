@@ -63,7 +63,7 @@ const payIn = async (req, res) => {
 const callback = async (req, res) =>{
   try {
     console.log(req.body);
-   const {data} = req.body;
+   const data = req.body;
    console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
    const payin = await PayIn.findOne();
    return res.status(200).send(data);
