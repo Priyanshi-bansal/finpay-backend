@@ -76,7 +76,7 @@ const callback = async (req, res) =>{
    
    return res.status(200).send(data);
   
-    } catch (error) {
+  } catch (error) {
       console.log("Error in call back response", error);
       return res.status(400).send("Something went wrong");
     }
