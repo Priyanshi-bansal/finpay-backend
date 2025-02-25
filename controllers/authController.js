@@ -176,8 +176,8 @@ const getAlluserController = async (req, res) => {
     const searchCriteria = searchQuery
       ? {
           $or: [
-            { name: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive search on name
-            { email: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive search on email
+            { name: { $regex: searchQuery, $options: 'i' } }, 
+            { email: { $regex: searchQuery, $options: 'i' } }, 
           ],
         }
       : {};

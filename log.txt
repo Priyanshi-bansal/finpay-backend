@@ -32,3 +32,19 @@
 
  Mon Feb 24 2025 12:11:28 GMT+0530 (India Standard Time) - 
  Request URL - /recharge - Request Body - {"uid":"testalpha1@gmail.com","pwd":"testalpha1@123","cn":"7797833489","op":"1","cir":"23","amt":"30.00","reqid":"43347686767374657"} - Response Status: 200 - Response Body: "\n\n<recharge>\n    <status>SUCCESSPENDING</status>\n    <txId>Init</txId>\n    <balance>10000000</balance>\n    <discountprice>30.0</discountprice>\n    <couponstatus>null</couponstatus>\n    <mobikwikstamp>MBK766717544</mobikwikstamp>\n    <opRefNo>null</opRefNo>\n    <googleVoucherCode>null</googleVoucherCode>\n</recharge>" 
+
+ Mon Feb 24 2025 15:14:19 GMT+0530 (India Standard Time) - 
+ Request URL - /payIn/response?reference=34567876543 - Request Body - {} - Response Status: 200 - Response Body: {
+  _id: new ObjectId('67b86a232fa7256c2788bc4e'),
+  userId: new ObjectId('67b6f05e6a935705d8fc54ee'),
+  amount: 1,
+  reference: '34567876543',
+  name: 'xyz',
+  mobile: 8765159528,
+  email: 'xyz@gmail.com',
+  status: 'Pending',
+  __v: 0
+} 
+
+ Mon Feb 24 2025 15:14:19 GMT+0530 (India Standard Time) - 
+ Request URL - /payIn/response?reference=34567876543 - Request Body - {} - Response Status: 200 - Response Body: {"_id":"67b86a232fa7256c2788bc4e","userId":"67b6f05e6a935705d8fc54ee","amount":1,"reference":"34567876543","name":"xyz","mobile":8765159528,"email":"xyz@gmail.com","status":"Pending","__v":0} 
