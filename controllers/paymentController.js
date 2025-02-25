@@ -2,15 +2,9 @@ const { default: axios } = require("axios");
 const PayIn = require("../models/payInModel");
 
 const PayOut = require("../models/payOutModel");
-const payment = require("../services/payment");
 
 const mongoose = require('mongoose');
-var config = {
-  key: process.env.EASEBUZZ_KEY,
-  salt: process.env.EASEBUZZ_SALT,
-  env: process.env.EASEBUZZ_ENV,
-  enable_iframe: process.env.EASEBUZZ_IFRAME,
-};
+
 
 const payIn = async (req, res) => {
  
@@ -84,13 +78,12 @@ const callback = async (req, res) =>{
 }
 
 const getPayInRes = async (req, res) =>{
-  const payin = await PayIn.findById(req.body.id);
+  const {reference} = req.query;
+  const payin = await PayIn.findOne({reference});
   if(!payin){
     return res.status(404).send("No data found");
   }
-
   return res.status(200).send(payin);
-
 }
 
 const payOut = async (req, res) => {
@@ -162,4 +155,4 @@ const payOut = async (req, res) => {
   }
 };
 
-module.exports = { payIn, payOut,callback, getPayInRes };
+module.exports = { payIn, payOut, callback, getPayInRes };

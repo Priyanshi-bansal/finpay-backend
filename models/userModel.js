@@ -55,6 +55,14 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
+    },
+    payInWallet:{
+      type: Number,
+      default: 0,
+    },
+    payOutWallet: {
+      type: Number,
+      default: 0,
     }
   },
   { timestamps: true }
