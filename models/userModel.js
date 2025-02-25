@@ -63,6 +63,9 @@ const userSchema = new mongoose.Schema(
     payOutWallet: {
       type: Number,
       default: 0,
+    },
+    mpin:{
+      type:Number
     }
   },
   { timestamps: true }
