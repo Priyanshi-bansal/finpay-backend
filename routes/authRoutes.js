@@ -1,16 +1,17 @@
 const express = require("express");
 
-const { sendOtpController,registerUser, loginController, getAlluserController, getUserController, updateProfileController, aadhaarVerify, submitAadharOTP,verifyBank,verifyPAN, userVerify } = require("../controllers/authController");
+const { sendOtpController, verifyOTPController, registerUser, loginController, getAlluserController, getUserController, updateProfileController, aadhaarVerify, submitAadharOTP,verifyBank,verifyPAN, userVerify } = require("../controllers/authController");
 
 
 const router = express.Router();
 
 router.post("/send-otp", sendOtpController);
+router.post("/verify-otp",verifyOTPController);
 router.post("/login", loginController);
 router.post("/register", registerUser);
 router.get("/", getAlluserController);
 router.get("/:id", getUserController);
-router.put("/update-profile", updateProfileController); // Profile update route added
+router.put("/update-profile", updateProfileController); 
 router.post('/aadhar-verify',aadhaarVerify);
 router.post('/submit-aadhar-otp',submitAadharOTP);
 router.post("/verifybank", verifyBank);

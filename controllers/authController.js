@@ -35,6 +35,31 @@ const sendOtpController = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+ 
+// Verify OTP controller
+const verifyOTPController = async (req, res) => {
+  try {
+    const { mobileNumber, otp } = req.body;
+
+    if (!mobileNumber || !otp) {
+      return res.status(400).json({ message: "Mobile number and OTP are required" });
+    }
+
+    // Verify OTP
+    const verificationResult = await verifyOtp(mobileNumber, otp);
+
+    if (!verificationResult.success) {
+      return res.status(400).json({ message: verificationResult.message });
+    }
+
+    return res.status(200).json({
+      message: "OTP verified successful",
+    });
+  } catch (error) {
+    console.error("Error in verifyOTPController:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 // Verify OTP and login user
 const loginController = async (req, res) => {
@@ -52,24 +77,14 @@ const loginController = async (req, res) => {
       return res.status(400).json({ message: verificationResult.message });
     }
 
-    // Check if user exists
     let user = await User.findOne({ mobileNumber });
 
     if (!user) {
-      // Create a new user if not exists
-      user = await User.create({ mobileNumber });
-
-      // Initialize wallet with default balance for a new user
-      await Wallet.create({ userId: user._id, balance: 0 });
-    } else {
-      // Update the user's verification status
-      user.isVerified = false;
+      return res.status(404).json("No user found");
     }
 
-    // Generate a JWT token
     const token = generateJwtToken(user._id);
 
-    // Save the token in the database
     user.token = token;
     await user.save();
 
@@ -89,12 +104,12 @@ const loginController = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    // Check if user exists
-    const { name, email, mobileNumber, password } = req.body;
-    const user = await User.findOne({ email });
+    const { name, email, mobileNumber, password, mpin } = req.body;
+
+    let user = await User.findOne({ email }); 
 
     if (user) {
-      return res.status(400).json("User already exist");
+      return res.status(400).json("User already exists");
     }
 
     let crptPass = await bcrypt
@@ -102,41 +117,41 @@ const registerUser = async (req, res) => {
       .then((hash) => {
         return hash;
       })
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error("Error hashing password:", err.message));
 
-    user = await User.create({ name, email, mobileNumber, crptPass });
+    user = await User.create({ name, email, mobileNumber, password: crptPass, mpin });
 
-    // Initialize wallet with default balance for a new user
+    // Initialize wallcsccschdakkskdh priya
     await Wallet.create({ userId: user._id, balance: 0 });
     
     await user.save();
 
     return res.status(200).json({
-      message: "Login successful",
+      message: "Registration successful",
       user: user,
     });
   } catch (error) {
-    console.error("Error in registerOController:", error);
+    console.error("Error in registerUser controller:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
+
 const updateProfileController = async (req, res) => {
   try {
-    const { userId, name, email, mobileNumber  } = req.body;
+    const { userId, name, email, mobileNumber } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
-    // Find user by ID
     let user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the user profile with new name and email (if provided)
+    // Update the user profile with new name and email 
     if (name) {
       user.name = name;
     }
@@ -147,7 +162,6 @@ const updateProfileController = async (req, res) => {
       user.mobileNumber = mobileNumber;
     }
 
-    // Save updated user details
     await user.save();
 
     return res.status(200).json({
@@ -170,7 +184,7 @@ const getAlluserController = async (req, res) => {
     // Get page, limit, and search query from request query parameters
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const searchQuery = req.query.search || ''; // Default to empty string if no search query
+    const searchQuery = req.query.search || ''; 
 
     // Build search criteria if there's a search query
     const searchCriteria = searchQuery
@@ -215,19 +229,19 @@ const getAlluserController = async (req, res) => {
   }
 };
 
-const getUserController = async (req, res) =>{
+const getUserController = async (req, res) => {
   try {
-   
-    let user = User.findById(req.params.id);
-    if(!user){
-      return res.status(404).send("No user Found");
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send("No user found");
     }
+    user = user.toObject();  // Convert Mongoose document to plain object
     return res.status(200).send(user);
   } catch (error) {
-    console.error("Error in getUserController :", error);
+    console.error("Error in getUserController:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+}; 
 
 const aadhaarVerify = async (req, res) => {
   const { aadharNumber } = req.body;
@@ -235,7 +249,7 @@ const aadhaarVerify = async (req, res) => {
     res.send("Aadhar Number is required");
   }
   try {
-    // Step 1: Generate OTP for the given Aadhaar number
+  
     const generateOtpResponse = await axios.post(
       "https://kyc-api.surepass.io/api/v1/aadhaar-v2/generate-otp",
       {
@@ -272,23 +286,22 @@ const submitAadharOTP = async (req, res) => {
   const submitOtpResponse = await axios.post(
     "https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp",
     {
-      client_id: client_id, // Replace with your actual client_id
+      client_id: client_id, 
       otp: otp,
     },
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.TOKEN}`, // Replace with your actual TOKEN
+        Authorization: `Bearer ${process.env.TOKEN}`, 
       },
     }
   );
   console.log(submitOtpResponse.data.data);
   const nameFromAadhar = submitOtpResponse.data.data;
-  console.log("szdfxcgvhdfgchv", nameFromAadhar);
+  console.log("name in aadhar card", nameFromAadhar);
   user.aadharDetails = nameFromAadhar;
   await user.save();
 
-  // Handle the response from OTP submission
   if (
     submitOtpResponse.data &&
     submitOtpResponse.data.message_code === "success"
@@ -317,10 +330,8 @@ const verifyBank = async (req, res) => {
         .json({ success: false, message: "IFSC number or ID is missing" });
     }
 
-    // API URL
     const url = "https://kyc-api.surepass.io/api/v1/bank-verification/";
 
-    // API Call
     const response = await axios.post(
       url,
       {
@@ -338,7 +349,7 @@ const verifyBank = async (req, res) => {
 
     console.log("Surepass API Response:", response.data);
     const nameFromBank = response.data.data;
-    console.log("sdfghjfdgh", nameFromBank);
+    console.log("name in bank account", nameFromBank);
     user.bankDetails = nameFromBank;
     await user.save();
 
@@ -367,10 +378,8 @@ const verifyPAN = async (req, res) => {
         .json({ success: false, message: "IFSC number missing" });
     }
 
-    // API URL
     const url = "https://kyc-api.surepass.io/api/v1/pan/pan";
 
-    // API Call
     const response = await axios.post(
       url,
       {
@@ -385,9 +394,9 @@ const verifyPAN = async (req, res) => {
     );
 
     console.log("Surepass API Response:", response.data);
-    // Assuming the name is in response.data.name
+
     const nameFromPAN = response.data.data;
-    console.log("wertfgyhjk", nameFromPAN);
+    console.log("name in pancard", nameFromPAN);
     user.panDetails = nameFromPAN;
     await user.save();
 
@@ -403,13 +412,10 @@ const verifyPAN = async (req, res) => {
 };
 
 const normalizeName = (name) => {
-  // Remove common prefixes like Mr., Mrs., Ms., Dr., etc.
-  // Also, trim extra spaces and convert to lowercase
-
-  const prefixList = ["Mr", "Ms", "Mrs", "Dr"]; // List of possible prefixes
+  const prefixList = ["Mr", "Ms", "Mrs", "Dr"];
   prefixList.forEach((prefix) => {
     if (name.startsWith(prefix)) {
-      name = name.replace(prefix, "").trim(); // Remove prefix and trim extra spaces
+      name = name.replace(prefix, "").trim();
     }
   });
   name = name.toLowerCase().replace(/\s+/g, " ");
@@ -444,6 +450,7 @@ const userVerify = async (req, res) => {
 
 module.exports = {
   sendOtpController,
+  verifyOTPController,
   registerUser,
   loginController,
   getAlluserController,
