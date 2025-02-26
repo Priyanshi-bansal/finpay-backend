@@ -139,7 +139,7 @@ const registerUser = async (req, res) => {
 
 const updateProfileController = async (req, res) => {
   try {
-    const { userId, name, email, mobileNumber } = req.body;
+    const { userId, name, email, mobileNumber,  } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
@@ -268,7 +268,7 @@ const aadhaarVerify = async (req, res) => {
       data: generateOtpResponse.data,
     });
   } catch (error) {
-    console.error("Error during Aadhaar verification:", error);
+    console.error("Error during Aadhaar verification:", error.message);
     return res
       .status(500)
       .send("An error occurred during Aadhaar verification");
