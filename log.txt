@@ -150,3 +150,6 @@
  Tue Feb 25 2025 16:44:49 GMT+0530 (India Standard Time) - 
  Request URL - /login - Request Body - {"email":"rahul123@gmail.com","password":"Rahul@123"} - Response Status: 200 - Response Body: {"message":"Login successful","user":{"id":"67bda3b5172302c020d687ea","email":"rahul123@gmail.com"}} 
 
+
+ Wed Feb 26 2025 15:13:40 GMT+0530 (India Standard Time) - 
+ Request URL - /biller-info - Request Body - {"billerId":["AURDG0000DIG01"]} - Response Status: 500 - Response Body: {"error":"Data to decrypt is missing!"} 
