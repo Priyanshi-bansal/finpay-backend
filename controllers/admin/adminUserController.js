@@ -22,7 +22,7 @@ exports.createUser = async (req, res) => {
 
 
 exports.loginController = async (req, res) => {
-  console.log("hitttttt");
+  //console.log("hitttttt");
   
   try {
     const { email, password } = req.body;

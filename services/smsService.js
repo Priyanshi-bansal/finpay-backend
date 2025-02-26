@@ -20,14 +20,14 @@ const sendOtp = async (mobileNumber, otp) => {
       numbers: mobileNumber,
     };
 
-    console.log("Fast2SMS Request Params:", params);  // Debugging log
+    //console.log("Fast2SMS Request Params:", params);  // Debugging log
 
     const response = await axios.post("https://www.fast2sms.com/dev/bulkV2", params, {
       headers: {
         authorization: apiKey  // API key in the header
       }
       });
-    console.log("Fast2SMS Response:", response.data);
+    //console.log("Fast2SMS Response:", response.data);
 
     if (response.data.return) {
       return { success: true, message: "OTP sent successfully" };

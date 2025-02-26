@@ -14,7 +14,7 @@ const encryptData = (data, key) => {
   if (!data) {
     throw new Error("Data to encrypt is missing!");
   }
-  console.log("Encrypting data:", data);
+  // //console.log("Encrypting data:", data);
   const encryptionKey = getKey(key);
   const cipher = crypto.createCipheriv("aes-128-cbc", Buffer.from(encryptionKey), Buffer.alloc(16, 0));
   let encrypted = cipher.update(data, "utf8", "hex");
@@ -27,7 +27,7 @@ const decryptData = (encryptedData, key) => {
   if (!encryptedData) {
     throw new Error("Data to decrypt is missing!");
   }
-  console.log("Decrypting data:", encryptedData);
+  // //console.log("Decrypting data:", encryptedData);
   const decryptionKey = getKey(key);
   const decipher = crypto.createDecipheriv("aes-128-cbc", Buffer.from(decryptionKey), Buffer.alloc(16, 0));
   let decrypted = decipher.update(encryptedData, "hex", "utf8");

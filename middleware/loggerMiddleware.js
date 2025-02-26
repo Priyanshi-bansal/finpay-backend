@@ -10,7 +10,7 @@ async function log(logData) {
       logData
     );
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 }
 

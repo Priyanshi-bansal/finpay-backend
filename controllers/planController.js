@@ -12,7 +12,7 @@ const getPlanTypes = async (req, res) => {
     try {
       // Fetch recharge plans using the service
       const plans = await fetchPlanType(op_id, cir_id, plan_type);
-      console.log(plans);
+      //console.log(plans);
       if(!plans){
           res.status(400).send('No plan found')
       }

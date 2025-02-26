@@ -113,7 +113,7 @@ let initiate_payment = function (data, config, res) {
       form.customer_authentication_id = data.customer_authentication_id
     }
 
-    console.log("form",form);
+    //console.log("form",form);
     return form;
   }
   
@@ -125,7 +125,7 @@ let initiate_payment = function (data, config, res) {
   payment_url = geturl(config.env);
   call_url = payment_url + 'payment/initiateLink';
   util.call(call_url, form()).then(function (response) {
-    console.log(response,"rrrrrrr");
+    //console.log(response,"rrrrrrr");
     
     pay(response.data, payment_url)
   });
@@ -150,7 +150,7 @@ let initiate_payment = function (data, config, res) {
   function generateHash() {
 
     var hashstring = `${config.key}|${data.txnid}|${data.amount}|${data.productinfo}|${data.name}|${data.email}|||||||||||${process.env.EASEBUZZ_SALT}`;
-    console.log("hassssssssss",hashstring);
+    //console.log("hassssssssss",hashstring);
     data.hash = sha512.sha512(hashstring);
     return (data.hash);
   }
