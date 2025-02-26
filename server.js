@@ -11,12 +11,15 @@ const walletRoutes = require("./routes/walletRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const queryRoute = require("./routes/queryRoute");
 const planRoute = require("./routes/planRoute");
-const adminUserRoutes = require("./admin/adminUserRoutes");
 const rechargeRoute = require("./routes/rechargeRoute");
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 const creditBillRoute = require("./routes/creditbillRoutes");
 const OpLogoRoutes = require("./routes/OpLogoRoutes");
 const billerRoutes = require("./routes/bbps/billerRoutes");
+
+//admin routes
+const adminRoutes=require("./routes/admin/adminUserRoutes")
+
 
 const app = express();
 app.use(cors());
@@ -31,11 +34,13 @@ app.use("/api/wallet", walletRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/query", queryRoute);
 app.use("/api/plan", planRoute);
-app.use("/api/admin-users", adminUserRoutes);
 app.use("/api/recharge",rechargeRoute);
 app.use("/api/creditbill", creditBillRoute);
 app.use("/api/oplogo",OpLogoRoutes);
 app.use("/api/biller", billerRoutes);
+
+  // admin 
+  app.use("/api/admin",adminRoutes)
 
 
 const url = "mongodb://localhost:27017/";

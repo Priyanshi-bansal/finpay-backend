@@ -79,6 +79,7 @@ const loginController = async (req, res) => {
 
     let user = await User.findOne({ mobileNumber });
 
+
     if (!user) {
       return res.status(404).json("No user found");
     }
@@ -447,6 +448,7 @@ const userVerify = async (req, res) => {
     .status(400)
     .send("Dismatched User details please Correct the information");
 };
+
 
 module.exports = {
   sendOtpController,

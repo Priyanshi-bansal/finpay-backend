@@ -1,4 +1,4 @@
-const AdminUser = require("./adminUserModel");
+const AdminUser = require("../../models/admin//adminUserModel");
 
 // Create User
 exports.createUser = async (req, res) => {
@@ -84,6 +84,8 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.loginController = async (req, res) => {
+  console.log("hitttttt");
+  
   try {
     const { email, password } = req.body;
 
