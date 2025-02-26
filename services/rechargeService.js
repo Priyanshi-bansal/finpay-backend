@@ -17,7 +17,7 @@ const PWD = "testalpha1@123";
   try {
     const url = `${MOBIKWIK_API_URL}?uid=${UID}&pwd=${PWD}&txId=${txId}`;
     const response = await axios.get(url);
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch recharge status");
@@ -43,7 +43,7 @@ const PWD = "testalpha1@123";
   }
 };
  const viewbill = async ({ cir, cn, op }) => {
-  console.log("sdddddddddd", cir, cn, op);
+  //console.log("sdddddddddd", cir, cn, op);
 
   try {
     const requestBody = {
@@ -78,14 +78,14 @@ const PWD = "testalpha1@123";
   const url = "https://alpha3.mobikwik.com/recharge/v1/retailerValidation";
 
   const plainText = `{"uid":"${uid}","password":"${password}","amt":"${amt}","cir":"${cir}","cn":"${cn}","op":"${op}","adParams":{}}`;
-  console.log("dfghj", plainText);
+  //console.log("dfghj", plainText);
   function generateChecksum(plainText) {
     const hmac = crypto.createHmac("sha256", "abcd@123");
     hmac.update(plainText);
     return hmac.digest("base64");
   }
   const checksum = generateChecksum(plainText);
-  console.log("checksum", checksum);
+  //console.log("checksum", checksum);
 
   const headers = {
     "X-MClient": "14",
@@ -96,7 +96,7 @@ const PWD = "testalpha1@123";
   try {
     const response = await axios.post(url, plainText, { headers });
 
-    console.log("status: ", response.status, " data:", response.data);
+    //console.log("status: ", response.status, " data:", response.data);
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error("Error while calling recharge API:", error);

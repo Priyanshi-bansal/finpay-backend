@@ -7,7 +7,7 @@ const { generateJwtToken } = require("../services/jwtService");
 const { default: axios } = require("axios");
 require("dotenv").config();
 const token = process.env.TOKEN;
-console.log(token);
+//console.log(token);
 
 // Send OTP to the user
 const sendOtpController = async (req, res) => {
@@ -23,7 +23,7 @@ const sendOtpController = async (req, res) => {
 
     // Send OTP via SMS
     const smsResult = await sendOtp(mobileNumber, otp);
-    console.log("otp", smsResult);
+    //console.log("otp", smsResult);
 
     if (smsResult.success) {
       return res.status(200).json({ message: "OTP sent successfully" });
@@ -263,7 +263,7 @@ const aadhaarVerify = async (req, res) => {
         },
       }
     );
-    console.log(generateOtpResponse.data);
+    //console.log(generateOtpResponse.data);
     return res.send({
       message: "OTP send successful",
       data: generateOtpResponse.data,
@@ -297,9 +297,9 @@ const submitAadharOTP = async (req, res) => {
       },
     }
   );
-  console.log(submitOtpResponse.data.data);
+  //console.log(submitOtpResponse.data.data);
   const nameFromAadhar = submitOtpResponse.data.data;
-  console.log("name in aadhar card", nameFromAadhar);
+  //console.log("name in aadhar card", nameFromAadhar);
   user.aadharDetails = nameFromAadhar;
   await user.save();
 
@@ -348,9 +348,9 @@ const verifyBank = async (req, res) => {
       }
     );
 
-    console.log("Surepass API Response:", response.data);
+    //console.log("Surepass API Response:", response.data);
     const nameFromBank = response.data.data;
-    console.log("name in bank account", nameFromBank);
+    //console.log("name in bank account", nameFromBank);
     user.bankDetails = nameFromBank;
     await user.save();
 
@@ -394,10 +394,10 @@ const verifyPAN = async (req, res) => {
       }
     );
 
-    console.log("Surepass API Response:", response.data);
+    //console.log("Surepass API Response:", response.data);
 
     const nameFromPAN = response.data.data;
-    console.log("name in pancard", nameFromPAN);
+    //console.log("name in pancard", nameFromPAN);
     user.panDetails = nameFromPAN;
     await user.save();
 

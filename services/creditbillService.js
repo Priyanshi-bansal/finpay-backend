@@ -8,10 +8,10 @@ const rechargeValidation = async ({ uid, password, amt, cir, cn, op }) => {
   const url = "https://alpha3.mobikwik.com/recharge/v1/retailerValidation";
 
   const encryptedCn = encryptCreditCard(cn);
-  console.log("encrypted cn", encryptedCn);
+  //console.log("encrypted cn", encryptedCn);
 
   const plainText = `{"uid":"${uid}","password":"${password}","amt":"${amt}","cir":"${cir}","cn":"${encryptedCn}","op":"${op}","adParams":{}}`;
-  console.log("dfghj", plainText);
+  //console.log("dfghj", plainText);
 
   function generateChecksum(plainText) {
     const hmac = crypto.createHmac("sha256", "abcd@123");
@@ -19,7 +19,7 @@ const rechargeValidation = async ({ uid, password, amt, cir, cn, op }) => {
     return hmac.digest("base64");
   }
   const checksum = generateChecksum(plainText);
-  console.log("checksum", checksum);
+  //console.log("checksum", checksum);
 
   const headers = {
     "X-MClient": "14",
@@ -30,7 +30,7 @@ const rechargeValidation = async ({ uid, password, amt, cir, cn, op }) => {
   try {
     const response = await axios.post(url, plainText, { headers });
 
-    console.log("status: ", response.status, " data:", response.data);
+    //console.log("status: ", response.status, " data:", response.data);
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error("Error while calling recharge API:", error);
@@ -47,7 +47,7 @@ const rechargeviewbill = async ({ uid, password, mobile, last4, encrypted_card }
 
   // Encrypt the card information
   const encryptedCn = encryptCreditCard(encrypted_card);
-  console.log("encrypted cn", encryptedCn);
+  //console.log("encrypted cn", encryptedCn);
 
   // Prepare the data as parameters
   const params = JSON.stringify({
@@ -58,7 +58,7 @@ const rechargeviewbill = async ({ uid, password, mobile, last4, encrypted_card }
     encrypted_card: encryptedCn
   });
 
-  console.log("params", params);
+  //console.log("params", params);
 
   const headers = {
     "X-MClient": "14",
@@ -68,8 +68,8 @@ const rechargeviewbill = async ({ uid, password, mobile, last4, encrypted_card }
   try {
     // Send the data using parameters, not the body
     const response = await axios.post(url, params, { headers });
-    console.log("response", response);
-    console.log("status:", response.status, " data:", response.data);
+    //console.log("response", response);
+    //console.log("status:", response.status, " data:", response.data);
     return { status: response.status, data: response.data };
   } catch (error) {
     console.error("Error while calling recharge API:", error);

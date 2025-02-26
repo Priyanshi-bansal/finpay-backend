@@ -30,7 +30,7 @@ const viewbill = async (req, res) => {
 
         // Call service to handle recharge logic
         const response = await rechargeviewbill({uid, password, mobile, last4, encrypted_card});
-        console.log("first", response);
+        //console.log("first", response);
         // Return the response
         res.status(response.status).json(response.data);
     } catch (error) {

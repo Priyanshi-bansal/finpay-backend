@@ -18,7 +18,7 @@ const generateChecksum = (params, secretKey) => {
     checksumString += secretKey;
 
     // Log checksum string for debugging
-    console.log("Checksum String: ", checksumString);
+    //console.log("Checksum String: ", checksumString);
 
     // Step 4: Generate checksum using HMAC with SHA-256
     const checksum = crypto.createHmac('sha256', secretKey)
