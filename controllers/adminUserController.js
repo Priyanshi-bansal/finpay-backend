@@ -1,4 +1,6 @@
 const AdminUser = require("../models/adminUserModel");
+const User = require("../models/userModel");
+const PayIn = require("../models/payInModel");
 
 // Create User
 exports.createUser = async (req, res) => {
@@ -18,71 +20,67 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Get all users with search and pagination
-exports.getAllUsers = async (req, res) => {
-    try {
-        const { page = 1, limit = 10, search } = req.query;
 
-        // Search filter (by name or email)
-        let filter = {};
-        if (search) {
-            filter = {
-                $or: [
-                    { name: { $regex: search, $options: "i" } },  // Case-insensitive search
-                    { email: { $regex: search, $options: "i" } }
-                ]
-            };
-        }
 
-        // Pagination logic
-        const users = await AdminUser.find(filter)
-            .skip((page - 1) * limit)  // Skip previous pages
-            .limit(parseInt(limit))    // Limit results per page
-            .exec();
 
-        const totalUsers = await AdminUser.countDocuments(filter); // Total users count
 
-        res.status(200).json({
-            success: true,
-            totalUsers,
-            totalPages: Math.ceil(totalUsers / limit),
-            currentPage: parseInt(page),
-            users
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
 
-// Get User by ID
-exports.getUserById = async (req, res) => {
-  try {
-    const user = await AdminUser.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Update User
-exports.updateUser = async (req, res) => {
-  try {
-    const updatedUser = await AdminUser.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json({ message: "User updated successfully", updatedUser });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Delete User
 exports.payingwalletreport = async (req, res) => {
   try {
-    
+    console.log("✅ API Called: /api/admin-users/alluserwallet");
+
+    // Step 1: Aggregate total pay-in amount per user
+    console.log("⏳ Fetching total pay-in data...");
+    const payInData = await PayIn.aggregate([
+      {
+        $match: { status: "Approved" } // Sirf approved transactions count karenge
+      },
+      {
+        $group: {
+          _id: "$userId",
+          totalPayIn: { $sum: "$amount" } // Total pay-in sum
+        }
+      }
+    ]);
+    console.log("✅ PayIn Aggregation Result:", payInData);
+
+    // Step 2: Convert aggregation result to an object for quick lookup
+    const payInMap = {};
+    payInData.forEach(item => {
+      payInMap[item._id.toString()] = item.totalPayIn;
+    });
+    console.log("✅ PayIn Map Created:", payInMap);
+
+    // Step 3: Fetch all users
+    console.log("⏳ Fetching all users...");
+    const users = await User.find({}, "name email mobileNumber role payInWallet");
+    console.log("✅ Users Fetched:", users.length, "users found.");
+
+    // Step 4: Attach total pay-in amount to users
+    console.log("⏳ Mapping users with total pay-in...");
+    const finalData = users.map(user => ({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      mobileNumber: user.mobileNumber,
+      role: user.role,
+      payInWallet: user.payInWallet,
+      totalPayIn: payInMap[user._id.toString()] || 0  // Default 0 if no PayIn found
+    }));
+
+    console.log("✅ Final Data Prepared:", finalData);
+
+    return res.status(200).json({
+      success: true,
+      data: finalData
+    });
+
   } catch (error) {
-   
+    console.error("❌ Error in payingwalletreport API:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: error.message
+    });
   }
-};  
+};

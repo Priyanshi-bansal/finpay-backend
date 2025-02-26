@@ -48,3 +48,33 @@
 
  Mon Feb 24 2025 15:14:19 GMT+0530 (India Standard Time) - 
  Request URL - /payIn/response?reference=34567876543 - Request Body - {} - Response Status: 200 - Response Body: {"_id":"67b86a232fa7256c2788bc4e","userId":"67b6f05e6a935705d8fc54ee","amount":1,"reference":"34567876543","name":"xyz","mobile":8765159528,"email":"xyz@gmail.com","status":"Pending","__v":0} 
+
+ Tue Feb 25 2025 15:40:26 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {"mobilenumber":"7357444352"} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:43:28 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:52:45 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:52:52 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:52:53 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:52:54 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:55:16 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 15:55:17 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 500 - Response Body: {"message":"Cast to ObjectId failed for value \"alluserwallet\" (type string) at path \"_id\" for model \"AdminUser\""} 
+
+ Tue Feb 25 2025 16:00:30 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":[{"_id":"67b6f9e24c24f85fdc8c06b1","mobileNumber":"7665415080","role":"Distributer","payInWallet":0,"totalPayIn":0},{"_id":"67bd96ae06f7ecb49920de60","name":"Ranjay Kumar","email":"ranjay@gmail.com","mobileNumber":"9852463851","role":"Distributer","payInWallet":0,"totalPayIn":0}]} 
+
+ Tue Feb 25 2025 16:05:57 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":[{"_id":"67bd96ae06f7ecb49920de60","name":"Ranjay Kumar","email":"ranjay@gmail.com","mobileNumber":"9852463851","role":"Distributer","payInWallet":0,"totalPayIn":0}]} 

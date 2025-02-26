@@ -55,7 +55,7 @@ const loginController = async (req, res) => {
     // Check if user exists
     let user = await User.findOne({ mobileNumber });
 
-    if (!user) {
+    if (!user) { 
       // Create a new user if not exists
       user = await User.create({ mobileNumber });
 
