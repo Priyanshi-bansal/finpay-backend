@@ -18,70 +18,8 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Get all users with search and pagination
-exports.getAllUsers = async (req, res) => {
-  try {
-    const { page = 1, limit = 10, search } = req.query;
 
-    // Search filter (by name or email)
-    let filter = {};
-    if (search) {
-      filter = {
-        $or: [
-          { name: { $regex: search, $options: "i" } }, // Case-insensitive search
-          { email: { $regex: search, $options: "i" } },
-        ],
-      };
-    }
 
-    // Pagination logic
-    const users = await AdminUser.find(filter)
-      .skip((page - 1) * limit) // Skip previous pages
-      .limit(parseInt(limit)) // Limit results per page
-      .exec();
-
-    const totalUsers = await AdminUser.countDocuments(filter); // Total users count
-
-    res.status(200).json({
-      success: true,
-      totalUsers,
-      totalPages: Math.ceil(totalUsers / limit),
-      currentPage: parseInt(page),
-      users,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// Get User by ID
-exports.getUserById = async (req, res) => {
-  try {
-    const user = await AdminUser.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Update User
-exports.updateUser = async (req, res) => {
-  try {
-    const updatedUser = await AdminUser.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedUser)
-      return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json({ message: "User updated successfully", updatedUser });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 exports.loginController = async (req, res) => {
   console.log("hitttttt");
