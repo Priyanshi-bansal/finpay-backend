@@ -39,11 +39,8 @@ const userSchema = new mongoose.Schema(
       default: "Pending",
       required: false,
     },
-    services: {
-      type: [String],
-      required: false,
-      default: [],
-    },
+   
+    plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
     name: {
       type: String,
       required:true,

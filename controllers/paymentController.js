@@ -30,7 +30,7 @@ const payIn = async (req, res) => {
       },
     }
   );
-  console.log(payInData.data);
+  //console.log(payInData.data);
   if (payInData.data) {
     const newPayIn = new PayIn({
       userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
@@ -57,9 +57,9 @@ const payIn = async (req, res) => {
 
 const callback = async (req, res) =>{
   try {
-    console.log(req.body);
+    //console.log(req.body);
    const data = req.body;
-   console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
+   //console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
    const payin = await PayIn.findOne(data.reference);
    if(data.status === "Success"){
     payin.status = "Approved";
@@ -72,7 +72,7 @@ const callback = async (req, res) =>{
    return res.status(200).send(data);
   
   } catch (error) {
-      console.log("Error in call back response", error);
+      //console.log("Error in call back response", error);
       return res.status(400).send("Something went wrong");
     }
 }
@@ -123,7 +123,7 @@ const payOut = async (req, res) => {
       },
     }
   );
-  console.log(payOutData.data);
+  //console.log(payOutData.data);
   if (payOutData.data) {
     const newPayOut = new PayOut({
       userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId

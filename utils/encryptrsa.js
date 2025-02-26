@@ -5,7 +5,7 @@ const fs = require('fs');
 function generateKeyPair() {
     // Check if the keys already exist
     if (fs.existsSync("public.pem") && fs.existsSync("private.pem")) {
-        console.log("🔒 RSA Key Pair already exists!");
+        // //console.log("🔒 RSA Key Pair already exists!");
         return; // Exit the function if keys already exist
     }
 
@@ -18,7 +18,7 @@ function generateKeyPair() {
     // Save keys to .pem files
     fs.writeFileSync("public.pem", publicKey);
     fs.writeFileSync("private.pem", privateKey);
-    console.log("✅ RSA Key Pair Generated & Saved!");
+    //console.log("✅ RSA Key Pair Generated & Saved!");
 }
 
 // Call the function to generate keys (only if not already present)
@@ -59,13 +59,13 @@ const decryptCreditCard = (encryptedData) =>{
 
 // 🚀 TEST
 const creditCard = "4111-1111-1111-1111"; // Sample Credit Card Number
-console.log("💳 Original Credit Card:", creditCard);
+// //console.log("💳 Original Credit Card:", creditCard);
 
 const encryptedCard = encryptCreditCard(creditCard);
-console.log("🔒 Encrypted Credit Card:", encryptedCard);
+// //console.log("🔒 Encrypted Credit Card:", encryptedCard);
 
 const decryptedCard = decryptCreditCard(encryptedCard);
-console.log("🔓 Decrypted Credit Card:", decryptedCard);
+// //console.log("🔓 Decrypted Credit Card:", decryptedCard);
 
 
 module.exports = {encryptCreditCard, decryptCreditCard};

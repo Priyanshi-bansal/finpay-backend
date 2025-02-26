@@ -7,7 +7,7 @@ const BBPS_API_URL = process.env.BBPS_API_URL;
 
 // 🔹 Biller Info Fetch API
 const billerInfo = async (req, res) => {
-  console.log("Received Request Body:", req.body);
+  //console.log("Received Request Body:", req.body);
 
   const { billerId } = req.body;
 
@@ -18,14 +18,14 @@ const billerInfo = async (req, res) => {
       .json({ error: "Biller ID must be a non-empty array." });
   }
 
-  console.log("Validated Request Data:", { billerId });
+  //console.log("Validated Request Data:", { billerId });
 
   // Encrypt data
   const encryptedData = encryptData(
     JSON.stringify({ billerId }),
     process.env.ENCRYPTION_KEY
   );
-  console.log("Encrypted Data:", encryptedData);
+  //console.log("Encrypted Data:", encryptedData);
 
   try {
     // Send request to BBPS API
@@ -41,14 +41,14 @@ const billerInfo = async (req, res) => {
       }
     );
 
-    console.log("BBPS Response:", response.data);
+    //console.log("BBPS Response:", response.data);
 
     // Decrypt response
     const decryptedResponse = decryptData(
       response.data.enc_response,
       process.env.ENCRYPTION_KEY
     );
-    console.log("sdfghjkl",decryptedResponse)
+    //console.log("sdfghjkl",decryptedResponse)
     res.json(JSON.parse(decryptedResponse));
   } catch (error) {
     console.error("Error sedrfghjkghj:", error.message);
