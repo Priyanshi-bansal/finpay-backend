@@ -449,6 +449,7 @@ const userVerify = async (req, res) => {
     .send("Dismatched User details please Correct the information");
 };
 
+
 module.exports = {
   sendOtpController,
   verifyOTPController,
