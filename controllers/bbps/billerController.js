@@ -1,13 +1,11 @@
-const express = require("express");
 const axios = require("axios");
 const { encryptData, decryptData } = require("../../utils/encryption");
 
-const router = express.Router();
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
-// 🔹 Biller Info Fetch API
+// Biller Info Fetch API
 const billerInfo = async (req, res) => {
-  //console.log("Received Request Body:", req.body);
+  console.log("Received Request Body:", req.body);
 
   const { billerId } = req.body;
 
@@ -18,14 +16,14 @@ const billerInfo = async (req, res) => {
       .json({ error: "Biller ID must be a non-empty array." });
   }
 
-  //console.log("Validated Request Data:", { billerId });
+  console.log("Validated Request Data:", { billerId });
 
   // Encrypt data
   const encryptedData = encryptData(
     JSON.stringify({ billerId }),
     process.env.ENCRYPTION_KEY
   );
-  //console.log("Encrypted Data:", encryptedData);
+  console.log("Encrypted Data:", encryptedData);
 
   try {
     // Send request to BBPS API
@@ -41,14 +39,14 @@ const billerInfo = async (req, res) => {
       }
     );
 
-    //console.log("BBPS Response:", response.data);
+    console.log("BBPS Response:", response.data);
 
     // Decrypt response
     const decryptedResponse = decryptData(
       response.data.enc_response,
       process.env.ENCRYPTION_KEY
     );
-    //console.log("sdfghjkl",decryptedResponse)
+    console.log("sdfghjkl",decryptedResponse)
     res.json(JSON.parse(decryptedResponse));
   } catch (error) {
     console.error("Error sedrfghjkghj:", error.message);
@@ -89,6 +87,65 @@ const billFetch = async (req, res) => {
   }
 };
 
-
+const billPayment = async (req, res) => {
+  try {
+    const data = axios.post(
+      "https://stgapi.billavenue.com/billpay/extBillPayCntrl/billPayRequest/json",
+      {
+        billerAdhoc: "false",
+        agentId: "CC01CC01513515340681",
+        agentDeviceInfo: {
+          initChannel: "AGT",
+          ip: "192.168.2.183",
+          mac: "01-23-45-67-89-ab",
+        },
+        customerInfo: {
+          customerMobile: "9892506507",
+          customerEmail: "kishor.anand@avenues.info",
+          customerAdhaar: "548550008000",
+          customerPan: "",
+        },
+        billerId: "HPCL00000NAT01",
+        inputParams: {
+          input: [
+            { paramName: "Consumer Number", paramValue: "90883000" },
+            { paramName: "Distributor ID", paramValue: "13645300" },
+          ],
+        },
+        billerResponse: [
+          {
+            billAmount: "92300",
+            billNumber: "1123314338567",
+            customerName: "Ramesh Agrawal",
+            dueDate: "",
+          },
+        ],
+        additionalInfo: {
+          info: [
+            { infoName: "Distributor Contact", infoValue: "243306" },
+            { infoName: "Distributor Name", infoValue: "Billavenue COMPANY" },
+            { infoName: "Consumer Number", infoValue: "90883000" },
+            { infoName: "Consumer Address", infoValue: "NA" },
+          ],
+        },
+        amountInfo: { amount: "92300", currency: "356", custConvFee: "0" },
+        paymentMethod: {
+          paymentMode: "Credit Card",
+          quickPay: "N",
+          splitPay: "N",
+        },
+        paymentInfo: {
+          info: [
+            { infoName: "CardNum", infoValue: "4111111111111111" },
+            { infoName: "AuthCode", infoValue: "123456" },
+          ],
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error in bill fetch:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = { billerInfo, billFetch };
