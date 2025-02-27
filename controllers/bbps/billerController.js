@@ -46,7 +46,7 @@ const billerInfo = async (req, res) => {
       response.data.enc_response,
       process.env.ENCRYPTION_KEY
     );
-    console.log("sdfghjkl",decryptedResponse)
+    console.log("sdfghjkl",decryptedResponse);
     res.json(JSON.parse(decryptedResponse));
   } catch (error) {
     console.error("Error sedrfghjkghj:", error.message);
