@@ -8,21 +8,21 @@ const billerInfo = async (req, res) => {
   console.log("Received Request Body:", req.body);
 
   const { billerId } = req.body;
-
-  console.log("biller id is", billerId);
+  const billerIdData = billerId[0];
+  console.log("biller id is", billerIdData);
 
   // Validate input
-  if (!billerId || !Array.isArray(billerId) || billerId.length === 0) {
+  if (!billerIdData || !Array.isArray(billerIdData) || billerIdData.length === 0) {
     return res
       .status(400)
       .json({ error: "Biller ID must be a non-empty array." });
   }
 
-  console.log("Validated Request Data:", { billerId });
+  console.log("Validated Request Data:", { billerIdData });
 
   // Encrypt data
   const encryptedData = encryptData(
-    JSON.stringify({ billerId }),
+    JSON.stringify({ billerIdData }),
     process.env.ENCRYPTION_KEY
   );
   console.log("Encrypted Data:", encryptedData);
