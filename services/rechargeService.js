@@ -43,7 +43,7 @@ const PWD = "testalpha1@123";
   }
 };
  const viewbill = async ({ cir, cn, op }) => {
-  //console.log("sdddddddddd", cir, cn, op);
+  console.log("sdddddddddd", cir, cn, op);
 
   try {
     const requestBody = {
@@ -67,9 +67,10 @@ const PWD = "testalpha1@123";
         "X-MClient": "14",
       },
     });
-
+    console.log("dfghjkl",response.data);
     return response.data;
   } catch (error) {
+    console.error("API Error:", error.response?.data || error.message);
     throw new Error("Failed to fetch retailer balance");
   }
 };

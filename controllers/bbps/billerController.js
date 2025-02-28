@@ -148,4 +148,4 @@ const billPayment = async (req, res) => {
   }
 };
 
-module.exports = { billerInfo, billFetch };
+module.exports = { billerInfo, billFetch, billPayment };

@@ -71,6 +71,7 @@ const getviewbill = async (req, res) => {
      try {
         const {cir,cn,op}=req.body;
         const response = await viewbill({cir,cn,op});
+        console.log("sdfghjk", response);
         res.status(200).json(response);
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
