@@ -9,6 +9,8 @@ const billerInfo = async (req, res) => {
 
   const { billerId } = req.body;
 
+  console.log("biller id is", billerId);
+
   // Validate input
   if (!billerId || !Array.isArray(billerId) || billerId.length === 0) {
     return res
