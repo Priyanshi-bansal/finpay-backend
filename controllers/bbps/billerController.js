@@ -6,17 +6,10 @@ const BBPS_API_URL = process.env.BBPS_API_URL;
 // Biller Info Fetch API
 const billerInfo = async (req, res) => {
   console.log("Received Request Body:", req.body);
-
+  const {requestId} = req.query;
   const { billerId } = req.body;
   const billerIdData = billerId[0];
   console.log("biller id is", billerIdData);
-
-  // // Validate input
-  // if (!billerIdData || !Array.isArray(billerIdData) || billerIdData.length === 0) {
-  //   return res
-  //     .status(400)
-  //     .json({ error: "Biller ID must be a non-empty array." });
-  // }
 
   console.log("Validated Request Data:", { billerIdData });
 
@@ -30,7 +23,7 @@ const billerInfo = async (req, res) => {
   try {
     // Send request to BBPS API
     const response = await axios.post(
-      `${BBPS_API_URL}/extMdmCntrl/mdmRequestNew/json`,
+      `${BBPS_API_URL}/extMdmCntrl/mdmRequestNew/json?accessCode=${process.env.ACCESS_CODE}&requestId=${requestId}&ver=${process.env.VERSION}&instituteId=${process.env.AGENT_ID}`,
       {
         enc_request: encryptedData,
         access_code: process.env.ACCESS_CODE,
@@ -43,18 +36,25 @@ const billerInfo = async (req, res) => {
 
     console.log("BBPS Response:", response.data);
 
-    // Decrypt response
-    const decryptedResponse = decryptData(
-      response.data.enc_response,
-      process.env.ENCRYPTION_KEY
-    );
-    console.log("sdfghjkl",decryptedResponse);
-    res.json(JSON.parse(decryptedResponse));
+    // Check if the response contains the expected encrypted response
+    if (response.data && response.data.enc_response) {
+      // Decrypt response
+      const decryptedResponse = decryptData(
+        response.data.enc_response,
+        process.env.ENCRYPTION_KEY
+      );
+      console.log("Decrypted Response:", decryptedResponse);
+      res.json(JSON.parse(decryptedResponse));
+    } else {
+      console.error("No encrypted response found in API response.");
+      res.status(400).json({ error: "Invalid response from BBPS API" });
+    }
   } catch (error) {
-    console.error("Error sedrfghjkghj:", error.message);
+    console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const billFetch = async (req, res) => {
   try {
