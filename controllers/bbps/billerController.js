@@ -22,7 +22,7 @@ const billerInfo = async (req, res) => {
 
   // Encrypt data
   const encryptedData = encryptData(
-    JSON.stringify({ billerIdData }),
+    billerIdData ,
     process.env.ENCRYPTION_KEY
   );
   console.log("Encrypted Data:", encryptedData);
