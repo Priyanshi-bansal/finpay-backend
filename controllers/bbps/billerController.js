@@ -11,12 +11,12 @@ const billerInfo = async (req, res) => {
   const billerIdData = billerId[0];
   console.log("biller id is", billerIdData);
 
-  // Validate input
-  if (!billerIdData || !Array.isArray(billerIdData) || billerIdData.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "Biller ID must be a non-empty array." });
-  }
+  // // Validate input
+  // if (!billerIdData || !Array.isArray(billerIdData) || billerIdData.length === 0) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Biller ID must be a non-empty array." });
+  // }
 
   console.log("Validated Request Data:", { billerIdData });
 
