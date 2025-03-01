@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    isVerified: {
+    isKycVerified: {
       type: Boolean,
       default: false,
     },
@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["Distributer", "Retailer"],
-      default: "Distributer" ,
       required: false,
     },
     status:{
@@ -52,14 +51,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
-    },
-    payInWallet:{
-      type: Number,
-      default: 0,
-    },
-    payOutWallet: {
-      type: Number,
-      default: 0,
     },
     mpin:{
       type:Number

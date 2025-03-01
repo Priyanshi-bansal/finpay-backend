@@ -36,7 +36,11 @@ const payInSchema = new mongoose.Schema(
         utr: {
             type: String,
             required: false,
-        }
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
     }
 );
 

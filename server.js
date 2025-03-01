@@ -16,6 +16,7 @@ const loggerMiddleware = require("./middleware/loggerMiddleware");
 const creditBillRoute = require("./routes/creditbillRoutes");
 const OpLogoRoutes = require("./routes/OpLogoRoutes");
 const billerRoutes = require("./routes/bbps/billerRoutes");
+const KycRoutes = require("./routes/kycRoutes");
 
 //admin routes
 const adminRoutes=require("./routes/admin/adminUserRoutes")
@@ -38,6 +39,7 @@ app.use("/api/recharge",rechargeRoute);
 app.use("/api/creditbill", creditBillRoute);
 app.use("/api/oplogo",OpLogoRoutes);
 app.use("/api/biller", billerRoutes);
+app.use("/api/kyc",KycRoutes);
 
   // admin 
   app.use("/api/admin",adminRoutes)

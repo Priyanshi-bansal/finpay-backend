@@ -51,7 +51,11 @@ const payOutSchema = new mongoose.Schema(
         txn_id:{
             type:String,
             required:true
-        }
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
     }
 );
 

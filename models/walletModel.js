@@ -11,6 +11,15 @@ const walletSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    credit:{
+      type: Number,
+      default: 0
+    },
+    debit: {
+      type: Number,
+      default: 0
+    },
+    
   },
   { timestamps: true }
 );
