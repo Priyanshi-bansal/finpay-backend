@@ -17,7 +17,7 @@ const billerInfo = async (req, res) => {
   console.log("Validated Request Data:", { billerIdData });
 
   // Encrypt data
-  const encryptedData = encrypt(billerId, key);
+  const encryptedData = encrypt(JSON.stringify(billerId), key);
   // const encryptedData = encrypt(
   //   JSON.stringify(billerId), process.env.ENCRYPTION_KEY
   // );
