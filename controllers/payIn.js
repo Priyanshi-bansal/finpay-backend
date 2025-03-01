@@ -1,5 +1,7 @@
 const { default: axios } = require("axios");
 const PayIn = require("../models/payInModel");
+const User =require("../models/userModel")
+const AdminUser =require("../models/mainwallet")
 
 const PayOut = require("../models/payOutModel");
 
@@ -55,27 +57,58 @@ const payIn = async (req, res) => {
   }
 };
 
-const callback = async (req, res) =>{
+const callback = async (req, res) => {
   try {
-    //console.log(req.body);
-   const data = req.body;
-   //console.log( "dataaaaaaaaaaaaaaaaaaaaaaaaaaaa",data);
-   const payin = await PayIn.findOne(data.reference);
-   if(data.status === "Success"){
-    payin.status = "Approved";
-    payin.utr = data.utr;
-    await payin.save();
-   }
-   payin.status = "Failed";
-   await payin.save();
+    const data = req.body;
+    const payin = await PayIn.findOne({ reference: data.reference });
 
-   return res.status(200).send(data);
-  
-  } catch (error) {
-      //console.log("Error in call back response", error);
-      return res.status(400).send("Something went wrong");
+    if (!payin) {
+      return res.status(404).json({ message: "Transaction not found" });
     }
-}
+
+    if (data.status === "Success") {
+      // Find Retailer & Super Admin
+      const retailer = await User.findById(payin.userId); // Assuming payin has userId
+      const superAdmin = await AdminUser.findOne({ role: "SuperAdmin" });
+
+      if (!retailer || !superAdmin) {
+        return res.status(400).json({ message: "User or Admin not found" });
+      }
+
+      // Update PayIn Transaction
+      payin.status = "Approved";
+      payin.utr = data.utr;
+      await payin.save();
+
+      // Update Wallets
+      retailer.payInWallet += payin.amount;
+      superAdmin.wallet += payin.amount;
+
+      await retailer.save();
+      await superAdmin.save();
+
+      // Log Transaction History
+      await Transaction.create({
+        userId: retailer._id,
+        type: "PayIn",
+        amount: payin.amount,
+        status: "Success",
+        reference: data.reference
+      });
+
+      return res.status(200).json({ message: "PayIn successful", payin });
+    }
+
+    // Handle Failed Transaction
+    payin.status = "Failed";
+    await payin.save();
+
+    return res.status(400).json({ message: "Payment Failed", payin });
+  } catch (error) {
+    console.error("Error in callback response", error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
 
 const getPayInRes = async (req, res) =>{
   const {reference} = req.query;
