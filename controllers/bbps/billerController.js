@@ -1,8 +1,9 @@
 const axios = require("axios");
 const { encrypt, decrypt } = require('../../utils/encryption');
+const crypto = require('crypto');
 
-
-
+const workingKey = process.env.ENCRYPTION_KEY;
+const key = crypto.createHash('md5').update(workingKey).digest();  
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
 // Biller Info Fetch API
@@ -16,9 +17,10 @@ const billerInfo = async (req, res) => {
   console.log("Validated Request Data:", { billerIdData });
 
   // Encrypt data
-  const encryptedData = encrypt(
-    JSON.stringify(billerId), process.env.ENCRYPTION_KEY
-  );
+  const encryptedData = encrypt(billerId, key);
+  // const encryptedData = encrypt(
+  //   JSON.stringify(billerId), process.env.ENCRYPTION_KEY
+  // );
   console.log("Encrypted Data:", encryptedData);
 
   try {
@@ -40,7 +42,7 @@ const billerInfo = async (req, res) => {
     // Check if the response contains the expected encrypted response
     if (response.data && response.data.enc_response) {
       // Decrypt response
-      const decryptedResponse = decrypt(encryptedData,  process.env.ENCRYPTION_KEY);
+      const decryptedResponse = decrypt(encryptedData,  key);
       console.log("Decrypted Response:", decryptedResponse);
       res.json(JSON.parse(decryptedResponse));
     } else {
