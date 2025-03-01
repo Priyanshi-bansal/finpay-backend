@@ -1,32 +1,46 @@
 const crypto = require('crypto');
 
-// Encryption function
-const encryptData = (plainText, key) => {
-    const keyBuffer = Buffer.from(md5(key), 'hex');  // Equivalent to PHP's md5($key)
-    const iv = Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);
+// Encryption key (replace with your actual key)
+const ENCRYPTION_KEY = 'your_encryption_key_32_bytes_long'; // Must be 32 bytes (64 hex characters)
 
-    const cipher = crypto.createCipheriv('aes-128-cbc', keyBuffer, iv);
-    let encryptedText = cipher.update(plainText, 'utf8', 'hex');
-    encryptedText += cipher.final('hex');
+// Function to encrypt data using AES-256-ECB
+const encrypt = (text, key) => {
+    // Ensure the key is 32 bytes (64 hex characters)
+    const keyBuffer = Buffer.from(key, 'hex');
 
-    return encryptedText;
+    // Create a cipher object
+    const cipher = crypto.createCipheriv('aes-256-ecb', keyBuffer, null);
+
+    // Encrypt the text
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+
+    return encrypted;
 }
 
-// Decryption function
-const decryptData = (encryptedText, key) => {
-    const keyBuffer = Buffer.from(md5(key), 'hex');
-    const iv = Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);
+// JSON data to encrypt
+const jsonString = JSON.stringify({ billerId: ["DUMMY0000DIG08"] });
 
-    const decipher = crypto.createDecipheriv('aes-128-cbc', keyBuffer, iv);
-    let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
-    decryptedText += decipher.final('utf8');
+// Encrypt the JSON string
+const encryptedOutput = encrypt(jsonString, ENCRYPTION_KEY);
 
-    return decryptedText;
+
+// Function to decrypt data using AES-256-ECB
+const decrypt = (encryptedText, key) => {
+    // Ensure the key is 32 bytes (64 hex characters)
+    const keyBuffer = Buffer.from(key, 'hex');
+
+    // Create a decipher object
+    const decipher = crypto.createDecipheriv('aes-256-ecb', keyBuffer, null);
+
+    // Decrypt the text
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
 }
 
-// MD5 hash function
-function md5(str) {
-    return crypto.createHash('md5').update(str).digest('hex');
-}
 
-module.exports = { encryptData, decryptData };
+
+
+module.exports = {encrypt, decrypt}
