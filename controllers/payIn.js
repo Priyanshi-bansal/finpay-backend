@@ -57,7 +57,7 @@ const payIn = async (req, res) => {
   }
 };
 
-const callback = async (req, res) => {
+const callbackPayIn = async (req, res) => {
   try {
     const data = req.body;
     const payin = await PayIn.findOne({ reference: data.reference });
@@ -67,34 +67,20 @@ const callback = async (req, res) => {
     }
 
     if (data.status === "Success") {
-      // Find Retailer & Super Admin
-      const retailer = await User.findById(payin.userId); // Assuming payin has userId
-      const superAdmin = await AdminUser.findOne({ role: "SuperAdmin" });
-
-      if (!retailer || !superAdmin) {
-        return res.status(400).json({ message: "User or Admin not found" });
-      }
-
+     
       // Update PayIn Transaction
       payin.status = "Approved";
       payin.utr = data.utr;
       await payin.save();
 
-      // Update Wallets
-      retailer.payInWallet += payin.amount;
-      superAdmin.wallet += payin.amount;
-
-      await retailer.save();
-      await superAdmin.save();
-
-      // Log Transaction History
-      await Transaction.create({
-        userId: retailer._id,
-        type: "PayIn",
-        amount: payin.amount,
-        status: "Success",
-        reference: data.reference
-      });
+      // // Log Transaction History
+      // await Transaction.create({
+      //   userId: retailer._id,
+      //   type: "PayIn",
+      //   amount: payin.amount,
+      //   status: "Success",
+      //   reference: data.reference
+      // });
 
       return res.status(200).json({ message: "PayIn successful", payin });
     }
@@ -119,73 +105,62 @@ const getPayInRes = async (req, res) =>{
   return res.status(200).send(payin);
 }
 
-const payOut = async (req, res) => {
-  const {
-    userId,
-    amount,
-    reference,
-    trans_mode,
-    account,
-    ifsc,
-    name,
-    mobile,
-    email,
-    address,
-  } = req.body;
+const payInReportAllUsers = async (req, res) => {
+  try {
+    const { userId, startDate, endDate, status, paymentGateway } = req.query; // Query Parameters
 
-  if (!amount || !reference || !name || !mobile || !email || !trans_mode) {
-    return res.send("All fields are required");
-  }
-  const payOutData = await axios.post(
-    "https://api.worldpayme.com/api/v1.1/payoutTransaction",
-    {
-      amount,
-      reference,
-      trans_mode,
-      account,
-      ifsc,
-      name,
-      email,
-      mobile,
-      address,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4IiwianRpIjoiZjgzNmIxMmVmOWExZWJhZmE2MzQ3NzBmMDMwMzhhYTlhZWFlOTRmMzk3Nzg2NTk4MDIxOTNlYTY1OWMxM2FjNWFjYTU4ZjhkMzdlMjJiMGQiLCJpYXQiOjE3MzY0MjMwNjUuNDEyNzAyLCJuYmYiOjE3MzY0MjMwNjUuNDEyNzAzLCJleHAiOjE3Njc5NTkwNjUuNDEwMDQ3LCJzdWIiOiIxNTkiLCJzY29wZXMiOltdfQ.RoH3GH7ljYL1kZGw4h1aiBYSp9WkSsOxhjx3nI7Hq7K68eml7hHFFk2d15pE1KW-8cq_yH70QMlgJ_mcmbq-rtMITPnQbkXsdv4P6F5iT3YBcJ3VjVxCVK8z0C_diq2l-SR5wUX5xtnDTv0l_dgdeq_8nrD_RSS3xC4d-CuoDmtx_QnjqFsiQdE0diPOeI3T_UHo1TB-SvbAofga7cb6IXyuW3nw4rRRsqJmTdH39mv3y10y3Dt8dCM21Oyw7F02W2-_HtTqNe5qhMHfzlISCr7H4rcq3nzxWUWlvFB-xcmnFzVqAHrKA9HZV1h2ovoQPp-QYhfTIzKRtaVx5wKXfitKGtjyIJErdN20GanpF--mzbzAplXeH_bv6-nX16vhFCfINtwSkukysP5irs0QMBb6BAOY0LUB_AIHxXgK93U6mmkv6QvpjPtOwG5OFsLi9QeTIX2wuAGsvvS5zyXLadmOMsE9xffZzQJ2LRBZvQE0UTouvK1KMM3UbPRWpnDbhdNJpWOGdUaq8JXgyx7VFIVcsBVUTQvt3E-0p1eT_A_09rBzI4McvOrQ6KDbS7buRe9BJBredCuU9rJBs4-J2kEAYxCOcMLd86NB1WFEHZT4csl59Xn8JbUopG9HYydT7stpq6bGgW-LFRbNg5jDEmGH2w9jmYydgCkgs7xkrH8`,
-      },
+    let filter = {};
+
+    if (userId) {
+      filter.userId = new mongoose.Types.ObjectId(userId);
     }
-  );
-  //console.log(payOutData.data);
-  if (payOutData.data) {
-    const newPayOut = new PayOut({
-      userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
-      amount,
-      reference,
-      trans_mode,
-      account,
-      ifsc,
-      name,
-      mobile,
-      email,
-      address,
-      status:payOutData.data.status.status,
-      txn_id:payOutData.data.status.data.txn_id
+    if (status) {
+      filter.status = status; // Pending, Approved, Failed
+    }
+    if (paymentGateway) {
+      filter.paymentGateway = paymentGateway; // Razorpay, Paytm, etc.
+    }
+    if (startDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
 
-    });
+    // Aggregation Pipeline
+    const payIns = await PayIn.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          amount: 1,
+          reference: 1,
+          paymentGateway: 1,
+          paymentMode: 1,
+          status: 1,
+          utr: 1,
+          createdAt: 1,
+        },
+      },
+      { $sort: { createdAt: -1 } }, // Sorting by latest transactions
+    ]);
 
-    // Save the record to MongoDB
-    await newPayOut.save();
-    return res
-      .status(200)
-      .send({
-        data: payOutData.data,
-        status: payOutData.data.status,
-        message: "Payment data saved successfully in the database.",
-      });
-  } else {
-    return res.status(400).send("bad request");
+    return res.status(200).json({ success: true, data: payIns });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
-module.exports = { payIn, payOut, callback, getPayInRes };
+module.exports = { payIn, callbackPayIn, getPayInRes, payInReportAllUsers};

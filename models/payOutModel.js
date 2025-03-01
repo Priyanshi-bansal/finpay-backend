@@ -46,6 +46,8 @@ const payOutSchema = new mongoose.Schema(
         },
         status:{
             type: String,
+            enum: ["Pending", "Approved", "Failed"], 
+            default: "Pending",
             required:false
         },
         txn_id:{
