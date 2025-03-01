@@ -1,14 +1,15 @@
 const crypto = require('crypto');
 
-// Encryption key (replace with your actual key)
-const ENCRYPTION_KEY = 'your_encryption_key_32_bytes_long'; // Must be 32 bytes (64 hex characters)
-
 // Function to encrypt data using AES-256-ECB
 const encrypt = (text, key) => {
-    // Ensure the key is 32 bytes (64 hex characters)
+    // Ensure the key is 32 bytes (64 hex characters) and buffer from hexadecimal
     const keyBuffer = Buffer.from(key, 'hex');
 
-    // Create a cipher object
+    if (keyBuffer.length !== 32) {
+        throw new Error('Invalid key length. AES-256 requires a 32-byte key.');
+    }
+
+    // Create a cipher object in ECB mode (no IV needed for ECB mode)
     const cipher = crypto.createCipheriv('aes-256-ecb', keyBuffer, null);
 
     // Encrypt the text
@@ -18,19 +19,16 @@ const encrypt = (text, key) => {
     return encrypted;
 }
 
-// JSON data to encrypt
-const jsonString = JSON.stringify({ billerId: ["DUMMY0000DIG08"] });
-
-// Encrypt the JSON string
-const encryptedOutput = encrypt(jsonString, ENCRYPTION_KEY);
-
-
 // Function to decrypt data using AES-256-ECB
 const decrypt = (encryptedText, key) => {
-    // Ensure the key is 32 bytes (64 hex characters)
+    // Ensure the key is 32 bytes (64 hex characters) and buffer from hexadecimal
     const keyBuffer = Buffer.from(key, 'hex');
 
-    // Create a decipher object
+    if (keyBuffer.length !== 32) {
+        throw new Error('Invalid key length. AES-256 requires a 32-byte key.');
+    }
+
+    // Create a decipher object in ECB mode (no IV needed for ECB mode)
     const decipher = crypto.createDecipheriv('aes-256-ecb', keyBuffer, null);
 
     // Decrypt the text
@@ -40,7 +38,4 @@ const decrypt = (encryptedText, key) => {
     return decrypted;
 }
 
-
-
-
-module.exports = {encrypt, decrypt}
+module.exports = { encrypt, decrypt };

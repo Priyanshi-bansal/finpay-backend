@@ -31,7 +31,7 @@ const billerInfo = async (req, res) => {
         command: "BILLER_INFO",
         request_type: "JSON",
         response_type: "JSON",
-        version: "1.1",
+        version: "1.0",
       }
     );
 
