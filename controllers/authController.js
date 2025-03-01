@@ -105,7 +105,7 @@ const loginController = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, mobileNumber, password, mpin } = req.body;
+    const { name, email, mobileNumber, password} = req.body;
 
     let user = await User.findOne({ email }); 
 
@@ -180,55 +180,7 @@ const updateProfileController = async (req, res) => {
   }
 };
 
-const getAlluserController = async (req, res) => {
-  try {
-    // Get page, limit, and search query from request query parameters
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const searchQuery = req.query.search || ''; 
 
-    // Build search criteria if there's a search query
-    const searchCriteria = searchQuery
-      ? {
-          $or: [
-            { name: { $regex: searchQuery, $options: 'i' } }, 
-            { email: { $regex: searchQuery, $options: 'i' } }, 
-          ],
-        }
-      : {};
-
-    // Calculate the number of users to skip
-    const skip = (page - 1) * limit;
-
-    // Fetch users with pagination and search criteria
-    const result = await User.find(searchCriteria)
-      .skip(skip)
-      .limit(limit);
-
-    if (!result || result.length === 0) {
-      return res.status(404).send("No users found");
-    }
-
-    // Get the total number of users matching the search criteria
-    const totalUsers = await User.countDocuments(searchCriteria);
-
-    // Calculate the total number of pages
-    const totalPages = Math.ceil(totalUsers / limit);
-
-    return res.status(200).json({
-      data: result,
-      pagination: {
-        totalUsers,
-        totalPages,
-        currentPage: page,
-        pageSize: limit,
-      },
-    });
-  } catch (error) {
-    console.error("Error in getAlluserController:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
 
 const getUserController = async (req, res) => {
   try {
@@ -244,210 +196,9 @@ const getUserController = async (req, res) => {
   }
 }; 
 
-const aadhaarVerify = async (req, res) => {
-  const { aadharNumber } = req.body;
-  if (!aadharNumber) {
-    res.send("Aadhar Number is required");
-  }
-  try {
-  
-    const generateOtpResponse = await axios.post(
-      "https://kyc-api.surepass.io/api/v1/aadhaar-v2/generate-otp",
-      {
-        id_number: aadharNumber,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.TOKEN}`,
-        },
-      }
-    );
-    //console.log(generateOtpResponse.data);
-    return res.send({
-      message: "OTP send successful",
-      data: generateOtpResponse.data,
-    });
-  } catch (error) {
-    console.error("Error during Aadhaar verification:", error.message);
-    return res
-      .status(500)
-      .send("An error occurred during Aadhaar verification");
-  }
-};
 
-const submitAadharOTP = async (req, res) => {
-  const { otp, client_id, userId } = req.body;
-  let user = await User.findById(userId);
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
 
-  const submitOtpResponse = await axios.post(
-    "https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp",
-    {
-      client_id: client_id, 
-      otp: otp,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.TOKEN}`, 
-      },
-    }
-  );
-  //console.log(submitOtpResponse.data.data);
-  const nameFromAadhar = submitOtpResponse.data.data;
-  //console.log("name in aadhar card", nameFromAadhar);
-  user.aadharDetails = nameFromAadhar;
-  await user.save();
-
-  if (
-    submitOtpResponse.data &&
-    submitOtpResponse.data.message_code === "success"
-  ) {
-    return res.send({
-      message: "Aadhaar verification successful",
-      data: submitOtpResponse.data,
-      name: nameFromAadhar,
-    });
-  } else {
-    return res.send("Aadhaar verification failed");
-  }
-};
-
-const verifyBank = async (req, res) => {
-  const { id_number, ifsc, userId } = req.body;
-  let user = await User.findById(userId);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  try {
-    if (!id_number || !ifsc) {
-      return res
-        .status(400)
-        .json({ success: false, message: "IFSC number or ID is missing" });
-    }
-
-    const url = "https://kyc-api.surepass.io/api/v1/bank-verification/";
-
-    const response = await axios.post(
-      url,
-      {
-        id_number,
-        ifsc,
-        ifsc_details: true,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.TOKEN}`,
-        },
-      }
-    );
-
-    //console.log("Surepass API Response:", response.data);
-    const nameFromBank = response.data.data;
-    //console.log("name in bank account", nameFromBank);
-    user.bankDetails = nameFromBank;
-    await user.save();
-
-    return res
-      .status(200)
-      .json({ pandata: response.data, success: true, name: nameFromBank });
-  } catch (error) {
-    console.error("Error in verifyBank:", error.message);
-    return res
-      .status(500)
-      .json({ success: false, message: "Error verifying bank details" });
-  }
-};
-
-const verifyPAN = async (req, res) => {
-  const { id_number, userId } = req.body;
-  let user = await User.findById(userId);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  try {
-    if (!id_number) {
-      return res
-        .status(400)
-        .json({ success: false, message: "IFSC number missing" });
-    }
-
-    const url = "https://kyc-api.surepass.io/api/v1/pan/pan";
-
-    const response = await axios.post(
-      url,
-      {
-        id_number,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.TOKEN}`,
-        },
-      }
-    );
-
-    //console.log("Surepass API Response:", response.data);
-
-    const nameFromPAN = response.data.data;
-    //console.log("name in pancard", nameFromPAN);
-    user.panDetails = nameFromPAN;
-    await user.save();
-
-    return res
-      .status(200)
-      .json({ success: true, name: nameFromPAN, data: response.data });
-  } catch (error) {
-    console.error("Error in pancard:", error.message);
-    return res
-      .status(500)
-      .json({ success: false, message: "Error verifying pan details" });
-  }
-};
-
-const normalizeName = (name) => {
-  const prefixList = ["Mr", "Ms", "Mrs", "Dr"];
-  prefixList.forEach((prefix) => {
-    if (name.startsWith(prefix)) {
-      name = name.replace(prefix, "").trim();
-    }
-  });
-  name = name.toLowerCase().replace(/\s+/g, " ");
-  return name;
-};
-
-const userVerify = async (req, res) => {
-  const { userId } = req.body;
-  const user = await User.findById(userId);
-  if (!user) {
-    return "User not found!";
-  }
-
-  const normalizedAadharName = normalizeName(user.aadharDetails.full_name);
-  const normalizedPanName = normalizeName(user.panDetails.full_name);
-  const normalizedBankName = normalizeName(user.bankDetails.full_name);
-
-  if (
-    normalizedAadharName == normalizedPanName &&
-    normalizedPanName == normalizedBankName
-  ) {
-    user.isVerified = true;
-    await user.save();
-    return res.status(200).send("user verified successfully");
-  }
-  user.isVerified = false;
-  await user.save();
-  return res
-    .status(400)
-    .send("Dismatched User details please Correct the information");
-};
 
 
 module.exports = {
@@ -455,12 +206,7 @@ module.exports = {
   verifyOTPController,
   registerUser,
   loginController,
-  getAlluserController,
   getUserController,
   updateProfileController,
-  aadhaarVerify,
-  submitAadharOTP,
-  verifyBank,
-  verifyPAN,
-  userVerify,
+  
 };

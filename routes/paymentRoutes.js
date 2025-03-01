@@ -1,6 +1,6 @@
 const express = require("express");
 
-const {payIn, payOut,callback, getPayInRes} = require('../controllers/paymentController');
+const {payIn, payOut,callback, getPayInRes} = require('../controllers/payIn');
 
 const router = express.Router();
 

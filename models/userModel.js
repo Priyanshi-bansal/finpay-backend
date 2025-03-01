@@ -8,12 +8,9 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    isVerified: {
+    isKycVerified: {
       type: Boolean,
       default: false,
-    },
-    token: {
-      type: String, // Stores the JWT token
     },
     panDetails: {
       type: Object,
