@@ -40,6 +40,7 @@ function hextobin(hexString) {
 
 
 
+module.exports = {encrypt, decrypt};
 
 // // Encrypt the plainText
 // const encryptedText = encrypt(plainText, key);
