@@ -44,7 +44,7 @@ const payOut = async (req, res) => {
         },
       }
     );
-    //console.log(payOutData.data);
+    console.log(payOutData.data);
     if (payOutData.data) {
       const newPayOut = new PayOut({
         userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
@@ -86,7 +86,7 @@ const payOut = async (req, res) => {
           payout.status = "Approved";
           payout.txn_id = data.txn_id;
           await payout.save();
-    
+          console.log("payout callback", payout);
           return res.status(200).json({ message: "PayOut successful", payout });
         }
     

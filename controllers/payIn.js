@@ -1,9 +1,9 @@
 const { default: axios } = require("axios");
 const PayIn = require("../models/payInModel");
 const User =require("../models/userModel")
-const AdminUser =require("../models/mainwallet")
 
-const PayOut = require("../models/payOutModel");
+
+
 
 const mongoose = require('mongoose');
 
@@ -32,7 +32,7 @@ const payIn = async (req, res) => {
       },
     }
   );
-  //console.log(payInData.data);
+  console.log(payInData.data);
   if (payInData.data) {
     const newPayIn = new PayIn({
       userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
