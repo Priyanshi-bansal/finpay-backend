@@ -120,7 +120,7 @@ const registerUser = async (req, res) => {
       })
       .catch((err) => console.error("Error hashing password:", err.message));
 
-    user = await User.create({ name, email, mobileNumber, password: crptPass, mpin });
+    user = await User.create({ name, email, mobileNumber, password: crptPass });
 
     // Initialize wallcsccschdakkskdh priya
     await Wallet.create({ userId: user._id, balance: 0 });
