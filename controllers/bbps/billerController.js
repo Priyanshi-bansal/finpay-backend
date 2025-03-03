@@ -6,34 +6,50 @@ const workingKey = process.env.ENCRYPTION_KEY;
 const key = crypto.createHash('md5').update(workingKey).digest();  
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
+function generateRequestId() {
+  const now = new Date();
+  const year = now.getFullYear() % 10; // Last digit of the year
+  const startOfYear = new Date(now.getFullYear(), 0, 0);
+  const diff = now - startOfYear;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay); // DDD
+  const hours = String(now.getHours()).padStart(2, "0"); // hh (24-hour format)
+  const minutes = String(now.getMinutes()).padStart(2, "0"); // mm
+  
+  const randomPart = crypto.randomBytes(20).toString("hex").slice(0, 27);
+  const timestampPart = `${year}${String(dayOfYear).padStart(3, "0")}${hours}${minutes}`;
+  
+  return `${randomPart}${timestampPart}`;
+}
+
+console.log(generateRequestId());
+
 // Biller Info Fetch API
 const billerInfo = async (req, res) => {
   console.log("Received Request Body:", req.body);
   const {requestId} = req.query;
   const { billerId } = req.body;
-  const billerIdData = billerId[0];
-  console.log("biller id is", billerIdData);
 
-  console.log("Validated Request Data:", { billerIdData });
+  console.log("Validated Request Data:", { billerId });
 
   // Encrypt data
   const encryptedData = encrypt(JSON.stringify(billerId), key);
-  // const encryptedData = encrypt(
-  //   JSON.stringify(billerId), process.env.ENCRYPTION_KEY
-  // );
+ 
   console.log("Encrypted Data:", encryptedData);
 
   try {
     // Send request to BBPS API
     const response = await axios.post(
-      `${BBPS_API_URL}/extMdmCntrl/mdmRequestNew/json?accessCode=${process.env.ACCESS_CODE}&requestId=${requestId}&ver=${process.env.VERSION}&instituteId=${process.env.AGENT_ID}`,
+      `${BBPS_API_URL}/extMdmCntrl/mdmRequestNew/json`,
       {
         enc_request: encryptedData,
-        access_code: process.env.ACCESS_CODE,
+        requestId: generateRequestId(),
+        accessCode: process.env.ACCESS_CODE,
         command: "BILLER_INFO",
         request_type: "JSON",
         response_type: "JSON",
-        version: "1.0",
+        instituteId:"FP09",
+        version: "1.0"
       }
     );
 
