@@ -27,7 +27,6 @@ console.log(generateRequestId());
 // Biller Info Fetch API
 const billerInfo = async (req, res) => {
   console.log("Received Request Body:", req.body);
-  const {requestId} = req.query;
   const { billerId } = req.body;
 
   console.log("Validated Request Data:", { billerId });

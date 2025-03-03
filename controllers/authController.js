@@ -140,7 +140,7 @@ const registerUser = async (req, res) => {
 
 const updateProfileController = async (req, res) => {
   try {
-    const { userId, name, email, mobileNumber,  } = req.body;
+    const { userId, name, email, mobileNumber} = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });

@@ -1,4 +1,4 @@
-const Plan = require("../../models/Planmodel");
+const Plan = require("../../models/servicePlanmodel");
 const User = require("../../models/userModel");
 
 
