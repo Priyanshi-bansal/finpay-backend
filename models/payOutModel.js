@@ -52,7 +52,7 @@ const payOutSchema = new mongoose.Schema(
         },
         txn_id:{
             type:String,
-            required:true
+            required:false
         },
         createdAt: {
             type: Date,
