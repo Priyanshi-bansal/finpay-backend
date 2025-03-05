@@ -1,51 +1,52 @@
 const crypto = require('crypto');
 
-// Function to encrypt the plainText using AES-128-CBC
-const encrypt = (plainText, key) => {
-    const iv = Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);  // IV (same as PHP)
-    
-    // Create cipher instance using AES-128-CBC
-    const cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
-    
-    // Encrypt the plainText and return as hex
-    let encrypted = cipher.update(plainText, 'utf8', 'hex');
+// Define the encryption and decryption functions
+const encrypt = (text, key) => {
+    // Ensure the key is 16 bytes (128 bits) long for AES-128
+    const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
+
+    // Generate a random initialization vector (IV)
+    const iv = crypto.randomBytes(16);
+
+    // Create a cipher instance
+    const cipher = crypto.createCipheriv('aes-128-cbc', keyBuffer, iv);
+
+    // Encrypt the data
+    let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    
-    // Return in uppercase as in PHP code
-    return encrypted.toUpperCase();
+
+    // Return the IV and encrypted data as a base64-encoded string
+    return `${iv.toString('hex')}:${encrypted}`;
 }
 
-// Function to decrypt the encryptedText using AES-128-CBC
 const decrypt = (encryptedText, key) => {
-    const iv = Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);  // IV (same as PHP)
-    
-    // Create decipher instance using AES-128-CBC
-    const decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
-    
-    // Decrypt the encryptedText and return the original text
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    // Ensure the key is 16 bytes (128 bits) long for AES-128
+    const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
+
+    // Split the IV and encrypted data
+    const [ivHex, encryptedData] = encryptedText.split(':');
+    const iv = Buffer.from(ivHex, 'hex');
+
+    // Create a decipher instance
+    const decipher = crypto.createDecipheriv('aes-128-cbc', keyBuffer, iv);
+
+    // Decrypt the data
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
 }
 
-// Function to convert hex to binary (similar to PHP's hextobin function)
-function hextobin(hexString) {
-    let binString = '';
-    for (let i = 0; i < hexString.length; i += 2) {
-        binString += String.fromCharCode(parseInt(hexString.substr(i, 2), 16));
-    }
-    return binString;
-}
+module.exports = {encrypt, decrypt}
 
+// // Example usage
+// const originalText = 'Hello, World!';
+// const key = 'your-secret-key-123'; // Ensure this is 16 bytes for AES-128
 
+// // Encrypt the data
+// const encryptedText = encrypt(originalText, key);
+// console.log('Encrypted:', encryptedText);
 
-module.exports = {encrypt, decrypt};
-
-// // Encrypt the plainText
-// const encryptedText = encrypt(plainText, key);
-// console.log('Encrypted Text:', encryptedText);  // Encrypted text in uppercase (same as PHP)
-
-// // Decrypt the encryptedText
+// // Decrypt the data
 // const decryptedText = decrypt(encryptedText, key);
-// console.log('Decrypted Text:', decryptedText);  // Decrypted text (should match plainText)
+// console.log('Decrypted:', decryptedText);

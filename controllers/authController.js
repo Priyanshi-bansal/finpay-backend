@@ -105,7 +105,7 @@ const loginController = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, mobileNumber, password} = req.body;
+    const { name, email, mobileNumber, password, role} = req.body;
 
     let user = await User.findOne({ email }); 
 
@@ -120,7 +120,7 @@ const registerUser = async (req, res) => {
       })
       .catch((err) => console.error("Error hashing password:", err.message));
 
-    user = await User.create({ name, email, mobileNumber, password: crptPass });
+    user = await User.create({ name, email, mobileNumber, password: crptPass, role });
 
     // Initialize wallcsccschdakkskdh priya
     await Wallet.create({ userId: user._id, balance: 0 });

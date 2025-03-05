@@ -1,3 +1,4 @@
+
 const axios = require("axios");
 const { encrypt, decrypt } = require('../../utils/encryption');
 const crypto = require('crypto');
@@ -15,7 +16,6 @@ function generateRequestId() {
   const dayOfYear = Math.floor(diff / oneDay); // DDD
   const hours = String(now.getHours()).padStart(2, "0"); // hh (24-hour format)
   const minutes = String(now.getMinutes()).padStart(2, "0"); // mm
-  
   const randomPart = crypto.randomBytes(20).toString("hex").slice(0, 27);
   const timestampPart = `${year}${String(dayOfYear).padStart(3, "0")}${hours}${minutes}`;
   
@@ -27,28 +27,22 @@ console.log(generateRequestId());
 // Biller Info Fetch API
 const billerInfo = async (req, res) => {
   console.log("Received Request Body:", req.body);
+
   const { billerId } = req.body;
 
   console.log("Validated Request Data:", { billerId });
 
   // Encrypt data
-  const encryptedData = encrypt(JSON.stringify(billerId), key);
+  const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
  
   console.log("Encrypted Data:", encryptedData);
 
   try {
     // Send request to BBPS API
     const response = await axios.post(
-      `${BBPS_API_URL}/extMdmCntrl/mdmRequestNew/json`,
+      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json?accessCode=${process.env.ACCESS_CODE}&requestId=98745632112345678998745632112345678&ver=1.0&instituteId=FP09`,
       {
         enc_request: encryptedData,
-        requestId: generateRequestId(),
-        accessCode: process.env.ACCESS_CODE,
-        command: "BILLER_INFO",
-        request_type: "JSON",
-        response_type: "JSON",
-        instituteId:"FP09",
-        version: "1.0"
       }
     );
 
