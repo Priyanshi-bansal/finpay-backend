@@ -24,45 +24,84 @@ function generateRequestId() {
 
 console.log(generateRequestId());
 
-// Biller Info Fetch API
+
+
 const billerInfo = async (req, res) => {
-  console.log("Received Request Body:", req.body);
-
-  const { billerId } = req.body;
-
-  console.log("Validated Request Data:", { billerId });
-
-  // Encrypt data
-  const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
- 
-  console.log("Encrypted Data:", encryptedData);
-
   try {
+    console.log("Received Request Body:", req.body);
+
+    const { billerId } = req.body;
+
+    if (!billerId) {
+      return res.status(400).json({ error: "billerId is required" });
+    }
+
+    console.log("Validated Request Data:", { billerId });
+
+    const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
+
+    // // Encrypt data using external API
+    // const encryptionResponse = await axios.post(
+    //   `https://api.worldpayme.com/api/encrypt`,
+    //   {
+    //     merchant_data: JSON.stringify(billerId),
+    //   }
+    // );
+
+    // if (!encryptionResponse.data || !encryptionResponse.data.enc_request) {
+    //   console.error("Encryption API error:", encryptionResponse.data);
+    //   return res.status(500).json({ error: "Encryption failed" });
+    // }
+
+    // const encryptedData = encryptionResponse.data.enc_request;
+    console.log("Encrypted Data:", encryptedData);
+
     // Send request to BBPS API
-    const response = await axios.post(
-      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json?accessCode=${process.env.ACCESS_CODE}&requestId=98745632112345678998745632112345678&ver=1.0&instituteId=FP09`,
+    const bbpsResponse = await axios.post(
+      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
       {
         enc_request: encryptedData,
+      },
+      {
+        params: {
+          accessCode: process.env.ACCESS_CODE,
+          requestId: "98745632112345678998745632112345678",
+          ver: "1.0",
+          instituteId: "FP09",
+        },
       }
     );
 
-    console.log("BBPS Response:", response.data);
+    console.log("BBPS Response:", bbpsResponse.data);
 
-    // Check if the response contains the expected encrypted response
-    if (response.data && response.data.enc_response) {
-      // Decrypt response
-      const decryptedResponse = decrypt(encryptedData,  key);
-      console.log("Decrypted Response:", decryptedResponse);
-      res.json(JSON.parse(decryptedResponse));
-    } else {
+    if (!bbpsResponse.data ) {
       console.error("No encrypted response found in API response.");
-      res.status(400).json({ error: "Invalid response from BBPS API" });
+      return res.status(400).json({ error: "Invalid response from BBPS API" });
     }
+
+    // // Decrypt response using external API
+    // const decryptionResponse = await axios.post(
+    //   `https://api.worldpayme.com/api/decrypt`,
+    //   {
+    //     enc_response: bbpsResponse.data.enc_response,
+    //   }
+    // );
+
+    // if (!decryptionResponse.data || !decryptionResponse.data.decryptedText) {
+    //   console.error("Decryption API error:", decryptionResponse.data);
+    //   return res.status(500).json({ error: "Decryption failed" });
+    // }
+    // const decryptedText = decrypt(encryptedData, workingKey);
+    // console.log("Decrypted Response:", decryptionResponse.data.decryptedText);
+
+     res.json(bbpsResponse.data);
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 
 const billFetch = async (req, res) => {

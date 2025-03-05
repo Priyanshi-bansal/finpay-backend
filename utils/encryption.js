@@ -39,14 +39,3 @@ const decrypt = (encryptedText, key) => {
 
 module.exports = {encrypt, decrypt}
 
-// // Example usage
-// const originalText = 'Hello, World!';
-// const key = 'your-secret-key-123'; // Ensure this is 16 bytes for AES-128
-
-// // Encrypt the data
-// const encryptedText = encrypt(originalText, key);
-// console.log('Encrypted:', encryptedText);
-
-// // Decrypt the data
-// const decryptedText = decrypt(encryptedText, key);
-// console.log('Decrypted:', decryptedText);
