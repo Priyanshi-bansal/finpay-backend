@@ -100,3 +100,96 @@
 
  Wed Mar 05 2025 15:22:23 GMT+0530 (India Standard Time) - 
  Request URL - /biller-info - Request Body - {"billerId":["OTME00005XXZ43"]} - Response Status: 200 - Response Body: "\n<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n<title>Access Denied</title>\n</head>\n<body>\n\t<center>\n\t\t<h5>:::::::: Unauthorized Access Detected ::::::::</h5>\n\t\t<br><br>\n\t\t<h5>Please make sure you have access privilege for this module.</h5>\n\t\t<h6>:::::::: Thank You :::::::: </h6>\n\t</center>\n</body>\n</html>" 
+
+ Wed Mar 05 2025 15:29:23 GMT+0530 (India Standard Time) - 
+ Request URL - /biller-info - Request Body - {"billerId":["OTME00005XXZ43"]} - Response Status: 200 - Response Body: "\n<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n<title>Access Denied</title>\n</head>\n<body>\n\t<center>\n\t\t<h5>:::::::: Unauthorized Access Detected ::::::::</h5>\n\t\t<br><br>\n\t\t<h5>Please make sure you have access privilege for this module.</h5>\n\t\t<h6>:::::::: Thank You :::::::: </h6>\n\t</center>\n</body>\n</html>" 
+
+ Wed Mar 05 2025 15:30:04 GMT+0530 (India Standard Time) - 
+ Request URL - /biller-info - Request Body - {"billerId":["OTME00005XXZ43"]} - Response Status: 200 - Response Body: "\n<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n<title>Access Denied</title>\n</head>\n<body>\n\t<center>\n\t\t<h5>:::::::: Unauthorized Access Detected ::::::::</h5>\n\t\t<br><br>\n\t\t<h5>Please make sure you have access privilege for this module.</h5>\n\t\t<h6>:::::::: Thank You :::::::: </h6>\n\t</center>\n</body>\n</html>" 
+
+ Thu Mar 06 2025 13:12:23 GMT+0530 (India Standard Time) - 
+ Request URL - /alluserwallet - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":[{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":1,"availableBalance":-1},{"_id":"67c7f6c5ff4b4fedeea15a96","name":"rinku","email":"rinkuyadav9460@gmail.com","mobileNumber":"9460129249","role":"Retailer","totalPayIn":0,"totalPayOut":0,"availableBalance":0}]} 
+
+ Thu Mar 06 2025 15:22:29 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:22:57 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c7f6c5ff4b4fedeea15a96 - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c7f6c5ff4b4fedeea15a96","name":"rinku","email":"rinkuyadav9460@gmail.com","mobileNumber":"9460129249","role":"Retailer","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:23:03 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:25:23 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:26:03 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:27:14 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:27:42 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:28:57 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:31:25 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:31:45 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:34:24 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 500 - Response Body: {"success":false,"message":"Something went wrong","error":"Schema hasn't been registered for model \"Users\".\nUse mongoose.model(name, schema)"} 
+
+ Thu Mar 06 2025 15:37:39 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:39:10 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:43:38 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":0,"availableBalance":0}} 
+
+ Thu Mar 06 2025 15:45:19 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 500 - Response Body: {"success":false,"message":"Something went wrong","error":"Class constructor ObjectId cannot be invoked without 'new'"} 
+
+ Thu Mar 06 2025 15:45:42 GMT+0530 (India Standard Time) - 
+ Request URL - /userwallet/67c536b5ab679fac059829fe - Request Body - {} - Response Status: 200 - Response Body: {"success":true,"data":{"_id":"67c536b5ab679fac059829fe","name":"luvkkky","email":"luckktt@gmail.com","mobileNumber":"9460129248","totalPayIn":0,"totalPayOut":1,"availableBalance":-1}} 
+
+ Thu Mar 06 2025 17:48:42 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 500 - Response Body: Internal Server Error 
+
+ Thu Mar 06 2025 17:51:57 GMT+0530 (India Standard Time) - 
+ Request URL - /register - Request Body - {"name":"Admin","email":"admin@finunique@gmail.com","mobileNumber":"3245678456","password":"Admin@123","role":"Admin"} - Response Status: 200 - Response Body: {"message":"Registration successful","user":{"mobileNumber":"3245678456","isKycVerified":false,"role":"Admin","status":"Pending","name":"Admin","email":"admin@finunique@gmail.com","password":"$2b$10$vq7edFZnCr3iDbWly84FX.9TR/f5O3bwzyJKmdQ6GzXbxqZZU5eLO","_id":"67c99365aba74d7280ddebff","createdAt":"2025-03-06T12:21:57.466Z","updatedAt":"2025-03-06T12:21:57.466Z","__v":0}} 
+
+ Thu Mar 06 2025 17:52:08 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 500 - Response Body: Internal Server Error 
+
+ Thu Mar 06 2025 17:53:37 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 500 - Response Body: Internal Server Error 
+
+ Thu Mar 06 2025 17:54:30 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 404 - Response Body: No User Found 
+
+ Thu Mar 06 2025 17:54:59 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 404 - Response Body: No User Found 
+
+ Thu Mar 06 2025 18:00:18 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c536b5ab679fac059829fe","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 404 - Response Body: No User Found 
+
+ Thu Mar 06 2025 18:01:29 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c7f6c5ff4b4fedeea15a96","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 404 - Response Body: No User Found 
+
+ Thu Mar 06 2025 18:02:09 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c7f6c5ff4b4fedeea15a96","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 404 - Response Body: No User Found 
+
+ Thu Mar 06 2025 18:02:58 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c7f6c5ff4b4fedeea15a96","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 
+
+ Thu Mar 06 2025 18:06:53 GMT+0530 (India Standard Time) - 
+ Request URL - /register - Request Body - {"name":"Priyanshi","email":"priyanshi@gmail.com","mobileNumber":"3245678457","password":"Priyanshi@123","role":"Retailer"} - Response Status: 200 - Response Body: {"message":"Registration successful","user":{"mobileNumber":"3245678457","isKycVerified":false,"role":"Retailer","status":"Pending","name":"Priyanshi","email":"priyanshi@gmail.com","password":"$2b$10$Cx2hkCqIOWcfX9DUbDFSQehWWjgB35O8ArKr7JiwxOC9BaL2UzDaa","_id":"67c996e45d90b4e6a0ea54e3","createdAt":"2025-03-06T12:36:52.823Z","updatedAt":"2025-03-06T12:36:52.823Z","__v":0}} 
+
+ Thu Mar 06 2025 18:07:10 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 

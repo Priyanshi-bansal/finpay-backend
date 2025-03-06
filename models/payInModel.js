@@ -4,7 +4,7 @@ const payInSchema = new mongoose.Schema(
     {
         userId : {
             type:Schema.Types.ObjectId,
-            ref:"Users",
+            ref:"User",
             required: true,
         },
         amount :{
@@ -13,7 +13,7 @@ const payInSchema = new mongoose.Schema(
         }, 
         reference:{
             type:String,
-            required:true
+            required:false
         }, 
         name:{
             type:String,
@@ -41,6 +41,10 @@ const payInSchema = new mongoose.Schema(
             type: Date,
             default: Date.now
         },
+        transferMode: {
+            type: String,
+            required: false
+        }
     }
 );
 

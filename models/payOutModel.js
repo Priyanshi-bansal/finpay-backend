@@ -5,7 +5,7 @@ const payOutSchema = new mongoose.Schema(
     {
         userId : {
             type:Schema.Types.ObjectId,
-            ref:"Users",
+            ref:"User",
             required: true,
         },
         amount :{
@@ -14,7 +14,7 @@ const payOutSchema = new mongoose.Schema(
         }, 
         reference:{
             type:String,
-            required:true
+            required:false
         }, 
         trans_mode :{
             type : String,
@@ -22,11 +22,11 @@ const payOutSchema = new mongoose.Schema(
         },
         account:{
             type:Number,
-            required:true
+            required:false
         },
         ifsc :{
             type:String,
-            required:true
+            required:false
         },
         name:{
             type:String,
@@ -58,6 +58,10 @@ const payOutSchema = new mongoose.Schema(
             type: Date,
             default: Date.now
         },
+        utr: {
+            type: String,
+            required: false,
+        }
     }
 );
 
