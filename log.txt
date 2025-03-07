@@ -193,3 +193,18 @@
 
  Thu Mar 06 2025 18:07:10 GMT+0530 (India Standard Time) - 
  Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 
+
+ Fri Mar 07 2025 10:01:07 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 
+
+ Fri Mar 07 2025 10:01:28 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 500 - Response Body: Internal Server Error 
+
+ Fri Mar 07 2025 10:02:00 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"debit","transferMode":"IMPS"} - Response Status: 200 - Response Body: Payment request is successful 
+
+ Fri Mar 07 2025 10:04:34 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"credit","transferMode":"IMPS"} - Response Status: 200 - Response Body: Payment request is successful 
+
+ Fri Mar 07 2025 10:05:30 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"credit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 

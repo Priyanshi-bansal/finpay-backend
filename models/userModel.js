@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema(
     },
    
     plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
+    
     name: {
       type: String,
       required:true,
@@ -45,8 +46,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    password: {
-      type: String,
+    mpin: {
+      type: Number,
       required: true
     },
     mpin:{

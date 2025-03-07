@@ -1,6 +1,7 @@
 const User = require("../../models/userModel");
 const PayIn = require("../../models/payInModel");
 const PayOut = require("../../models/payOutModel");
+const mongoose = require("mongoose");
 
 const {userWallet} = require("../../services/mainWalletService");
 
@@ -14,7 +15,7 @@ const addPaymentRequest = async (req, res) =>{
         }
         let user = await User.findById(userId);
         if(!user){
-          return  res.status(404).send("No User Found")        
+          return  res.status(404).send("No User Found");        
         }
 
         const adminId = Admin._id;

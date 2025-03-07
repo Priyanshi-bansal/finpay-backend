@@ -105,7 +105,7 @@ const loginController = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, mobileNumber, password, role} = req.body;
+    const { name, email, mobileNumber, mpin, role} = req.body;
 
     let user = await User.findOne({ email }); 
 
@@ -113,14 +113,14 @@ const registerUser = async (req, res) => {
       return res.status(400).json("User already exists");
     }
 
-    let crptPass = await bcrypt
-      .hash(password, 10)
-      .then((hash) => {
-        return hash;
-      })
-      .catch((err) => console.error("Error hashing password:", err.message));
+    // let crptPass = await bcrypt
+    //   .hash(password, 10)
+    //   .then((hash) => {
+    //     return hash;
+    //   })
+    //   .catch((err) => console.error("Error hashing password:", err.message));
 
-    user = await User.create({ name, email, mobileNumber, password: crptPass, role });
+    user = await User.create({ name, email, mobileNumber, mpin, role });
 
     // Initialize wallcsccschdakkskdh priya
     await Wallet.create({ userId: user._id, balance: 0 });
