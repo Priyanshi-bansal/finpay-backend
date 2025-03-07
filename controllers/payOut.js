@@ -154,7 +154,7 @@ const adminAction = async (req, res) => {
           },
         }
       );
-      console.log("wertyui", payOutData);
+      console.log("wertyui", payOutData.data);
       return res.status(200).send({
         data: payOutData.data,
         message: "Payment data saved successfully in the database.",
