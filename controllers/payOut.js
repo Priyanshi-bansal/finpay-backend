@@ -129,7 +129,7 @@ const payOut = async (req, res) => {
 const adminAction = async (req, res) => {
   const { action, reference } = req.body; // UTR is a unique reference identifier
   const payout = await PayOut.findOne({ reference });
-
+  console.log("szdxfcgv", payout);
   if (!payout) {
     return res.status(404).send("No payout transaction found");
   }
@@ -137,21 +137,15 @@ const adminAction = async (req, res) => {
   if (action === "APPROVE") {
     payout.adminAction = "Approved";
     await payout.save();
+    const {amount , reference, trans_mode, account, ifsc, name, email, mobile, address} = payout;
 
+    console.log("dfcgvhbhnjmkcv", amount, reference, trans_mode, account, ifsc, name, email, mobile, address);
     // After approval, call the external payout service
     try {
       const payOutData = await axios.post(
         "https://api.worldpayme.com/api/v1.1/payoutTransaction",
         {
-          amount: payout.amount,
-          reference: payout.reference,
-          trans_mode: payout.trans_mode,
-          account: payout.account,
-          ifsc: payout.ifsc,
-          name: payout.name,
-          email: payout.email,
-          mobile: payout.mobile,
-          address: payout.address,
+          amount , reference, trans_mode, account, ifsc, name, email, mobile, address
         },
         {
           headers: {

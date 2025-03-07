@@ -208,3 +208,36 @@
 
  Fri Mar 07 2025 10:05:30 GMT+0530 (India Standard Time) - 
  Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"credit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 
+
+ Fri Mar 07 2025 15:51:29 GMT+0530 (India Standard Time) - 
+ Request URL - /payment-request - Request Body - {"userId":"67c996e45d90b4e6a0ea54e3","amount":"100","utr":"132435678","amountType":"credit","transferMode":"IMPS"} - Response Status: 400 - Response Body: Not enough balance available in your wallet 
+
+ Fri Mar 07 2025 15:58:58 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"766777787787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: [object Object] 
+
+ Fri Mar 07 2025 15:58:58 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"766777787787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: {"message":"Payment data saved successfully in the database."} 
+
+ Fri Mar 07 2025 16:01:03 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut/admin-action - Request Body - {"action":"Rejected","reference":"766777787787"} - Response Status: 400 - Response Body: Payout Request rejected by admin 
+
+ Fri Mar 07 2025 16:31:25 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"766777787787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: [object Object] 
+
+ Fri Mar 07 2025 16:31:25 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"766777787787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: {"message":"Payment data saved successfully in the database."} 
+
+ Fri Mar 07 2025 16:31:31 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut/admin-action - Request Body - {"action":"Rejected","reference":"766777787787"} - Response Status: 400 - Response Body: Payout Request rejected by admin 
+
+ Fri Mar 07 2025 16:36:31 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"7667777gh87787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: [object Object] 
+
+ Fri Mar 07 2025 16:36:31 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut - Request Body - {"amount":"5","reference":"7667777gh87787","name":"Priyanshi","mobile":"7665415080","email":"priyanshi@gmail.com","userId":"67c996e45d90b4e6a0ea54e3","trans_mode":"imps","account":"38667009287","ifsc":"SBIN0031600","address":"Agra"} - Response Status: 200 - Response Body: {"message":"Payment data saved successfully in the database."} 
+
+ Fri Mar 07 2025 16:36:47 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut/admin-action - Request Body - {"action":"APPROVE","reference":"7667777gh87787"} - Response Status: 200 - Response Body: [object Object] 
+
+ Fri Mar 07 2025 16:36:47 GMT+0530 (India Standard Time) - 
+ Request URL - /payOut/admin-action - Request Body - {"action":"APPROVE","reference":"7667777gh87787"} - Response Status: 200 - Response Body: {"data":{"status":"success","data":{"status":"Processed","message":"Transfer Initiated"}},"message":"Payment data saved successfully in the database."} 
