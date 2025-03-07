@@ -176,6 +176,7 @@ const adminAction = async (req, res) => {
 const callbackPayout = async (req, res) => {
   try {
     const data = req.body;
+    console.log("sdfghj",data)
     const payout = await PayOut.findOne({ reference: data.reference });
 
     if (!payout) {
