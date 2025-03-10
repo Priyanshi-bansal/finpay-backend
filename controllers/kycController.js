@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-
+const { default: axios } = require("axios");
 
 const aadhaarVerify = async (req, res) => {
     const { aadharNumber } = req.body;
