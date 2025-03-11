@@ -13,7 +13,7 @@ const addPaymentRequest = async (req, res) =>{
         if(!Admin){
            return res.status(404).send("There is no such Admin User found");
         }
-        let user = await User.findOne({customer_name});
+        let user = await User.findOne({name:customer_name});
         if(!user){
           return  res.status(404).send("No User Found");        
         }
