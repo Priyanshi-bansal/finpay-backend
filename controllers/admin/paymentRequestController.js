@@ -26,7 +26,7 @@ const addPaymentRequest = async (req, res) =>{
         }
         if(amountType == "debit"){
             const newPayIn = new PayIn({
-                userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
+                userId: new mongoose.Types.ObjectId(user._id), // Ensuring the userID is a valid ObjectId
                 amount,
                 name: user.name,
                 mobile:user.mobileNumber,
@@ -52,7 +52,7 @@ const addPaymentRequest = async (req, res) =>{
               await adminPayout.save();
         }else{
             const newPayOut = new PayOut({
-                userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
+                userId: new mongoose.Types.ObjectId(user._id), // Ensuring the userID is a valid ObjectId
                 amount,
                 name: user.name,
                 mobile:user.mobileNumber,
