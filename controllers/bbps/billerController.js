@@ -14,7 +14,7 @@ function generateRequestId() {
   const diff = now - startOfYear;
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfYear = Math.floor(diff / oneDay); // DDD
-  const hours = String(now.getHours()).padStart(2, "0"); // hh (24-hour format)
+  const hours = String(now.getHours()).padStart(2, "0000000000"); // hh (24-hour format)
   const minutes = String(now.getMinutes()).padStart(2, "0"); // mm
   const randomPart = crypto.randomBytes(20).toString("hex").slice(0, 27);
   const timestampPart = `${year}${String(dayOfYear).padStart(3, "0")}${hours}${minutes}`;
