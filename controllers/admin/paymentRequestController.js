@@ -7,13 +7,13 @@ const {userWallet} = require("../../services/mainWalletService");
 
 const addPaymentRequest = async (req, res) =>{
     try {
-        const {userId, amount, utr, amountType, transferMode} = req.body;
+        const {customer_name, amount, utr, amountType, transferMode} = req.body;
         console.log(req.body);
         let Admin = await User.findOne({role:"Admin"});
         if(!Admin){
            return res.status(404).send("There is no such Admin User found");
         }
-        let user = await User.findById(userId);
+        let user = await User.findOne({customer_name});
         if(!user){
           return  res.status(404).send("No User Found");        
         }
