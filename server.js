@@ -12,7 +12,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const queryRoute = require("./routes/queryRoute");
 const planRoute = require("./routes/planRoute");
 const rechargeRoute = require("./routes/rechargeRoute");
-const loggerMiddleware = require("./middleware/loggerMiddleware");
+// const loggerMiddleware = require("./middleware/loggerMiddleware");
 const creditBillRoute = require("./routes/creditbillRoutes");
 const OpLogoRoutes = require("./routes/OpLogoRoutes");
 const billerRoutes = require("./routes/bbps/billerRoutes");
@@ -30,7 +30,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Register Routes
-app.use(loggerMiddleware);
+// app.use(loggerMiddleware);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/payment", paymentRoutes);

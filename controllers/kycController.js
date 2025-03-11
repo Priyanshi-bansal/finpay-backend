@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const { default: axios } = require("axios");
+require("dotenv").config();
 
 const aadhaarVerify = async (req, res) => {
     const { aadharNumber } = req.body;
