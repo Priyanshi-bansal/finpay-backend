@@ -169,7 +169,7 @@ const adminAction = async (req, res) => {
     payout.adminAction = "Rejected";
     payout.status = "Failed"; // Mark as failed if rejected
     await payout.save();
-    return res.status(400).send("Payout Request rejected by admin");
+    return res.status(400). mm,send("Payout Request rejected by admin");
   }
 };
 
