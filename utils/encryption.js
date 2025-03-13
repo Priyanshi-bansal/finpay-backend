@@ -1,41 +1,48 @@
 const crypto = require('crypto');
 
-// Define the encryption and decryption functions
-const encrypt = (text, key) => {
-    // Ensure the key is 16 bytes (128 bits) long for AES-128
-    const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
+const workingKey = process.env.ENCRYPTION_KEY || "6743D700ED335785E47D882027B283C0";
 
-    // Generate a random initialization vector (IV)
-    const iv = crypto.randomBytes(16);
+const initVector = Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);
 
-    // Create a cipher instance
-    const cipher = crypto.createCipheriv('aes-128-cbc', keyBuffer, iv);
-
-    // Encrypt the data
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-
-    // Return the IV and encrypted data as a base64-encoded string
-    return `${iv.toString('hex')}:${encrypted}`;
+function md5HexToBinary(hexString) {
+    return crypto.createHash('md5').update(hexString).digest();
 }
 
-const decrypt = (encryptedText, key) => {
-    // Ensure the key is 16 bytes (128 bits) long for AES-128
-    const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
+function encrypt(plainText, key) {
+    const derivedKey = md5HexToBinary(key);
+    
+    const cipher = crypto.createCipheriv('aes-128-cbc', derivedKey, initVector);
+    let encryptedText = cipher.update(plainText, 'utf8', 'hex');
+    encryptedText += cipher.final('hex');
 
-    // Split the IV and encrypted data
-    const [ivHex, encryptedData] = encryptedText.split(':');
-    const iv = Buffer.from(ivHex, 'hex');
-
-    // Create a decipher instance
-    const decipher = crypto.createDecipheriv('aes-128-cbc', keyBuffer, iv);
-
-    // Decrypt the data
-    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return decrypted;
+    // Return the encrypted text without truncation
+    return encryptedText;
 }
 
-module.exports = {encrypt, decrypt}
+function decrypt(encryptedText, key) {
+    const derivedKey = md5HexToBinary(key);
 
+    try {
+        const decipher = crypto.createDecipheriv('aes-128-cbc', derivedKey, initVector);
+        decipher.setAutoPadding(true); // Ensure proper padding
+
+        // Decrypt the text
+        let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
+        decryptedText += decipher.final('utf8');
+
+        return decryptedText;
+    } catch (error) {
+        console.error("Decryption failed:", error.message);
+        return null; // Handle decryption failure properly
+    }
+}
+
+// Example Data
+// const billerData = JSON.stringify({ "billerId": ["AURDG0000DIG01"] });
+// const encryptedBillerData = encrypt(billerData, workingKey);
+// console.log("Encrypted Biller Data:", encryptedBillerData);
+
+// const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
+// console.log("Decrypted Biller Data:", decryptedBillerData);
+
+module.exports = { encrypt, decrypt };
