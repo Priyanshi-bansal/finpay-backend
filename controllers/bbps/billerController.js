@@ -37,32 +37,79 @@ console.log(generateRequestId()); // Output: X9A5lT6k3PqYZ1mD8WJvNs4e0oC92350611
 
 
 
+// const billerInfo = async (req, res) => {
+//   try {
+//     console.log("Received Request Body:", req.body);
+
+//     const { billerId } = req.body;
+
+//     if (!billerId) {
+//       return res.status(400).json({ error: "billerId is required" });
+//     }
+
+//     console.log("Validated Request Data:", { billerId });
+
+//     const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
+
+
+
+//     // const encryptedData = encryptionResponse.data.enc_request;
+//     console.log("Encrypted Data:", encryptedData);
+
+//     // Send request to BBPS API
+//     const bbpsResponse = await axios.post(
+//       `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
+//       {
+//         enc_request: encryptedData,
+//       },
+//       {
+//         params: {
+//           accessCode: process.env.ACCESS_CODE,
+//           requestId: generateRequestId(),
+//           ver: "1.0",
+//           instituteId: "FP09",
+//         },
+//       }
+//     );
+
+//     console.log("BBPS Response:", bbpsResponse.data);
+
+//     if (!bbpsResponse.data ) {
+//       console.error("No encrypted response found in API response.");
+//       return res.status(400).json({ error: "Invalid response from BBPS API" });
+//     }
+
+//      res.json(bbpsResponse.data);
+//   } catch (error) {
+//     console.error("Error:", error.message);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 const billerInfo = async (req, res) => {
   try {
-    console.log("Received Request Body:", req.body);
+    console.log("Received Request Body:", req.body); // Should be a raw text string
 
-    const { billerId } = req.body;
-
-    if (!billerId) {
+    // Check if request body is empty
+    if (!req.body || req.body.trim() === "") {
       return res.status(400).json({ error: "billerId is required" });
     }
 
-    console.log("Validated Request Data:", { billerId });
+    const billerId = req.body.trim(); // Assuming raw text contains just the billerId
 
-    const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
+    console.log("Validated Request Data:", billerId);
 
-
-
-    // const encryptedData = encryptionResponse.data.enc_request;
+    const encryptedData = encrypt(billerId, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
     // Send request to BBPS API
     const bbpsResponse = await axios.post(
       `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
+      encryptedData, // Send raw text (not JSON)
       {
-        enc_request: encryptedData,
-      },
-      {
+        headers: {
+          "Content-Type": "text/plain", // Ensure it's sent as raw text
+        },
         params: {
           accessCode: process.env.ACCESS_CODE,
           requestId: generateRequestId(),
@@ -74,21 +121,17 @@ const billerInfo = async (req, res) => {
 
     console.log("BBPS Response:", bbpsResponse.data);
 
-    if (!bbpsResponse.data ) {
-      console.error("No encrypted response found in API response.");
+    if (!bbpsResponse.data) {
+      console.error("No response received from BBPS API.");
       return res.status(400).json({ error: "Invalid response from BBPS API" });
     }
 
-     res.json(bbpsResponse.data);
+    res.send(bbpsResponse.data); // Send response as received
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
 
-
-
-
-
-
 module.exports = { billerInfo };
+
