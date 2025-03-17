@@ -22,7 +22,7 @@ function generateRequestId() {
   return `${randomPart}${timestampPart}`;
 }
 
-console.log(generateRequestId());
+console.log("generated request id is: ", generateRequestId());
 
 
 

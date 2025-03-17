@@ -25,7 +25,7 @@ function generateKeyPair() {
 generateKeyPair();
 
 
-// 🛠️ 2. Encrypt Function (Credit Card Data)
+//  2. Encrypt Function (Credit Card Data)
 const encryptCreditCard  = (creditCardNumber) =>{
     const publicKey = fs.readFileSync("public.pem", "utf8");
 
