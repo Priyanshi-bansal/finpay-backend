@@ -8,21 +8,32 @@ const key = crypto.createHash('md5').update(workingKey).digest();
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
 function generateRequestId() {
+  // Generate 27 random alphanumeric characters
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomPart = '';
+  for (let i = 0; i < 27; i++) {
+      randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  // Get current date and time
   const now = new Date();
   const year = now.getFullYear() % 10; // Last digit of the year
   const startOfYear = new Date(now.getFullYear(), 0, 0);
   const diff = now - startOfYear;
   const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay); // DDD
-  const hours = String(now.getHours()).padStart(2, "0000000000"); // hh (24-hour format)
-  const minutes = String(now.getMinutes()).padStart(2, "0"); // mm
-  const randomPart = crypto.randomBytes(20).toString("hex").slice(0, 27);
-  const timestampPart = `${year}${String(dayOfYear).padStart(3, "0")}${hours}${minutes}`;
+  const dayOfYear = Math.floor(diff / oneDay); // nth day of the year
+
+  const hours = now.getHours().toString().padStart(2, '0'); // hh (24-hour format)
+  const minutes = now.getMinutes().toString().padStart(2, '0'); // mm
+
+  // Construct final requestId
+  const requestId = `${randomPart}${year}${dayOfYear.toString().padStart(3, '0')}${hours}${minutes}`;
   
-  return `${randomPart}${timestampPart}`;
+  return requestId;
 }
 
-console.log("generated request id is: ", generateRequestId());
+// Example Usage
+console.log(generateRequestId()); // Output: X9A5lT6k3PqYZ1mD8WJvNs4e0oC9235061145
 
 
 
