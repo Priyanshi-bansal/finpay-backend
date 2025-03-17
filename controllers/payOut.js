@@ -127,7 +127,7 @@ const payOut = async (req, res) => {
 };
 
 const adminAction = async (req, res) => {
-  const { action, reference } = req.body; // UTR is a unique reference identifier
+  const { action, reference } = req.body;
   const payout = await PayOut.findOne({ reference });
   console.log("szdxfcgv", payout);
   if (!payout) {
@@ -137,15 +137,44 @@ const adminAction = async (req, res) => {
   if (action === "APPROVE") {
     payout.adminAction = "Approved";
     await payout.save();
-    const {amount , reference, trans_mode, account, ifsc, name, email, mobile, address} = payout;
+    const {
+      amount,
+      reference,
+      trans_mode,
+      account,
+      ifsc,
+      name,
+      email,
+      mobile,
+      address,
+    } = payout;
 
-    console.log("dfcgvhbhnjmkcv", amount, reference, trans_mode, account, ifsc, name, email, mobile, address);
+    console.log(
+      "dfcgvhbhnjmkcv",
+      amount,
+      reference,
+      trans_mode,
+      account,
+      ifsc,
+      name,
+      email,
+      mobile,
+      address
+    );
     // After approval, call the external payout service
     try {
       const payOutData = await axios.post(
         "https://api.worldpayme.com/api/v1.1/payoutTransaction",
         {
-          amount , reference, trans_mode, account, ifsc, name, email, mobile, address
+          amount: amount,
+          reference: reference,
+          trans_mode: trans_mode,
+          account: account,
+          ifsc: ifsc,
+          name: name,
+          email: email,
+          mobile: mobile,
+          address: address,
         },
         {
           headers: {
@@ -169,15 +198,15 @@ const adminAction = async (req, res) => {
     payout.adminAction = "Rejected";
     payout.status = "Failed"; // Mark as failed if rejected
     await payout.save();
-    return res.status(400). mm,send("Payout Request rejected by admin");
+    return res.status(400).mm, send("Payout Request rejected by admin");
   }
 };
 
 const callbackPayout = async (req, res) => {
   try {
-  console.log("callback reqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",req)
+    console.log("callback reqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", req);
     const data = req.body;
-    console.log("sdfghj",data)
+    console.log("sdfghj", data);
     const payout = await PayOut.findOne({ reference: data.reference });
 
     if (!payout) {

@@ -8,107 +8,59 @@ const key = crypto.createHash('md5').update(workingKey).digest();
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
 function generateRequestId() {
-  // Generate 27 random alphanumeric characters
+  
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomPart = '';
   for (let i = 0; i < 27; i++) {
       randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
-  // Get current date and time
+ 
   const now = new Date();
-  const year = now.getFullYear() % 10; // Last digit of the year
+  const year = now.getFullYear() % 10; 
   const startOfYear = new Date(now.getFullYear(), 0, 0);
   const diff = now - startOfYear;
   const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay); // nth day of the year
+  const dayOfYear = Math.floor(diff / oneDay); 
 
-  const hours = now.getHours().toString().padStart(2, '0'); // hh (24-hour format)
-  const minutes = now.getMinutes().toString().padStart(2, '0'); // mm
+  const hours = now.getHours().toString().padStart(2, '0'); 
+  const minutes = now.getMinutes().toString().padStart(2, '0'); 
 
-  // Construct final requestId
+ 
   const requestId = `${randomPart}${year}${dayOfYear.toString().padStart(3, '0')}${hours}${minutes}`;
   
   return requestId;
 }
 
-// Example Usage
-console.log(generateRequestId()); // Output: X9A5lT6k3PqYZ1mD8WJvNs4e0oC9235061145
+
+// console.log(generateRequestId()); 
 
 
 
-// const billerInfo = async (req, res) => {
-//   try {
-//     console.log("Received Request Body:", req.body);
-
-//     const { billerId } = req.body;
-
-//     if (!billerId) {
-//       return res.status(400).json({ error: "billerId is required" });
-//     }
-
-//     console.log("Validated Request Data:", { billerId });
-
-//     const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
-
-
-
-//     // const encryptedData = encryptionResponse.data.enc_request;
-//     console.log("Encrypted Data:", encryptedData);
-
-//     // Send request to BBPS API
-//     const bbpsResponse = await axios.post(
-//       `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
-//       {
-//         enc_request: encryptedData,
-//       },
-//       {
-//         params: {
-//           accessCode: process.env.ACCESS_CODE,
-//           requestId: generateRequestId(),
-//           ver: "1.0",
-//           instituteId: "FP09",
-//         },
-//       }
-//     );
-
-//     console.log("BBPS Response:", bbpsResponse.data);
-
-//     if (!bbpsResponse.data ) {
-//       console.error("No encrypted response found in API response.");
-//       return res.status(400).json({ error: "Invalid response from BBPS API" });
-//     }
-
-//      res.json(bbpsResponse.data);
-//   } catch (error) {
-//     console.error("Error:", error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const billerInfo = async (req, res) => {
   try {
-    console.log("Received Request Body:", req.body); // Should be a raw text string
+    console.log("Received Request Body:", req.body); 
 
-    // Check if request body is empty
+  
     if (!req.body || req.body.trim() === "") {
       return res.status(400).json({ error: "billerId is required" });
     }
 
-    const billerId = req.body.trim(); // Assuming raw text contains just the billerId
+    const billerId = req.body.trim(); 
 
     console.log("Validated Request Data:", billerId);
 
     const encryptedData = encrypt(billerId, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
-    // Send request to BBPS API
+    
     const bbpsResponse = await axios.post(
       `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
-      encryptedData, // Send raw text (not JSON)
+      encryptedData, 
       {
         headers: {
-          "Content-Type": "text/plain", // Ensure it's sent as raw text
+          "Content-Type": "text/plain", 
         },
         params: {
           accessCode: process.env.ACCESS_CODE,
@@ -126,7 +78,7 @@ const billerInfo = async (req, res) => {
       return res.status(400).json({ error: "Invalid response from BBPS API" });
     }
 
-    res.send(bbpsResponse.data); // Send response as received
+    res.send(bbpsResponse.data);
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });

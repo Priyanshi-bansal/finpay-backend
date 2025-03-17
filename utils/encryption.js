@@ -2,7 +2,7 @@ const crypto = require('crypto');
 
 const workingKey = process.env.ENCRYPTION_KEY || "6743D700ED335785E47D882027B283C0";
 
-// Define the encryption and decryption functions
+
 function encrypt(text, key) {
     // Ensure the key is 16 bytes (128 bits) long for AES-128
     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
@@ -40,7 +40,7 @@ function decrypt(encryptedText, key) {
 }
 
 // Example usage
-// const billerData = JSON.stringify({ "billerId": ["AURDG0000DIG01"] });
+// const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
 // const encryptedBillerData = encrypt(billerData, workingKey);
 // console.log("Encrypted Biller Data:", encryptedBillerData);
 
