@@ -56,7 +56,7 @@ const billerInfo = async (req, res) => {
 
     
     const bbpsResponse = await axios.post(
-      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
+      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/xml`,
       encryptedData, 
       {
         headers: {
