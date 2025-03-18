@@ -75,6 +75,22 @@ const billerInfo = async (req, res) => {
   }
 };
 
+const billerDec = async (req, res) => {
+  try {
+    console.log("Received Request Body:", req.body);
+
+    const { encryptedData } = req.body;
+
+   
+    const decryptedData = decrypt(encryptedData, workingKey);
+
+     res.json(decryptedData);
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 
 
