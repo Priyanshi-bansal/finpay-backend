@@ -71,7 +71,7 @@ const billerInfo = async (req, res) => {
       }
     );
 
-    console.log("BBPS Response:", bbpsResponse.data);
+    console.log("BBPS Response:", bbpsResponse);
 
     if (!bbpsResponse.data) {
       console.error("No response received from BBPS API.");
