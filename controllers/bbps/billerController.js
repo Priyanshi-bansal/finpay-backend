@@ -8,50 +8,60 @@ const key = crypto.createHash('md5').update(workingKey).digest();
 const BBPS_API_URL = process.env.BBPS_API_URL;
 
 function generateRequestId() {
+  
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomPart = '';
+  for (let i = 0; i < 27; i++) {
+      randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+ 
   const now = new Date();
-  const year = now.getFullYear() % 10; // Last digit of the year
+  const year = now.getFullYear() % 10; 
   const startOfYear = new Date(now.getFullYear(), 0, 0);
   const diff = now - startOfYear;
   const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay); // DDD
-  const hours = String(now.getHours()).padStart(2, "0"); // hh (24-hour format)
-  const minutes = String(now.getMinutes()).padStart(2, "0"); // mm
-  const randomPart = crypto.randomBytes(20).toString("hex").slice(0, 27);
-  const timestampPart = `${year}${String(dayOfYear).padStart(3, "0")}${hours}${minutes}`;
+  const dayOfYear = Math.floor(diff / oneDay); 
+
+  const hours = now.getHours().toString().padStart(2, '0'); 
+  const minutes = now.getMinutes().toString().padStart(2, '0'); 
+
+ 
+  const requestId = `${randomPart}${year}${dayOfYear.toString().padStart(3, '0')}${hours}${minutes}`;
   
-  return `${randomPart}${timestampPart}`;
+  return requestId;
 }
 
-console.log(generateRequestId());
+
+// console.log(generateRequestId()); 
+
 
 
 
 const billerInfo = async (req, res) => {
   try {
-    console.log("Received Request Body:", req.body);
+    console.log("Received Request Body:", req.body); 
 
-    const { billerId } = req.body;
-
-    if (!billerId) {
+  
+    if (!req.body || req.body.trim() === "") {
       return res.status(400).json({ error: "billerId is required" });
     }
 
-    console.log("Validated Request Data:", { billerId });
+    const billerId = req.body.trim(); 
 
-    const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
+    console.log("Validated Request Data:", billerId);
 
-
-
-    // const encryptedData = encryptionResponse.data.enc_request;
+    const encryptedData = encrypt(billerId, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
-    // Send request to BBPS API
+    
     const bbpsResponse = await axios.post(
-      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
+      `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/xml`,
+      encryptedData, 
       {
-        enc_request: encryptedData,
-      },
-      {
+        headers: {
+          "Content-Type": "text/plain", 
+        },
         params: {
           accessCode: process.env.ACCESS_CODE,
           requestId: generateRequestId(),
@@ -61,19 +71,20 @@ const billerInfo = async (req, res) => {
       }
     );
 
-    console.log("BBPS Response:", bbpsResponse.data);
+    console.log("BBPS Response:", bbpsResponse);
 
-    if (!bbpsResponse.data ) {
-      console.error("No encrypted response found in API response.");
+    if (!bbpsResponse.data) {
+      console.error("No response received from BBPS API.");
       return res.status(400).json({ error: "Invalid response from BBPS API" });
     }
 
-     res.json(bbpsResponse.data);
+    res.send(bbpsResponse.data);
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const billerDec = async (req, res) => {
   try {
@@ -92,8 +103,6 @@ const billerDec = async (req, res) => {
 };
 
 
+module.exports = { billerInfo,  billerDec};
 
 
-
-
-module.exports = { billerInfo };

@@ -196,6 +196,8 @@ const getUserController = async (req, res) => {
   }
 }; 
 
+
+
 module.exports = {
   sendOtpController,
   verifyOTPController,

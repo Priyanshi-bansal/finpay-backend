@@ -7,13 +7,13 @@ const {userWallet} = require("../../services/mainWalletService");
 
 const addPaymentRequest = async (req, res) =>{
     try {
-        const {userId, amount, utr, amountType, transferMode} = req.body;
+        const {customer_name, amount, utr, amountType, transferMode} = req.body;
         console.log(req.body);
         let Admin = await User.findOne({role:"Admin"});
         if(!Admin){
            return res.status(404).send("There is no such Admin User found");
         }
-        let user = await User.findById(userId);
+        let user = await User.findOne({name:customer_name});
         if(!user){
           return  res.status(404).send("No User Found");        
         }
@@ -26,7 +26,7 @@ const addPaymentRequest = async (req, res) =>{
         }
         if(amountType == "debit"){
             const newPayIn = new PayIn({
-                userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
+                userId: new mongoose.Types.ObjectId(user._id), // Ensuring the userID is a valid ObjectId
                 amount,
                 name: user.name,
                 mobile:user.mobileNumber,
@@ -52,7 +52,7 @@ const addPaymentRequest = async (req, res) =>{
               await adminPayout.save();
         }else{
             const newPayOut = new PayOut({
-                userId: new mongoose.Types.ObjectId(userId), // Ensuring the userID is a valid ObjectId
+                userId: new mongoose.Types.ObjectId(user._id), // Ensuring the userID is a valid ObjectId
                 amount,
                 name: user.name,
                 mobile:user.mobileNumber,

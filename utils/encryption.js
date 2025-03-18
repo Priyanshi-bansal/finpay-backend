@@ -1,7 +1,9 @@
 const crypto = require('crypto');
 
-// Define the encryption and decryption functions
-const encrypt = (text, key) => {
+const workingKey = process.env.ENCRYPTION_KEY || "6743D700ED335785E47D882027B283C0";
+
+
+function encrypt(text, key) {
     // Ensure the key is 16 bytes (128 bits) long for AES-128
     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
 
@@ -19,7 +21,7 @@ const encrypt = (text, key) => {
     return `${iv.toString('hex')}:${encrypted}`;
 }
 
-const decrypt = (encryptedText, key) => {
+function decrypt(encryptedText, key) {
     // Ensure the key is 16 bytes (128 bits) long for AES-128
     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
 
@@ -37,8 +39,13 @@ const decrypt = (encryptedText, key) => {
     return decrypted;
 }
 
+// Example usage
+// const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
+// const encryptedBillerData = encrypt(billerData, workingKey);
+// console.log("Encrypted Biller Data:", encryptedBillerData);
 
 
+// const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
+// console.log("Decrypted Biller Data:", decryptedBillerData);
 
-module.exports = {encrypt, decrypt}
-
+ module.exports = { encrypt, decrypt };
