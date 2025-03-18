@@ -206,11 +206,9 @@ const callbackPayout = async (req, res) => {
   try {
     console.log("callback reqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", req);
     const data = req.body;
-<<<<<<< HEAD
-    console.log("sdfghj",data);
-=======
+
     console.log("sdfghj", data);
->>>>>>> ed57fea9046f8ca1cb8ce7df919e9b7d0378eb52
+
     const payout = await PayOut.findOne({ reference: data.reference });
 
     if (!payout) {

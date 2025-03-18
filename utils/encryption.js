@@ -44,7 +44,6 @@ function decrypt(encryptedText, key) {
 // const encryptedBillerData = encrypt(billerData, workingKey);
 // console.log("Encrypted Biller Data:", encryptedBillerData);
 
-
 // const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
 // console.log("Decrypted Biller Data:", decryptedBillerData);
 
