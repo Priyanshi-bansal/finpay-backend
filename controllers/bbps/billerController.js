@@ -72,7 +72,7 @@ const billerInfoenc = async (req, res) => {
         }
 
         const decryptedData = decrypt(bbpsResponse.data, workingKey);
-
+        console.log("decryptedData", decryptedData);
         res.json(decryptedData);
     } catch (error) {
         console.error("Error:", error.message);

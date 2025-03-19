@@ -25,14 +25,14 @@ function encrypt(text, key) {
 function decrypt(encryptedText, key) {
     // Ensure the key is 16 bytes (128 bits) long
     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
-
+    console.log("keyBuffer", keyBuffer);
     // Create a decipher instance
     const decipher = crypto.createDecipheriv('aes-128-cbc', keyBuffer, iv);
-
+    console.log("decipher", decipher);
     // Decrypt the data
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-
+    console.log("decrypted", decrypted);
     return decrypted;
 }
 
