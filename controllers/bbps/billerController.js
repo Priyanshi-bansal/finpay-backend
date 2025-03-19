@@ -44,12 +44,12 @@ const billerInfoenc = async (req, res) => {
         console.log("Validated Request Data:", billerId);
 
         // Encrypt the billerId
-        const encryptedData = encrypt(JSON.stringify(billerId), workingKey);
+        const encryptedData = encrypt(billerId, workingKey);
         console.log("Encrypted Data:", encryptedData);
 
         // Send encrypted data to BBPS API
         const bbpsResponse = await axios.post(
-            `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json`,
+            `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/xml`,
             encryptedData, 
             {
                 headers: {
