@@ -1,11 +1,13 @@
 const express = require("express");
 
-const {billerInfo} = require("../../controllers/bbps/billerController");
+const {billerInfoenc, billerInfo} = require("../../controllers/bbps/billerController");
 
 const router = express.Router();
 
 
-router.post("/biller-info", express.text(), billerInfo);
+router.post("/biller-info-enc", express.text(), billerInfoenc);
+
+router.post("/biller-info", billerInfo);
 // router.post("/biller-decrypt", billerDec);
 
 

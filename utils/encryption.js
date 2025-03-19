@@ -40,11 +40,11 @@ function decrypt(encryptedText, key) {
 }
 
 // Example usage
-// const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
-// const encryptedBillerData = encrypt(billerData, workingKey);
-// console.log("Encrypted Biller Data:", encryptedBillerData);
+const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
+const encryptedBillerData = encrypt(billerData, workingKey);
+console.log("Encrypted Biller Data:", encryptedBillerData);
 
-// const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
-// console.log("Decrypted Biller Data:", decryptedBillerData);
+const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
+console.log("Decrypted Biller Data:", decryptedBillerData);
 
  module.exports = { encrypt, decrypt };
