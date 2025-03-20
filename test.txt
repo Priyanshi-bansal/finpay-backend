@@ -101,46 +101,341 @@ const billPayment = async (req, res) => {
 
 
 
+bill fetch ------------->
+
+
+{ "agentId": "CC01CC01513515340681", "agentDeviceInfo": { "ip": "192.168.2.73", "initChannel": "AGT", "mac": "01-23-45-67-89-ab"
+},"customerInfo": { "customerMobile": 9898990084, "customerEmail": "", "customerAdhaar": "", "customerPan": ""
+},"billerId": "OTME00005XXZ43", "inputParams": { "input": [
+{ "paramName": "a", "paramValue": 10
+},{ "paramName": "a b", "paramValue": 20
+},{ "paramName": "a b c", "paramValue": 30
+},{ "paramName": "a b c d", "paramValue": 40
+},{ "paramName": "a b c d e", "paramValue": 50
+}
+]
+}
+}
 
 
 
-// const crypto = require('crypto');
+bill Pay --------->
 
-// // Define the encryption and decryption functions
-// const encrypt = (text, key) => {
-//     // Ensure the key is 16 bytes (128 bits) long for AES-128
-//     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
+{
+  "billPaymentRequest": {
+    "agentId": "CC01CC01513515340681",
+    "billerAdhoc": true,
+    "agentDeviceInfo": {
+      "ip": "192.168.2.73",
+      "initChannel": "AGT",
+      "mac": "01-23-45-67-89-ab"
+    },
+    "customerInfo": {
+      "customerMobile": "9898990084",
+      "customerEmail": "",
+      "customerAdhaar": "",
+      "customerPan": ""
+    },
+    "billerId": "OTME00005XXZ43",
+    "inputParams": {
+      "input": [
+        {
+          "paramName": "a",
+          "paramValue": "10"
+        },
+        {
+          "paramName": "a b",
+          "paramValue": "20"
+        },
+        {
+          "paramName": "a b c",
+          "paramValue": "30"
+        },
+        {
+          "paramName": "a b c d",
+          "paramValue": "40"
+        },
+        {
+          "paramName": "a b c d e",
+          "paramValue": "50"
+        }
+      ]
+    },
+    "billerResponse": {
+      "billAmount": 100000,
+      "billDate": "2015-06-14",
+      "billNumber": "12303",
+      "billPeriod": "june",
+      "customerName": "BBPS",
+      "dueDate": "2015-06-20",
+      "amountOptions": [
+        {
+          "amountName": "Late Payment Fee",
+          "amountValue": 40
+        },
+        {
+          "amountName": "Fixed Charges",
+          "amountValue": 50
+        },
+        {
+          "amountName": "Additional Charges",
+          "amountValue": 60
+        }
+      ]
+    },
+    "additionalInfo": {
+      "info": [
+        {
+          "infoName": "a",
+          "infoValue": "10"
+        },
+        {
+          "infoName": "a b",
+          "infoValue": "20"
+        },
+        {
+          "infoName": "a b c",
+          "infoValue": "30"
+        },
+        {
+          "infoName": "a b c d",
+          "infoValue": "40"
+        }
+      ]
+    },
+    "amountInfo": {
+      "amount": 100000,
+      "currency": 356,
+      "custConvFee": 0,
+      "amountTags": ""
+    },
+    "paymentMethod": {
+      "paymentMode": "Cash",
+      "quickPay": "N",
+      "splitPay": "N"
+    },
+    "paymentInfo": {
+      "info": [
+        {
+          "infoName": "Remarks",
+          "infoValue": "Received"
+        }
+      ]
+    }
+  }
+}
 
-//     // Generate a random initialization vector (IV)
-//     const iv = crypto.randomBytes(16);
 
-//     // Create a cipher instance
-//     const cipher = crypto.createCipheriv('aes-128-cbc', keyBuffer, iv);
 
-//     // Encrypt the data
-//     let encrypted = cipher.update(text, 'utf8', 'hex');
-//     encrypted += cipher.final('hex');
+bill pay (Quick pay) ----------->
 
-//     // Return the IV and encrypted data as a base64-encoded string
-//     return `${iv.toString('hex')}:${encrypted}`;
-// }
+{
+  "billPaymentRequest": {
+    "agentId": "CC01CC01513515340681",
+    "billerAdhoc": true,
+    "agentDeviceInfo": {
+      "ip": "192.168.2.73",
+      "initChannel": "AGT",
+      "mac": "01-23-45-67-89-ab"
+    },
+    "customerInfo": {
+      "customerMobile": "9898990083",
+      "customerEmail": "",
+      "customerAdhaar": "",
+      "customerPan": ""
+    },
+    "billerId": "OCNS00000TMN02",
+    "inputParams": {
+      "input": [
+        {
+          "paramName": "a",
+          "paramValue": "10"
+        },
+        {
+          "paramName": "a b",
+          "paramValue": "20"
+        },
+        {
+          "paramName": "a b c",
+          "paramValue": "30"
+        },
+        {
+          "paramName": "a b c d",
+          "paramValue": "40"
+        },
+        {
+          "paramName": "a b c d e",
+          "paramValue": "50"
+        }
+      ]
+    },
+    "amountInfo": {
+      "amount": 100000,
+      "currency": 356,
+      "custConvFee": 0,
+      "amountTags": ""
+    },
+    "paymentMethod": {
+      "paymentMode": "Cash",
+      "quickPay": "Y",
+      "splitPay": "N"
+    },
+    "paymentInfo": {
+      "info": [
+        {
+          "infoName": "Remarks",
+          "infoValue": "Received"
+        }
+      ]
+    }
+  }
+}
 
-// const decrypt = (encryptedText, key) => {
-//     // Ensure the key is 16 bytes (128 bits) long for AES-128
-//     const keyBuffer = Buffer.from(key, 'utf8').slice(0, 16);
 
-//     // Split the IV and encrypted data
-//     const [ivHex, encryptedData] = encryptedText.split(':');
-//     const iv = Buffer.from(ivHex, 'hex');
+TRANSACTION STATUS
+(TRANS_REF_ID) -------------->
 
-//     // Create a decipher instance
-//     const decipher = crypto.createDecipheriv('aes-128-cbc', keyBuffer, iv);
+{
+  "transactionStatusReq": {
+    "trackType": "TRANS_REF_ID",
+    "trackValue": "CC0175192009"
+  }
+}
 
-//     // Decrypt the data
-//     let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-//     decrypted += decipher.final('utf8');
 
-//     return decrypted;
-// }
+TRANSACTION STATUS
+(REQUEST_ID) ----------->
 
-// module.exports = {encrypt, decrypt}
+{
+  "transactionStatusReq": {
+    "trackType": "REQUEST_ID",
+    "trackValue": "9874563211y686678998845670112345624"
+  }
+}
+
+
+COMPLAINT REGISTRATION
+(TRANSACTION) --------------->
+
+{
+  "complaintRegistrationReq": {
+    "complaintType": "Transaction",
+    "participationType": "",
+    "agentId": "",
+    "txnRefId": "CC015079BAAE00073048",
+    "billerId": "",
+    "complaintDesc": "Complaint initiated through API",
+    "servReason": "",
+    "complaintDisposition": "Transaction Successful, account not updated"
+  }
+}
+
+
+COMPLAINT TRACKING ---------->
+
+{
+  "complaintTrackingReq": {
+    "complaintType": "Transaction",
+    "complaintId": "XD1495446616192"
+  }
+}
+
+
+
+Bill Validation -------------->
+
+{
+  "billValidationRequest": {
+    "agentId": "CC01CC01513515340681",
+    "billerId": "OTNS00005XXZ43",
+    "inputParams": {
+      "input": [
+        {
+          "paramName": "a",
+          "paramValue": "10"
+        },
+        {
+          "paramName": "a b",
+          "paramValue": "20"
+        },
+        {
+          "paramName": "a b c",
+          "paramValue": "30"
+        },
+        {
+          "paramName": "a b c d",
+          "paramValue": "40"
+        },
+        {
+          "paramName": "a b c d e",
+          "paramValue": "50"
+        }
+      ]
+    }
+  }
+}
+
+
+quick pay ------------->
+
+{
+  "billPaymentRequest": {
+    "agentId": "CC01CC01513515340681",
+    "billerAdhoc": true,
+    "agentDeviceInfo": {
+      "ip": "192.168.2.73",
+      "initChannel": "AGT",
+      "mac": "01-23-45-67-89-ab"
+    },
+    "customerInfo": {
+      "customerMobile": "9898990083",
+      "customerEmail": "",
+      "customerAdhaar": "",
+      "customerPan": ""
+    },
+    "billerId": "OCNS00000TMN02",
+    "inputParams": {
+      "input": [
+        {
+          "paramName": "a",
+          "paramValue": "10"
+        },
+        {
+          "paramName": "a b",
+          "paramValue": "20"
+        },
+        {
+          "paramName": "a b c",
+          "paramValue": "30"
+        },
+        {
+          "paramName": "a b c d",
+          "paramValue": "40"
+        },
+        {
+          "paramName": "a b c d e",
+          "paramValue": "50"
+        }
+      ]
+    },
+    "amountInfo": {
+      "amount": "100000",
+      "currency": "356",
+      "custConvFee": "0",
+      "amountTags": ""
+    },
+    "paymentMethod": {
+      "paymentMode": "Cash",
+      "quickPay": "Y",
+      "splitPay": "N"
+    },
+    "paymentInfo": {
+      "info": [
+        {
+          "infoName": "Remarks",
+          "infoValue": "Received"
+        }
+      ]
+    }
+  }
+}
