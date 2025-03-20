@@ -45,6 +45,7 @@ function decrypt(encryptedText, key) {
 }
 
 // ✅ Example Usage
+
 const billerData = JSON.stringify("Hello World");
 console.log("➡️ Original Biller Data:", billerData);
 
@@ -55,6 +56,7 @@ console.log("🔐 Encrypted Biller Data:", encryptedBillerData);
 // Decrypt the data
 try {
     const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
+
     console.log("🔓 Decrypted Biller Data:", decryptedBillerData);
 } catch (error) {
     console.error("❌ Decryption Failed:", error.message);

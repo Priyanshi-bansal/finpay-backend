@@ -53,7 +53,7 @@ const billerInfo = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json",
-
+      encryptedData,
       {
         headers: {
           "Content-Type": "text/plain",
@@ -63,7 +63,6 @@ const billerInfo = async (req, res) => {
           requestId: generateRequestId(),
           ver: "1.0",
           instituteId: "FP09",
-          encRequest: encryptedData,
         },
       }
     );
@@ -88,11 +87,7 @@ const billFetch = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
     const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
 
     const billerData = JSON.stringify(requestBody);
     console.log("Validated Request Data:", billerData);
@@ -103,8 +98,7 @@ const billFetch = async (req, res) => {
 
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
-      "https://stgapi.billavenue.com/billpay/extBillCntrl/billFetchRequest/xml",
-      encryptedData,
+      "https://stgapi.billavenue.com/billpay/extBillCntrl/billFetchRequest/json",
       {
         headers: {
           "Content-Type": "text/plain",
@@ -114,6 +108,7 @@ const billFetch = async (req, res) => {
           requestId: generateRequestId(),
           ver: "1.0",
           instituteId: "FP09",
+          encRequest: encryptedData,
         },
       }
     );

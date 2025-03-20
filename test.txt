@@ -94,13 +94,6 @@ const billPayment = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
 bill fetch ------------->
 
 
@@ -306,6 +299,7 @@ TRANSACTION STATUS
 TRANSACTION STATUS
 (REQUEST_ID) ----------->
 
+
 {
   "transactionStatusReq": {
     "trackType": "REQUEST_ID",
@@ -438,4 +432,5 @@ quick pay ------------->
       ]
     }
   }
+
 }
