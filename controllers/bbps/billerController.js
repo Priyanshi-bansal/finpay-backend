@@ -28,7 +28,7 @@ function generateRequestId() {
 }
 
 // ✅ Encrypted API (biller-info-enc)
-const billerInfoenc = async (req, res) => {
+const billerInfo = async (req, res) => {
     try {
         console.log("Received Request Body:", req.body);
 
@@ -79,20 +79,27 @@ const billerInfoenc = async (req, res) => {
 };
 
 
-// ✅ Plain API without encryption (biller-info)
-const billerInfo = async (req, res) => {
+const billFetch = async (req, res) => {
     try {
         console.log("Received Request Body:", req.body);
 
-        if (!req.body || req.body.trim() === "") {
-            return res.status(400).json({ error: "billerId is required" });
+        // ✅ Parse raw string to JSON if coming as raw text
+        const requestBody = JSON.parse(req.body);
+        if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
+            return res.status(400).json({ error: "Invalid billerId format" });
         }
 
-        const billerData = JSON.stringify(req.body);
+        const billerData = JSON.stringify(requestBody);
+        console.log("Validated Request Data:", billerData);
 
+        // ✅ Encrypt stringified data
+        const encryptedData = encrypt(billerData, workingKey);
+        console.log("Encrypted Data:", encryptedData);
+
+        // ✅ Send encrypted data to BBPS API
         const bbpsResponse = await axios.post(
-            `https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/xml`,
-            billerData,
+            "https://stgapi.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/json",
+            encryptedData,
             {
                 headers: {
                     "Content-Type": "text/plain",
@@ -112,12 +119,15 @@ const billerInfo = async (req, res) => {
             return res.status(400).json({ error: "Invalid response from BBPS API" });
         }
 
+        // ✅ Decrypt response data
         const decryptedData = decrypt(bbpsResponse.data, workingKey);
+        console.log("Decrypted Data:", decryptedData);
         res.json(JSON.parse(decryptedData));
     } catch (error) {
         console.error("Error:", error.message);
         res.status(500).json({ error: error.message });
     }
-};
+}
 
-module.exports = { billerInfoenc, billerInfo };
+
+module.exports = { billerInfo };
