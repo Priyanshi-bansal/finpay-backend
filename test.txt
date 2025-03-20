@@ -144,3 +144,17 @@ const billPayment = async (req, res) => {
 // }
 
 // module.exports = {encrypt, decrypt}
+
+
+{ "agentId": "CC01CC01513515340681", "agentDeviceInfo": { "ip": "192.168.2.73", "initChannel": "AGT", "mac": "01-23-45-67-89-ab"
+},"customerInfo": { "customerMobile": 9898990084, "customerEmail": "", "customerAdhaar": "", "customerPan": ""
+},"billerId": "OTME00005XXZ43", "inputParams": { "input": [
+{ "paramName": "a", "paramValue": 10
+},{ "paramName": "a b", "paramValue": 20
+},{ "paramName": "a b c", "paramValue": 30
+},{ "paramName": "a b c d", "paramValue": 40
+},{ "paramName": "a b c d e", "paramValue": 50
+}
+]
+}
+}

@@ -45,20 +45,25 @@ function decrypt(encryptedText, key) {
 }
 
 // ✅ Example Usage
-// const billerData = JSON.stringify("Hello World");
-// console.log("➡️ Original Biller Data:", billerData);
+const billerData = JSON.stringify({
+  "transactionStatusReq": {
+    "trackType": "REQUEST_ID",
+    "trackValue": "35CHRACTERSREQUESTID123456789012345"
+  }
+});
+console.log("➡️ Original Biller Data:", billerData);
 
 // // Encrypt the data
-// const encryptedBillerData = encrypt(billerData, workingKey);
-// console.log("🔐 Encrypted Biller Data:", encryptedBillerData);
+const encryptedBillerData = encrypt(billerData, workingKey);
+console.log("🔐 Encrypted Biller Data:", encryptedBillerData);
 
-// // Decrypt the data
-// try {
-//     const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
-//     console.log("🔓 Decrypted Biller Data:", decryptedBillerData);
-// } catch (error) {
-//     console.error("❌ Decryption Failed:", error.message);
-// }
+// Decrypt the data
+try {
+    const decryptedBillerData = decrypt("encryptedBillerData", workingKey);
+    console.log("🔓 Decrypted Biller Data:", decryptedBillerData);
+} catch (error) {
+    console.error("❌ Decryption Failed:", error.message);
+}
 
 // ✅ Export encryption and decryption functions
 module.exports = { encrypt, decrypt };
