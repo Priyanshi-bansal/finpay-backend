@@ -32,10 +32,13 @@ transactionStatusReq---------->
 compliant register--------->
 
 
-
+{"complaintAssigned":"XYZ Bank","complaintId":"CC0125079106647","complaintResponseCode":"000","complaintResponseReason":"SUCCESS","transactionDetailsVO":{}}
 
 
 
 complaint traking------------->
+
+{"complaintAssigned":"XYZ Bank","complaintId":"CC0125079106647","complaintStatus":"ASSIGNED","complaintResponseCode":"000","complaintResponseReason":"SUCCESS","complaintRemarks":"Testing Complaint registration through API","transactionDetailsVO":{}}
+
 
 

@@ -87,9 +87,10 @@ const billFetch = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    const requestBody = JSON.parse(req.body);
+    // const requestBody = JSON.parse(req.body);
 
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
+
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -99,12 +100,13 @@ const billFetch = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillCntrl/billFetchRequest/json",
+      // No body, params go in `params`
       {
         headers: {
           "Content-Type": "text/plain",
         },
-        params: {
-          accessCode: ACCESS_CODE,
+        Params: {
+          accessCode: AVJJ84II88GJ68IMZY,
           requestId: generateRequestId(),
           ver: "1.0",
           instituteId: "FP09",

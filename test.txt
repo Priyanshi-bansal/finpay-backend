@@ -115,7 +115,6 @@ bill fetch ------------->
 bill Pay --------->
 
 {
-  "billPaymentRequest": {
     "agentId": "CC01CC01513515340681",
     "billerAdhoc": true,
     "agentDeviceInfo": {
@@ -161,8 +160,8 @@ bill Pay --------->
       "billPeriod": "june",
       "customerName": "BBPS",
       "dueDate": "2015-06-20",
-      "amountOptions": [
-        {
+      "amountOptions": {
+        "option" : [{
           "amountName": "Late Payment Fee",
           "amountValue": 40
         },
@@ -173,8 +172,8 @@ bill Pay --------->
         {
           "amountName": "Additional Charges",
           "amountValue": 60
-        }
-      ]
+        }]
+      }
     },
     "additionalInfo": {
       "info": [
@@ -200,7 +199,7 @@ bill Pay --------->
       "amount": 100000,
       "currency": 356,
       "custConvFee": 0,
-      "amountTags": ""
+      "amountTags": []
     },
     "paymentMethod": {
       "paymentMode": "Cash",
@@ -216,7 +215,6 @@ bill Pay --------->
       ]
     }
   }
-}
 
 
 
@@ -330,7 +328,7 @@ COMPLAINT TRACKING ---------->
 {
   "complaintTrackingReq": {
     "complaintType": "Transaction",
-    "complaintId": "XD1495446616192"
+    "complaintId": "CC0125079106647"
   }
 }
 
