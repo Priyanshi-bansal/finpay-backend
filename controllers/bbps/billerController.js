@@ -2,6 +2,9 @@ const axios = require("axios");
 const { encrypt, decrypt } = require("../../utils/encryption");
 const crypto = require("crypto");
 
+// ✅ Global variable to store requestId
+let globalRequestId = null;
+
 const workingKey = process.env.ENCRYPTION_KEY;
 const BBPS_API_URL = process.env.BBPS_API_URL;
 const ACCESS_CODE = process.env.ACCESS_CODE;
@@ -97,6 +100,10 @@ const billFetch = async (req, res) => {
     const encryptedData = encrypt(billerData, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
+    // ✅ Generate and store requestId in global variable
+    globalRequestId = generateRequestId();
+    console.log("✅ Request ID stored globally:", globalRequestId);
+
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillCntrl/billFetchRequest/json",
@@ -107,7 +114,7 @@ const billFetch = async (req, res) => {
         },
         params: {
           accessCode: ACCESS_CODE,
-          requestId: generateRequestId(),
+          requestId: globalRequestId,
           ver: "1.0",
           instituteId: "FP09",
           encRequest: encryptedData,
@@ -143,6 +150,13 @@ const billpayment = async (req, res) => {
     const encryptedData = encrypt(billerData, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
+    if (!globalRequestId) {
+      console.warn("⚠️ No requestId found. Generating new requestId.");
+      globalRequestId = generateRequestId(); // Fallback if no requestId found
+    }
+
+    console.log("✅ Using Request ID:", globalRequestId);
+
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillPayCntrl/billPayRequest/json",
@@ -153,7 +167,7 @@ const billpayment = async (req, res) => {
         },
         params: {
           accessCode: ACCESS_CODE,
-          requestId: generateRequestId(),
+          requestId: globalRequestId,
           ver: "1.0",
           instituteId: "FP09",
           encRequest: encryptedData,
