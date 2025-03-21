@@ -103,7 +103,7 @@ const billFetch = async (req, res) => {
       // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -135,10 +135,8 @@ const billpayment = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
 
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -182,13 +180,7 @@ const transactionstatus = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
-
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -232,13 +224,7 @@ const complaintregistration = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
-
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -282,13 +268,7 @@ const complainttracking = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
-
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -333,13 +313,7 @@ const billvalidation = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
-
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
@@ -384,13 +358,7 @@ const plan = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
 
-    // ✅ Parse raw string to JSON if coming as raw text
-    const requestBody = JSON.parse(req.body);
-    if (!requestBody.billerId || !Array.isArray(requestBody.billerId)) {
-      return res.status(400).json({ error: "Invalid billerId format" });
-    }
-
-    const billerData = JSON.stringify(requestBody);
+    const billerData = JSON.stringify(req.body);
     console.log("Validated Request Data:", billerData);
 
     // ✅ Encrypt stringified data
