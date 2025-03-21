@@ -100,7 +100,7 @@ const billFetch = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillCntrl/billFetchRequest/json",
-      // No body, params go in `params`
+      null, // No body, params go in `params`
       {
         headers: {
           "Content-Type": "application/json",
@@ -146,9 +146,10 @@ const billpayment = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillPayCntrl/billPayRequest/json",
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -190,9 +191,10 @@ const transactionstatus = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/transactionStatus/fetchInfo/json",
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -234,9 +236,10 @@ const complaintregistration = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extComplaints/register/json",
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -278,10 +281,10 @@ const complainttracking = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extComplaints/track/json",
-
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -323,10 +326,10 @@ const billvalidation = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extBillValCntrl/billValidationRequest/json",
-
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
@@ -368,10 +371,10 @@ const plan = async (req, res) => {
     // ✅ Send encrypted data to BBPS API
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extPlanMDM/planMdmRequest/json",
-
+      null, // No body, params go in `params`
       {
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         params: {
           accessCode: ACCESS_CODE,
