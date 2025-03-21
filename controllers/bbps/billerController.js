@@ -105,8 +105,8 @@ const billFetch = async (req, res) => {
         headers: {
           "Content-Type": "text/plain",
         },
-        Params: {
-          accessCode: AVJJ84II88GJ68IMZY,
+        params: {
+          accessCode: ACCESS_CODE,
           requestId: generateRequestId(),
           ver: "1.0",
           instituteId: "FP09",
