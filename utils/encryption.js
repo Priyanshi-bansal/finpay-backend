@@ -12,8 +12,7 @@ function encrypt(text, key) {
 
     // Create a cipher instance
     const cipher = crypto.createCipheriv('aes-128-cbc', keyBuffer, iv);
-
-    // Encrypt the data
+    
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
 
@@ -40,11 +39,11 @@ function decrypt(encryptedText, key) {
 }
 
 // Example usage
-// const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
-// const encryptedBillerData = encrypt(billerData, workingKey);
-// console.log("Encrypted Biller Data:", encryptedBillerData);
+const billerData = JSON.stringify({ "billerId": ["OTME00005XXZ43"] });
+const encryptedBillerData = encrypt(billerData, workingKey);
+console.log("Encrypted Biller Data:", encryptedBillerData);
 
-// const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
-// console.log("Decrypted Biller Data:", decryptedBillerData);
+const decryptedBillerData = decrypt(encryptedBillerData, workingKey);
+console.log("Decrypted Biller Data:", decryptedBillerData);
 
  module.exports = { encrypt, decrypt };
