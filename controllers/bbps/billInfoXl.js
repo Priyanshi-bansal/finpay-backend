@@ -119,11 +119,22 @@ const processBillerData = async (req, res) => {
 // ✅ Function to save biller data to MongoDB
 const saveBillerData = async (decryptedData) => {
     try {
+      // ✅ Parse the decrypted data
       const data = JSON.parse(decryptedData);
       console.log("data is ", data);
   
-      // ✅ Insert data into MongoDB
-      await Biller.insertMany(data, { ordered: false });
+      // ✅ Check if 'biller' array exists
+      if (!data || !Array.isArray(data.biller) || data.biller.length === 0) {
+        console.warn("⚠️ No valid biller data found to insert.");
+        return;
+      }
+  
+      // ✅ Extract 'biller' array
+      const billerData = data.biller;
+      console.log("billerData to be inserted:", billerData);
+  
+      // ✅ Insert only the 'biller' array into MongoDB
+      await Biller.insertMany(billerData, { ordered: false });
       console.log("✅ Biller data inserted successfully into MongoDB.");
     } catch (error) {
       if (error.code === 11000) {
@@ -133,5 +144,6 @@ const saveBillerData = async (decryptedData) => {
       }
     }
   };
+  
 
 module.exports = { processBillerData };
