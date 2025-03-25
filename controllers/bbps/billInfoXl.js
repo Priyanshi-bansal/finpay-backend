@@ -120,10 +120,7 @@ const processBillerData = async (req, res) => {
 const saveBillerData = async (decryptedData) => {
     try {
       const data = JSON.parse(decryptedData);
-      if (!Array.isArray(data) || data.length === 0) {
-        console.warn("⚠️ No valid data to insert.");
-        return;
-      }
+      console.log("data is ", data);
   
       // ✅ Insert data into MongoDB
       await Biller.insertMany(data, { ordered: false });
