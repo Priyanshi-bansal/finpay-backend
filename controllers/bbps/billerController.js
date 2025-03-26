@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { encrypt, decrypt } = require("../../utils/encryption");
 const crypto = require("crypto");
-require('dotenv').config();
+const { sendOtp } = require("../../services/smsService.js");
 
 // ✅ Global variable to store requestId
 let globalRequestId = null;
@@ -9,6 +9,9 @@ let globalRequestId = null;
 const workingKey = process.env.ENCRYPTION_KEY;
 const BBPS_API_URL = process.env.BBPS_API_URL;
 const ACCESS_CODE = process.env.ACCESS_CODE;
+
+
+
 
 // ✅ Generate unique requestId in required format
 function generateRequestId() {
@@ -139,39 +142,6 @@ const billFetch = async (req, res) => {
   }
 };
 
-// ✅ Fast2SMS API Function
-const sendSms = async (mobile, amount, txnId, customerName, dateTime) => {
-  try {
-    const messageBody = `Dear Customer ${customerName}, bill for ${amount} is paid for Mob No ${mobile} keep ${txnId} on ${dateTime} for your reference.`;
-
-    // ✅ Fast2SMS API Endpoint and Data
-    const smsResponse = await axios.post(
-      'https://www.fast2sms.com/dev/bulkV2',
-      {
-        sender_id: 'TXTIND',
-        message: messageBody,
-        route: 'v3',
-        numbers: mobile, // Mobile number to send SMS
-      },
-      {
-        headers: {
-          authorization: process.env.FAST2SMS_API_KEY,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    if (smsResponse.data.return) {
-      console.log(`✅ SMS sent successfully to ${mobile}`);
-    } else {
-      console.error(`❌ Failed to send SMS: ${smsResponse.data.message}`);
-    }
-  } catch (error) {
-    console.error(`❌ Error sending SMS: ${error.message}`);
-  }
-};
-
-
 const billpayment = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
@@ -218,24 +188,7 @@ const billpayment = async (req, res) => {
     // ✅ Decrypt response data
     const decryptedData = decrypt(bbpsResponse.data, workingKey);
     console.log("Decrypted Data:", decryptedData);
-
-    const response = JSON.parse(decryptedData);
-
-    // ✅ Send SMS on Successful Payment
-    if (response.responseCode === '000') {
-      // Extract dynamic details from bill payment response
-      const mobile = req.body.customerInfo.customerMobile || 'NA'; // Fallback if mobile not present
-      const amount = parseInt(response.respAmount) ; // Convert paise to rupees
-      const txnId = response.txnRefId || 'NA'; // Transaction ID from response
-      const customerName = response.respCustomerName || 'Customer';
-      const dateTime = response.respBillDate || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-
-      // ✅ Send SMS notification with dynamic values
-      const sms = await sendSms(mobile, amount, txnId, customerName, dateTime);
-      console.log("sms received is :", sms);
-    }
-
-    res.json(response);
+    res.json(JSON.parse(decryptedData));
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
@@ -287,6 +240,50 @@ const transactionstatus = async (req, res) => {
   }
 };
 
+
+
+const sendMessage = async (mobileNumber, message) => {
+  try {
+    const apiKey = process.env.FLASH2SMS_API_KEY;
+    const senderId = process.env.FLASH2SMS_SENDER_ID;
+
+    if (!apiKey || !senderId) {
+      console.error("Missing API Key or Sender ID");
+      throw new Error("Fast2SMS API key or Sender ID is missing");
+    }
+
+    const params = {
+      route: "q",  // Change route if needed (e.g., "dlt")
+      sender_id: senderId,
+      message,
+      language: "english",
+      numbers: mobileNumber,
+    };
+
+    // Sending the message through Fast2SMS API
+    const response = await axios.post("https://www.fast2sms.com/dev/bulkV2", params, {
+      headers: {
+        authorization: apiKey  // API key in the header
+      }
+    });
+
+    if (response.data.return) {
+      return { success: true, message: "Message sent successfully" };
+    } else {
+      const errorMessage = response.data.message || "Failed to send message";
+      return { success: false, message: errorMessage };
+    }
+  } catch (error) {
+    if (error.response) {
+      console.error("Error in sendMessage - Response Error:", error.response.data);
+      return { success: false, message: error.response.data.message || "Failed to send message" };
+    } else {
+      console.error("Error in sendMessage - General Error:", error.message);
+      return { success: false, message: "Error sending message" };
+    }
+  }
+};
+
 const complaintregistration = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
@@ -298,7 +295,7 @@ const complaintregistration = async (req, res) => {
     const encryptedData = encrypt(billerData, workingKey);
     console.log("Encrypted Data:", encryptedData);
 
-    // ✅ Send encrypted data to BBPS API
+    // ✅ Send encrypted data to BBPS API for complaint registration
     const bbpsResponse = await axios.post(
       "https://stgapi.billavenue.com/billpay/extComplaints/register/json",
       null, // No body, params go in `params`
@@ -325,12 +322,41 @@ const complaintregistration = async (req, res) => {
     // ✅ Decrypt response data
     const decryptedData = decrypt(bbpsResponse.data, workingKey);
     console.log("Decrypted Data:", decryptedData);
-    res.json(JSON.parse(decryptedData));
+
+    // Parsing decrypted response
+    const responseData = JSON.parse(decryptedData);
+
+    // Handling the success response from BBPS API
+    if (responseData.complaintResponseCode === "001") {
+      const complaintId = responseData.errorInfo.error[0].errorMessage.split(":")[1].trim(); // Extract complaint ID
+      const txnRefId = req.body.txnRefId;  // Extract txnRefId from request body
+      const mobileNumber = req.body.mobileNumber;  // Mobile number from request body (Assumed field)
+
+      // Generate the customer message
+      const customerMessage = `Dear customer, your complaint has been registered successfully for txn ref id ${txnRefId}, and you can track your complaint id using your complaint id: ${complaintId}.`;
+
+      // Send the customer message using the sendMessage function
+      const messageResponse = await sendMessage(mobileNumber, customerMessage);
+
+      // Send response back to the client
+      return res.json({
+        success: true,
+        message: customerMessage,
+        messageResponse: messageResponse,  // Send message response as part of the response
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: responseData.errorInfo.error[0].errorMessage || "Failed to register the complaint",
+      });
+    }
+    
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const complainttracking = async (req, res) => {
   try {
@@ -360,6 +386,7 @@ const complainttracking = async (req, res) => {
         },
       }
     );
+
 
     console.log("BBPS Response:", bbpsResponse.data);
 
