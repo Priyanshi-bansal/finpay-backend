@@ -3,7 +3,7 @@ const { billerInfo,billFetch,billpayment,transactionstatus,complaintregistration
 const router = express.Router();
 
 const multer = require("multer");
-const { processBillerData } = require("../../controllers/bbps/billInfoXl");
+const { processBillerData, getBillerByCategory, getBillerById } = require("../../controllers/bbps/billInfoXl");
 
 
 
@@ -26,5 +26,10 @@ router.post("/plan", plan);
 // Upload and process biller data
 router.post("/upload", upload.single("file"), processBillerData);
 
-module.exports = router;
+// getall billername by category
+router.get("/:category",  getBillerByCategory);
+// getall billername by category
+router.get("/billerdata/:billerId",  getBillerById);
 
+
+module.exports = router; 
