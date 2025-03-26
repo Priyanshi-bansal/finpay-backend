@@ -144,6 +144,55 @@ const saveBillerData = async (decryptedData) => {
       }
     }
   };
+ 
+
+// ✅ Function to get biller data by category
+const getBillerByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    if (!category) {
+      return res.status(400).json({ message: "Biller category is required" });
+    }
+
+    // ✅ Fetch billerName and billerId based on billerCategory
+    const billers = await Biller.find(
+      { billerCategory: category },
+      { billerName: 1, billerId: 1, _id: 0 }
+    );
+
+    if (billers.length === 0) {
+      return res.status(404).json({ message: "No billers found for this category" });
+    }
+
+    res.status(200).json(billers);
+  } catch (error) {
+    console.error("Error fetching biller data:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+// ✅ Function to get biller data by billerId
+const getBillerById = async (req, res) => {
+  try {
+    const { billerId } = req.params;
+
+    if (!billerId) {
+      return res.status(400).json({ message: "Biller ID is required" });
+    }
+
+    // ✅ Fetch biller data based on billerId
+    const biller = await Biller.findOne({ billerId });
+
+    if (!biller) {
+      return res.status(404).json({ message: "Biller not found" });
+    }
+
+    res.status(200).json(biller);
+  } catch (error) {
+    console.error("Error fetching biller data:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
   
 
-module.exports = { processBillerData };
+module.exports = { processBillerData ,getBillerByCategory,getBillerById};
