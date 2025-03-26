@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { encrypt, decrypt } = require("../../utils/encryption");
 const crypto = require("crypto");
+require('dotenv').config();
 
 // ✅ Global variable to store requestId
 let globalRequestId = null;
@@ -138,6 +139,39 @@ const billFetch = async (req, res) => {
   }
 };
 
+// ✅ Fast2SMS API Function
+const sendSms = async (mobile, amount, txnId, customerName, dateTime) => {
+  try {
+    const messageBody = `Dear Customer ${customerName}, bill for ${amount} is paid for Mob No ${mobile} keep ${txnId} on ${dateTime} for your reference.`;
+
+    // ✅ Fast2SMS API Endpoint and Data
+    const smsResponse = await axios.post(
+      'https://www.fast2sms.com/dev/bulkV2',
+      {
+        sender_id: 'TXTIND',
+        message: messageBody,
+        route: 'v3',
+        numbers: mobile, // Mobile number to send SMS
+      },
+      {
+        headers: {
+          authorization: process.env.FAST2SMS_API_KEY,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (smsResponse.data.return) {
+      console.log(`✅ SMS sent successfully to ${mobile}`);
+    } else {
+      console.error(`❌ Failed to send SMS: ${smsResponse.data.message}`);
+    }
+  } catch (error) {
+    console.error(`❌ Error sending SMS: ${error.message}`);
+  }
+};
+
+
 const billpayment = async (req, res) => {
   try {
     console.log("Received Request Body:", req.body);
@@ -184,7 +218,24 @@ const billpayment = async (req, res) => {
     // ✅ Decrypt response data
     const decryptedData = decrypt(bbpsResponse.data, workingKey);
     console.log("Decrypted Data:", decryptedData);
-    res.json(JSON.parse(decryptedData));
+
+    const response = JSON.parse(decryptedData);
+
+    // ✅ Send SMS on Successful Payment
+    if (response.responseCode === '000') {
+      // Extract dynamic details from bill payment response
+      const mobile = req.body.customerInfo.customerMobile || 'NA'; // Fallback if mobile not present
+      const amount = parseInt(response.respAmount) ; // Convert paise to rupees
+      const txnId = response.txnRefId || 'NA'; // Transaction ID from response
+      const customerName = response.respCustomerName || 'Customer';
+      const dateTime = response.respBillDate || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+      // ✅ Send SMS notification with dynamic values
+      const sms = await sendSms(mobile, amount, txnId, customerName, dateTime);
+      console.log("sms received is :", sms);
+    }
+
+    res.json(response);
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
