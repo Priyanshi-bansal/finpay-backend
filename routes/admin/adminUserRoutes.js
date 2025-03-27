@@ -5,6 +5,7 @@ const plan = require("../../controllers/admin/AssignService");
 const paymentRequest = require("../../controllers/admin/paymentRequestController");
 
 router.get("/alluser", plan.getAlluserController);
+router.get("/export-users", plan.exportUsersToExcel);
 router.get("/alluserwallet", MainWallet.allUserWalletreport);
 router.get("/userwallet/:userId", MainWallet.userWalletreport);
 router.post("/planCreate", plan.createPlan);

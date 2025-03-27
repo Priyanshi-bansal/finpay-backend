@@ -61,6 +61,43 @@ exports.getAlluserController = async (req, res) => {
   }
 };
 
+const XLSX = require("xlsx");
+
+exports.exportUsersToExcel = async (req, res) => {
+  try {
+    const users = await User.find(); // Sare users fetch karo
+
+    if (!users || users.length === 0) {
+      return res.status(404).send("No users found");
+    }
+
+    // **Excel File Generate Karna**
+    const worksheet = XLSX.utils.json_to_sheet(users.map(user => ({
+      Name: user.name,
+      Email: user.email,
+      Role: user.role,
+      "KYC Verified": user.isKycVerified ? "Yes" : "No",
+      Status: user.status,
+      CreatedAt: user.createdAt
+    })));
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+
+    // Excel file ko buffer me save karo
+    const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+    // Response headers set karo taki file download ho
+    res.setHeader("Content-Disposition", "attachment; filename=users.xlsx");
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    return res.send(excelBuffer);
+  } catch (error) {
+    console.error("Error exporting users to Excel:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 exports.createPlan = async (req, res) => {
   try {
     const { name, services } = req.body;
