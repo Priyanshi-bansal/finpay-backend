@@ -158,7 +158,7 @@ const getBillerByCategory = async (req, res) => {
     // ✅ Fetch billerName and billerId based on billerCategory
     const billers = await Biller.find(
       { billerCategory: category },
-      { billerName: 1, billerId: 1, _id: 0 }
+      { billerName: 1, billerId: 1,billerAliasName:1,billerCategory:1, _id: 0 }
     );
 
     if (billers.length === 0) {
