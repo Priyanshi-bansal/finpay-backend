@@ -8,6 +8,7 @@ const { assignPlan } = require('../../controllers/admin/assignPlantoUser');
 const { getReport } = require('../../controllers/admin/servicePlanReportController');
 
 router.get("/alluser", plan.getAlluserController);
+router.get("/export-users", plan.exportUsersToExcel);
 router.get("/alluserwallet", MainWallet.allUserWalletreport);
 router.get("/userwallet/:userId", MainWallet.userWalletreport);
 router.post("/planCreate", plan.createPlan);

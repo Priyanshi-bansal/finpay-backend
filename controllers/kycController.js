@@ -211,6 +211,54 @@ const aadhaarVerify = async (req, res) => {
       .status(400)
       .send("Dismatched User details please Correct the information");
   };
+  const updateBankAccount = async (req, res) => {
+    const { userId, id_number, ifsc } = req.body;
+    let user = await User.findById(userId);
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    // Normalize names
+    const normalizedAadharName = normalizeName(user.aadharDetails.full_name);
+    const normalizedPanName = normalizeName(user.panDetails.full_name);
+
+    try {
+        if (!id_number || !ifsc) {
+            return res.status(400).json({ success: false, message: "IFSC number or ID is missing" });
+        }
+
+        // Call Surepass API for bank verification
+        const url = "https://kyc-api.surepass.io/api/v1/bank-verification/";
+        const response = await axios.post(
+            url,
+            { id_number, ifsc, ifsc_details: true },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.TOKEN}`,
+                },
+            }
+        );
+
+        const nameFromBank = response.data.data.full_name;
+        const normalizedBankName = normalizeName(nameFromBank);
+
+        // Check if Aadhaar & PAN name matches with new bank name
+        if (normalizedAadharName === normalizedBankName && normalizedPanName === normalizedBankName) {
+            user.bankDetails = response.data.data; // Update bank details
+            await user.save();
+            return res.status(200).json({ success: true, message: "Bank details updated successfully", data: response.data });
+        } else {
+            return res.status(400).json({ success: false, message: "Bank account name mismatch with Aadhaar & PAN" });
+        }
+
+    } catch (error) {
+        console.error("Error updating bank account:", error.message);
+        return res.status(500).json({ success: false, message: "Error updating bank details" });
+    }
+};
+
 
   
   module.exports = {
@@ -219,5 +267,6 @@ const aadhaarVerify = async (req, res) => {
     verifyBank,
     verifyPAN,
     userVerify,
+    updateBankAccount
   };
   
