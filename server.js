@@ -20,7 +20,10 @@ const KycRoutes = require("./routes/kycRoutes");
 const servicePlanRoutes = require("./routes/servicePlanRoutes");
 
 //admin routes
-const adminRoutes=require("./routes/admin/adminUserRoutes")
+const adminRoutes=require("./routes/admin/adminUserRoutes");
+
+// ✅ Import Cron Job
+const cronJobs = require("./utils/cronJob");
 
 
 const app = express();
@@ -61,6 +64,8 @@ mongoose
       await Merchant.create({ name: "Default Merchant", accountBalance: 0 });
       console.log("Default merchant account created.");
     }
+    // ✅ Start Cron Jobs After DB Connection
+    cronJobs;
   })
   .catch((err) => {
     console.error("Error connecting to MongoDB:", err.message);

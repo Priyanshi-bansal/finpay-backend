@@ -18,7 +18,7 @@ const payOutSchema = new mongoose.Schema(
         }, 
         trans_mode :{
             type : String,
-            required:true,
+            required:false,
         },
         account:{
             type:Number,

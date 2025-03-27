@@ -4,11 +4,20 @@ const MainWallet = require("../../controllers/admin/mainwallet");
 const plan = require("../../controllers/admin/AssignService");
 const paymentRequest = require("../../controllers/admin/paymentRequestController");
 
+const { assignPlan } = require('../../controllers/admin/assignPlantoUser');
+const { getReport } = require('../../controllers/admin/servicePlanReportController');
+
 router.get("/alluser", plan.getAlluserController);
 router.get("/alluserwallet", MainWallet.allUserWalletreport);
 router.get("/userwallet/:userId", MainWallet.userWalletreport);
 router.post("/planCreate", plan.createPlan);
 router.post("/planassign/:id", plan.assignPlanToUser);
 router.post("/payment-request", paymentRequest.addPaymentRequest);
+
+// ✅ Assign Plan to User
+router.post('/assign-plan', assignPlan);
+
+// ✅ Get Report for Admin
+router.get('/report', getReport);
 
 module.exports = router;

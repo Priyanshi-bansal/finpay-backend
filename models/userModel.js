@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("./servicePlanmodel");
 
 const userSchema = new mongoose.Schema(
   {
@@ -36,7 +37,13 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
    
-    plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
+    plan: {
+      planId: { type: mongoose.Schema.Types.ObjectId, ref: 'ServicePlan', default: null },
+      planType: { type: String, enum: ['monthly', 'quarterly', 'half-yearly', 'yearly'], default: null },
+      startDate: { type: Date, default: null },
+      endDate: { type: Date, default: null },
+    },
+
     
     name: {
       type: String,
@@ -49,9 +56,6 @@ const userSchema = new mongoose.Schema(
     mpin: {
       type: Number,
       required: true
-    },
-    mpin:{
-      type:Number
     }
   },
   { timestamps: true }

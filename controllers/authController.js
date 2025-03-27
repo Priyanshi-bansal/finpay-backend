@@ -184,12 +184,16 @@ const updateProfileController = async (req, res) => {
 
 const getUserController = async (req, res) => {
   try {
-    let user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id).populate("plan"); // ✅ "ServicePlan" को populate करें
+
     if (!user) {
-      return res.status(404).send("No user found");
+      return res.status(404).json({ message: "No user found" });
     }
-    user = user.toObject();  // Convert Mongoose document to plain object
-    return res.status(200).send(user);
+
+    user = user.toObject(); // Convert Mongoose document to plain object
+    console.log("User is: ", user);
+
+    return res.status(200).json(user);
   } catch (error) {
     console.error("Error in getUserController:", error);
     return res.status(500).json({ message: "Internal server error" });
