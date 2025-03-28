@@ -9,7 +9,7 @@ const payOutSchema = new mongoose.Schema(
             required: true,
         },
         amount :{
-            type:Number,
+            type:String,
             required:true
         }, 
         reference:{
@@ -21,7 +21,7 @@ const payOutSchema = new mongoose.Schema(
             required:false,
         },
         account:{
-            type:Number,
+            type:String,
             required:false
         },
         ifsc :{
@@ -33,7 +33,7 @@ const payOutSchema = new mongoose.Schema(
             required:true
         }, 
         mobile:{
-            type:Number,
+            type:String,
             required:true
         }, 
         email:{
