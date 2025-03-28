@@ -60,6 +60,7 @@ const payIn = async (req, res) => {
 const callbackPayIn = async (req, res) => {
   try {
     const data = req.body;
+    console.log("data in callback request: ", data);
     const payin = await PayIn.findOne({ reference: data.reference });
 
     if (!payin) {
