@@ -1,9 +1,9 @@
 const cron = require("node-cron");
 const User = require("../models/userModel");
 
-// ✅ Run cron job every 1 minute
-cron.schedule("*/1 * * * *", async () => {
-  console.log("⏳ [CRON] Checking for expired plans...");
+// ✅ Run cron job every day at midnight (12:00 AM)
+cron.schedule("0 0 * * *", async () => {
+  console.log("⏳ [CRON] Running daily expired plan check...");
 
   const now = new Date();
   console.log(`🕒 [INFO] Current Time: ${now.toISOString()}`);
@@ -39,7 +39,7 @@ cron.schedule("*/1 * * * *", async () => {
       console.log(`✅ [SUCCESS] Plan removed for user: ${user.name}`);
     }
 
-    console.log("🎉 [CRON] Plan expiration check completed successfully!");
+    console.log("🎉 [CRON] Daily plan expiration check completed successfully!");
   } catch (error) {
     console.error("❌ [ERROR] CRON Job Failed:", error);
   }
