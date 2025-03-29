@@ -19,6 +19,6 @@ router.post("/payment-request", paymentRequest.addPaymentRequest);
 router.post('/assign-plan', assignPlan);
 
 // ✅ Get Report for Admin
-router.get('/report', getReport);
+router.get('/assign-plan/report', getReport);
 
 module.exports = router;

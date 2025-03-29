@@ -30,33 +30,40 @@ const userSchema = new mongoose.Schema(
       enum: ["Distributer", "Retailer", "Admin"],
       required: false,
     },
-    status:{
-      type: String, 
-      enum: ["Pending", "Approved"], 
+    status: {
+      type: String,
+      enum: ["Pending", "Approved"],
       default: "Pending",
       required: false,
     },
-   
+
     plan: {
-      planId: { type: mongoose.Schema.Types.ObjectId, ref: 'ServicePlan', default: null },
-      planType: { type: String, enum: ['monthly', 'quarterly', 'half-yearly', 'yearly'], default: null },
+      planId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ServicePlan",
+        default: null,
+      },
+      planType: {
+        type: String,
+        enum: ["monthly", "quarterly", "half-yearly", "yearly"],
+        default: null,
+      },
       startDate: { type: Date, default: null },
       endDate: { type: Date, default: null },
     },
 
-    
     name: {
       type: String,
-      required:true,
+      required: true,
     },
     email: {
       type: String,
-      required: true
+      required: true,
     },
     mpin: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   { timestamps: true }
 );
