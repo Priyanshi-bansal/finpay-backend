@@ -11,8 +11,6 @@ router.get("/alluser", plan.getAlluserController);
 router.get("/export-users", plan.exportUsersToExcel);
 router.get("/alluserwallet", MainWallet.allUserWalletreport);
 router.get("/userwallet/:userId", MainWallet.userWalletreport);
-router.post("/planCreate", plan.createPlan);
-router.post("/planassign/:id", plan.assignPlanToUser);
 router.post("/payment-request", paymentRequest.addPaymentRequest);
 
 // ✅ Assign Plan to User
