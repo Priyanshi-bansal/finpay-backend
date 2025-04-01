@@ -137,7 +137,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-
 const updateProfileController = async (req, res) => {
   try {
     const { userId, name, email, mobileNumber} = req.body;
@@ -180,8 +179,6 @@ const updateProfileController = async (req, res) => {
   }
 };
 
-
-
 const getUserController = async (req, res) => {
   try {
     let user = await User.findById(req.params.id).populate("plan"); // ✅ "ServicePlan" को populate करें
@@ -199,8 +196,6 @@ const getUserController = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 }; 
-
-
 
 module.exports = {
   sendOtpController,

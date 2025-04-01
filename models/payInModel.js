@@ -44,6 +44,14 @@ const payInSchema = new mongoose.Schema(
         transferMode: {
             type: String,
             required: false
+        },
+        adminAction : {
+            type: String,
+            required: false
+        },
+        remark: {
+            type: String,
+            required: false
         }
     }
 );

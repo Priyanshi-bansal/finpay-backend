@@ -18,6 +18,7 @@ const OpLogoRoutes = require("./routes/OpLogoRoutes");
 const billerRoutes = require("./routes/bbps/billerRoutes");
 const KycRoutes = require("./routes/kycRoutes");
 const servicePlanRoutes = require("./routes/servicePlanRoutes");
+const userRequestRoutes = require("./routes/userRequestRoutes");
 
 //admin routes
 const adminRoutes=require("./routes/admin/adminUserRoutes");
@@ -46,6 +47,7 @@ app.use("/api/oplogo",OpLogoRoutes);
 app.use("/api/biller", billerRoutes);
 app.use("/api/kyc",KycRoutes);
 app.use("/api/service/plans", servicePlanRoutes);
+app.use("/api/user/request", userRequestRoutes);
 
   // admin 
   app.use("/api/admin",adminRoutes)

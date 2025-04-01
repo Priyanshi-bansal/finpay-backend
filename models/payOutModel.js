@@ -65,6 +65,10 @@ const payOutSchema = new mongoose.Schema(
         adminAction : {
             type: String,
             required: false
+        },
+        remark : {
+            type: String,
+            required: false
         }
     }
 );
