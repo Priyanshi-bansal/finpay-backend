@@ -291,4 +291,73 @@ const payOutReportAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { payOut, adminAction, callbackPayout, payOutReportAllUsers };
+const payOutReportForUser = async (req, res) => {
+  try {
+    const {userId} = req.body;
+    const {startDate, endDate, status, paymentGateway } = req.query; 
+
+    // Ensure that userId is present
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    // Initialize the filter with the provided userId
+    let filter = { userId: new mongoose.Types.ObjectId(userId) }; // Filter by userId
+
+    // Optional filters
+    if (status) {
+      filter.status = status; // Success, Failed, Pending
+    }
+    if (startDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    // Aggregation Pipeline
+    const payouts = await PayOut.aggregate([
+      { $match: filter }, // Apply userId and other filters
+      {
+        $lookup: {
+          from: "users", // Join Users Collection
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails", // Unwind the array returned by the lookup to get a single object
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          amount: 1,
+          reference: 1,
+          trans_mode: 1,
+          account: 1,
+          ifsc: 1,
+          status: 1,
+          txn_id: 1,
+          createdAt: 1,
+        },
+      },
+      { $sort: { createdAt: -1 } }, // Sort by creation date descending
+    ]);
+
+    // If no payouts are found for the user
+    if (payouts.length === 0) {
+      return res.status(404).json({ success: false, message: "No pay-out records found for this user" });
+    }
+
+    return res.status(200).json({ success: true, data: payouts });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+module.exports = { payOut, adminAction, callbackPayout, payOutReportAllUsers, payOutReportForUser };

@@ -1,12 +1,8 @@
 const { default: axios } = require("axios");
 const PayIn = require("../models/payInModel");
-const User =require("../models/userModel")
-
-
-
+const User =require("../models/userModel");
 
 const mongoose = require('mongoose');
-
 
 const payIn = async (req, res) => {
  
@@ -164,4 +160,72 @@ const payInReportAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { payIn, callbackPayIn, getPayInRes, payInReportAllUsers};
+const payInReportForUser = async (req, res) => {
+  try {
+    const {userId} = req.body;
+    const {startDate, endDate, status, paymentGateway } = req.query; 
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    let filter = { userId: new mongoose.Types.ObjectId(userId) }; // Filter by userId
+
+    if (status) {
+      filter.status = status; // Pending, Approved, Failed
+    }
+    if (paymentGateway) {
+      filter.paymentGateway = paymentGateway; // Razorpay, Paytm, etc.
+    }
+    if (startDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    // Aggregation Pipeline
+    const payIns = await PayIn.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "users", // Assuming the 'users' collection is named "users"
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails", // Unwind the userDetails array to get a single object
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          amount: 1,
+          reference: 1,
+          paymentGateway: 1,
+          paymentMode: 1,
+          status: 1,
+          utr: 1,
+          createdAt: 1,
+        },
+      },
+      { $sort: { createdAt: -1 } }, // Sort by creation date descending
+    ]);
+
+    // Check if any results were found
+    if (payIns.length === 0) {
+      return res.status(404).json({ success: false, message: "No pay-in records found for this user" });
+    }
+
+    return res.status(200).json({ success: true, data: payIns });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+module.exports = { payIn, callbackPayIn, getPayInRes, payInReportAllUsers, payInReportForUser};
