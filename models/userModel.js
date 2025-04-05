@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("./servicePlanmodel");
+const { format } = require("date-fns");  // Importing date-fns
 
 const userSchema = new mongoose.Schema(
   {
@@ -65,7 +66,16 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,  // This automatically adds createdAt and updatedAt fields
+    toJSON: { getters: true },  // Apply getters for JSON conversion
+    toObject: { getters: true }  // Apply getters for object conversion
+  }
 );
+
+// Adding custom getter to format the `createdAt` field
+userSchema.path('createdAt').get(function(val) {
+  return format(val, "MMM dd, yyyy h:mma");  // Formatting the date
+});
 
 module.exports = mongoose.model("User", userSchema);
