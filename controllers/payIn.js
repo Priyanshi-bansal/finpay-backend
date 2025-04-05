@@ -266,4 +266,52 @@ const payInReportForUser = async (req, res) => {
   }
 };
 
-module.exports = { payIn, callbackPayIn, getPayInRes, payInReportAllUsers, payInReportForUser};
+const payinUserCount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate if userId is valid
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    // Get the sum for each status category: Approved, Pending, Failed
+    const results = await Promise.all([
+      // Approved
+      PayIn.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId), status: "Approved" } },
+        { $group: { _id: null, totalApproved: { $sum: "$amount" } } }
+      ]),
+
+      // Pending
+      PayIn.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId), status: "Pending" } },
+        { $group: { _id: null, totalPending: { $sum: "$amount" } } }
+      ]),
+
+      // Failed
+      PayIn.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId), status: "Failed" } },
+        { $group: { _id: null, totalFailed: { $sum: "$amount" } } }
+      ])
+    ]);
+
+    // Extract the sums from the results of the aggregation
+    const totalApproved = results[0][0]?.totalApproved || 0;
+    const totalPending = results[1][0]?.totalPending || 0;
+    const totalFailed = results[2][0]?.totalFailed || 0;
+
+    // Return the results as a JSON response
+    res.status(200).json({
+      totalApproved,
+      totalPending,
+      totalFailed,
+    });
+
+  } catch (error) {
+    console.error("Error getting total sums: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+module.exports = { payIn, callbackPayIn, getPayInRes, payInReportAllUsers, payInReportForUser, payinUserCount};

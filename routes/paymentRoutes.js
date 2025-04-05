@@ -1,7 +1,7 @@
 const express = require("express");
 
-const {payIn, callbackPayIn, getPayInRes, payInReportAllUsers, payInReportForUser} = require('../controllers/payIn');
-const {payOut, adminAction, callbackPayout, payOutReportAllUsers, payOutReportForUser} = require("../controllers/payOut");
+const {payIn, callbackPayIn, getPayInRes, payInReportAllUsers, payInReportForUser, payinUserCount} = require('../controllers/payIn');
+const {payOut, adminAction, callbackPayout, payOutReportAllUsers, payOutReportForUser, payOutUserCount} = require("../controllers/payOut");
 const {combinedReportForUser} = require("../controllers/combinedReportForUser ");
 const router = express.Router();
 
@@ -16,5 +16,7 @@ router.get("/payOut/report", payOutReportAllUsers);
 router.get("/payIn/user/report", payInReportForUser);
 router.get("/payOut/user/report", payOutReportForUser);
 router.get("/user/report", combinedReportForUser);
+router.get("/payIn/total-sums/:userId", payinUserCount);
+router.get("/payOut/total-sums/:userId", payOutUserCount);
 
 module.exports = router;

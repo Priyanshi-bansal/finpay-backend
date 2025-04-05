@@ -95,6 +95,7 @@ const loginController = async (req, res) => {
         id: user._id,
         mobileNumber: user.mobileNumber,
         token: user.token,
+        role: user.role
       },
     });
   } catch (error) {
