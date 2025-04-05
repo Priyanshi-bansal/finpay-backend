@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 require("./servicePlanmodel");
 const { format } = require("date-fns");  // Importing date-fns
 
+const Schema = mongoose.Schema;
+
 const userSchema = new mongoose.Schema(
   {
     mobileNumber: {
@@ -73,9 +75,13 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Adding custom getter to format the `createdAt` field
+// Adding custom getter to format the `createdAt` and `updatedAt` fields
 userSchema.path('createdAt').get(function(val) {
-  return format(val, "MMM dd, yyyy h:mma");  // Formatting the date
+  return format(val, "MMM dd, yyyy h:mma");  // Formatting the date for `createdAt`
+});
+
+userSchema.path('updatedAt').get(function(val) {
+  return format(val, "MMM dd, yyyy h:mma");  // Formatting the date for `updatedAt`
 });
 
 module.exports = mongoose.model("User", userSchema);

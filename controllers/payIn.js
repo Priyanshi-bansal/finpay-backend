@@ -53,6 +53,46 @@ const payIn = async (req, res) => {
   }
 };
 
+// const callbackPayIn = async (req, res) => {
+//   try {
+//     const data = req.body;
+//     console.log("data in callback request: ", data);
+//     const payin = await PayIn.findOne({ reference: data.reference });
+
+//     if (!payin) {
+//       return res.status(404).json({ message: "Transaction not found" });
+//     }
+
+//     if (data.status === "Success") {
+     
+//       // Update PayIn Transaction
+//       payin.status = "Approved";
+//       payin.utr = data.utr;
+//       await payin.save();
+
+//       // // Log Transaction History
+//       // await Transaction.create({
+//       //   userId: retailer._id,
+//       //   type: "PayIn",
+//       //   amount: payin.amount,
+//       //   status: "Success",
+//       //   reference: data.reference
+//       // });
+
+//       return res.status(200).json({ message: "PayIn successful", payin });
+//     }
+
+//     // Handle Failed Transaction
+//     payin.status = "Failed";
+//     await payin.save();
+
+//     return res.status(400).json({ message: "Payment Failed", payin });
+//   } catch (error) {
+//     console.error("Error in callback response", error);
+//     return res.status(500).json({ message: "Something went wrong" });
+//   }
+// };
+
 const callbackPayIn = async (req, res) => {
   try {
     const data = req.body;
@@ -63,35 +103,33 @@ const callbackPayIn = async (req, res) => {
       return res.status(404).json({ message: "Transaction not found" });
     }
 
+    let redirectUrl = ""; // Initialize the redirect URL
+
     if (data.status === "Success") {
-     
       // Update PayIn Transaction
       payin.status = "Approved";
       payin.utr = data.utr;
       await payin.save();
 
-      // // Log Transaction History
-      // await Transaction.create({
-      //   userId: retailer._id,
-      //   type: "PayIn",
-      //   amount: payin.amount,
-      //   status: "Success",
-      //   reference: data.reference
-      // });
+      // Success - Redirect user to success page
+      redirectUrl = "/payment/success";
+    } else {
+      // Handle Failed Transaction
+      payin.status = "Failed";
+      await payin.save();
 
-      return res.status(200).json({ message: "PayIn successful", payin });
+      // Failure - Redirect user to failure page
+      redirectUrl = "/payment/failure";
     }
 
-    // Handle Failed Transaction
-    payin.status = "Failed";
-    await payin.save();
-
-    return res.status(400).json({ message: "Payment Failed", payin });
+    // Send the redirect URL in response or send the redirect directly
+    return res.redirect(redirectUrl); // Redirecting user to the corresponding page
   } catch (error) {
     console.error("Error in callback response", error);
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
+
 
 const getPayInRes = async (req, res) =>{
   const {reference} = req.query;
