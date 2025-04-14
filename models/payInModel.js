@@ -55,8 +55,32 @@ const payInSchema = new mongoose.Schema(
     },
     remark: {
       type: String,
+      required: false,
+    },
+    adminCommission: {
+      type: String,
+      required: false,
+    },
+    distributorCommission: {
+      type: String,
+      required: false,
+    },
+    charges: {
+      type: String,
+      required: false,
+    },
+    gst: {
+      type: String,
+      required: false,
+    },
+    tds: {
+      type: String,
+      required: false,
+    },
+    netAmount: {
+      type: String,
       required: false
-    }
+    },
   },
   {
     toJSON: { getters: true },  // Ensuring that getters are applied when converting to JSON

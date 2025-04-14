@@ -207,20 +207,16 @@ const adminAction = async (req, res) => {
     }
 
     const totalDeductions =
-    parseFloat(adminCommission) + parseFloat(distributorCommission) + parseFloat(charges) + parseFloat(gst) + parseFloat(tds);
-    const payoutAmount = amountNum + totalDeductions; 
-
-    const payoutAmountInt = Math.round(payoutAmount);
-    const payoutAmountStr = payoutAmountInt.toString();
+      adminCommission + distributorCommission + charges + gst + tds;
+    const payoutAmount = amountNum - totalDeductions; // ✅ fixed
+    const payoutAmountStr = payoutAmount.toString();
 
     console.log("payoutAmount is:", payoutAmountStr);
     // Update payout with commission breakdown
     payout.adminCommission = adminCommission;
     payout.distributorCommission = distributorCommission;
-    payout.charges = charges;
     payout.gst = gst;
     payout.tds = tds;
-    payout.netAmount = payoutAmountStr;
     await payout.save();
 
     // After approval, call the external payout service
@@ -228,7 +224,7 @@ const adminAction = async (req, res) => {
       const payOutData = await axios.post(
         "https://api.worldpayme.com/api/v1.1/payoutTransaction",
         {
-          amount: amount,
+          amount: payoutAmountStr,
           reference: reference,
           trans_mode: trans_mode,
           account: account,
@@ -246,9 +242,6 @@ const adminAction = async (req, res) => {
         }
       );
       console.log("wertyui", payOutData.data);
-
-      
-
       return res.status(200).send({
         data: payOutData.data,
         message: "Payment data saved successfully in the database.",
@@ -515,3 +508,70 @@ module.exports = {
   payOutReportForUser,
   payOutUserCount,
 };
+
+
+
+
+
+
+
+
+
+const user = await User.findById(payout.userId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const commission = await CommissionPackage.findOne({
+      userId: user._id,
+      serviceType: "Payout",
+      minAmount: { $lte: payout.amount },
+      maxAmount: { $gte: payout.amount },
+    });
+
+    if (!commission) {
+      payout.status = "Failed";
+      await payout.save();
+      return res.status(400).send("No commission package configured for user.");
+    }
+
+    // Calculate commissions
+    let adminCommission = 0;
+    let distributorCommission = 0;
+    let charges = 0;
+    let gst = 0;
+    let tds = 0;
+
+    const amountNum = parseFloat(payout.amount); // ✅ convert string to number
+
+    if (commission.type === "percentage") {
+      adminCommission = (amountNum * commission.commission) / 100;
+      distributorCommission =
+        (amountNum * commission.distributorCommission) / 100;
+      charges = (amountNum * commission.charges) / 100;
+      gst = (amountNum * commission.gst) / 100;
+      tds = (amountNum * commission.tds) / 100;
+    } else {
+      adminCommission = commission.commission;
+      distributorCommission = commission.distributorCommission;
+      charges = commission.charges;
+      gst = commission.gst;
+      tds = commission.tds;
+    }
+
+    const totalDeductions =
+    parseFloat(adminCommission) + parseFloat(distributorCommission) + parseFloat(charges) + parseFloat(gst) + parseFloat(tds);
+    const payoutAmount = amountNum + totalDeductions; 
+
+    const payoutAmountInt = Math.round(payoutAmount);
+    const payoutAmountStr = payoutAmountInt.toString();
+
+    console.log("payoutAmount is:", payoutAmountStr);
+    // Update payout with commission breakdown
+    payout.adminCommission = adminCommission;
+    payout.distributorCommission = distributorCommission;
+    payout.charges = charges;
+    payout.gst = gst;
+    payout.tds = tds;
+    payout.netAmount = payoutAmountStr;
+    await payout.save();

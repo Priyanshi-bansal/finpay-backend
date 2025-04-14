@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
+    distributorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     mobileNumber: {
       type: String,
       required: true,

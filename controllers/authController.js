@@ -7,6 +7,7 @@ const { generateJwtToken } = require("../services/jwtService");
 const { default: axios } = require("axios");
 require("dotenv").config();
 const token = process.env.TOKEN;
+const mongoose = require("mongoose");
 //console.log(token);
 
 // Send OTP to the user
@@ -198,11 +199,26 @@ const getUserController = async (req, res) => {
   }
 }; 
 
+const getRetailersByDistributor = async (req, res) => {
+  try {
+    const distributorId = new mongoose.Types.ObjectId(req.params.id);
+
+    const retailers = await User.find({ distributorId, role: 'Retailer' });
+
+    res.status(200).json({ success: true, data: retailers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+
 module.exports = {
   sendOtpController,
   verifyOTPController,
   registerUser,
   loginController,
   getUserController,
-  updateProfileController
+  updateProfileController,
+  getRetailersByDistributor
 };

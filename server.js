@@ -19,6 +19,8 @@ const billerRoutes = require("./routes/bbps/billerRoutes");
 const KycRoutes = require("./routes/kycRoutes");
 const servicePlanRoutes = require("./routes/servicePlanRoutes");
 const userRequestRoutes = require("./routes/userRequestRoutes");
+const commissionRoutes = require("./routes/commissionRoutes");
+const payugateway = require("./routes/payu");
 
 //admin routes
 const adminRoutes=require("./routes/admin/adminUserRoutes");
@@ -48,10 +50,12 @@ app.use("/api/biller", billerRoutes);
 app.use("/api/kyc",KycRoutes);
 app.use("/api/service/plans", servicePlanRoutes);
 app.use("/api/user/request", userRequestRoutes);
+app.use("/api/payu", payugateway);
+
 
   // admin 
-  app.use("/api/admin",adminRoutes)
-
+  app.use("/api/admin",adminRoutes);
+  app.use("/api/admin/commission", commissionRoutes);
 
 const url = "mongodb://localhost:27017/";
 // Connect to MongoDB
